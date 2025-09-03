@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日晷时间选择器 - 28星宿天体音乐生成器</title>
+    <!-- 🚀 预加载中文字体 - 用户选择时间时就开始下载 -->
+    <link rel="preload" href="/static/fonts/wqy-microhei.ttc" as="font" type="font/ttc" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
@@ -15,7 +18,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow-x: hidden;
         }
-        
+
         .stars {
             position: fixed;
             top: 0;
@@ -24,19 +27,26 @@
             height: 100%;
             pointer-events: none;
         }
-        
+
         .star {
             position: absolute;
             background: white;
             border-radius: 50%;
             animation: twinkle 2s infinite;
         }
-        
+
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
-        
+
         .glass-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -44,24 +54,24 @@
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .sundial-container {
             position: relative;
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             margin: 0 auto;
         }
-        
+
         #sundialCanvas {
             border-radius: 50%;
             cursor: grab;
             transition: transform 0.3s ease;
         }
-        
+
         #sundialCanvas:active {
             cursor: grabbing;
         }
-        
+
         .info-display {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -70,7 +80,7 @@
             padding: 20px;
             margin-top: 30px;
         }
-        
+
         .confirm-btn {
             background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
             border: none;
@@ -83,19 +93,19 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .confirm-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
-        
+
         .step-indicator {
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 40px;
         }
-        
+
         .step {
             width: 40px;
             height: 40px;
@@ -107,17 +117,17 @@
             font-weight: bold;
             transition: all 0.3s ease;
         }
-        
+
         .step.active {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
         }
-        
+
         .step.inactive {
             background: rgba(255, 255, 255, 0.2);
             color: rgba(255, 255, 255, 0.6);
         }
-        
+
         .step-line {
             width: 60px;
             height: 2px;
@@ -125,33 +135,36 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
-    
+
     <div class="min-h-screen flex flex-col items-center justify-center p-6">
         <!-- 标题 -->
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-4">28星宿天体音乐生成器</h1>
             <p class="text-xl text-gray-300">选择观测时间</p>
         </div>
-        
+
         <!-- 步骤指示器 -->
-        <div class="step-indicator">
+        <div class="step-indicator mt-8">
             <div class="step active">1</div>
-            <div class="step-line"></div>
+            <div class="step-line inactive"></div>
             <div class="step inactive">2</div>
-            <div class="step-line"></div>
+            <div class="step-line inactive"></div>
             <div class="step inactive">3</div>
+            <div class="step-line inactive"></div>
+            <div class="step inactive">4</div>
         </div>
-        
+
         <!-- 主容器 -->
         <div class="glass-container p-8 max-w-2xl w-full">
             <!-- 日晷容器 -->
             <div class="sundial-container">
-                <canvas id="sundialCanvas" width="500" height="500"></canvas>
+                <canvas id="sundialCanvas" width="600" height="600"></canvas>
             </div>
-            
+
             <!-- 信息显示 -->
             <div class="info-display text-center text-white">
                 <div class="grid grid-cols-2 gap-4 mb-6">
@@ -166,7 +179,7 @@
                         <p class="text-lg font-semibold" id="selectedTime">00:00</p>
                     </div>
                 </div>
-                
+
                 <div class="text-center">
                     <button class="confirm-btn" onclick="confirmSelection()">
                         <i class="fas fa-arrow-right mr-2"></i>
@@ -183,7 +196,7 @@
         const ctx = canvas.getContext('2d');
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        
+
         // 圆环配置
         const rings = {
             year: { radius: 220, width: 30, min: 1950, max: 2025, current: 1950, angle: 0 },
@@ -191,12 +204,12 @@
             day: { radius: 120, width: 20, min: 1, max: 31, current: 1, angle: 0 },
             hour: { radius: 70, width: 15, min: 0, max: 23, current: 0, angle: 0 }
         };
-        
+
         // 拖拽状态
         let isDragging = false;
         let dragRing = null;
         let lastAngle = 0;
-        
+
         // 初始化
         function init() {
             createStars();
@@ -205,7 +218,7 @@
             setupEventListeners();
             updateDisplay();
         }
-        
+
         // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -219,7 +232,7 @@
                 starsContainer.appendChild(star);
             }
         }
-        
+
         // 设置当前时间为默认值
         function setCurrentTime() {
             const now = new Date();
@@ -227,23 +240,23 @@
             rings.month.current = now.getMonth() + 1;
             rings.day.current = now.getDate();
             rings.hour.current = now.getHours();
-            
+
             // 计算对应的角度
             rings.year.angle = ((rings.year.current - rings.year.min) / (rings.year.max - rings.year.min)) * 360;
             rings.month.angle = ((rings.month.current - 1) / 11) * 360;
             rings.day.angle = ((rings.day.current - 1) / (getDaysInMonth() - 1)) * 360;
             rings.hour.angle = (rings.hour.current / 23) * 360;
         }
-        
+
         // 获取当前月份的天数
         function getDaysInMonth() {
             return new Date(rings.year.current, rings.month.current, 0).getDate();
         }
-        
+
         // 绘制日晷
         function drawSundial() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             // 绘制背景圆
             const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 250);
             gradient.addColorStop(0, 'rgba(139, 69, 19, 0.3)');
@@ -252,76 +265,76 @@
             ctx.beginPath();
             ctx.arc(centerX, centerY, 240, 0, Math.PI * 2);
             ctx.fill();
-            
+
             // 绘制各个圆环
             drawRing('year', '年份', '#CD853F');
             drawRing('month', '月份', '#DEB887');
             drawRing('day', '日期', '#F4A460');
             drawRing('hour', '小时', '#DAA520');
-            
+
             // 绘制中心指针
             drawPointer();
         }
-        
+
         // 绘制单个圆环
         function drawRing(type, label, color) {
             const ring = rings[type];
             const { radius, width, min, max, current, angle } = ring;
-            
+
             // 外圆环
             ctx.strokeStyle = color;
             ctx.lineWidth = width;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.stroke();
-            
+
             // 内圆环（更深色）
             ctx.strokeStyle = darkenColor(color, 0.3);
             ctx.lineWidth = width - 4;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.stroke();
-            
+
             // 绘制刻度
             drawTicks(type, radius, color);
-            
+
             // 绘制当前选中的标记
             drawCurrentMarker(radius, angle, color);
-            
+
             // 绘制数值
             drawValues(type, radius);
         }
-        
+
         // 绘制刻度
         function drawTicks(type, radius, color) {
             const ring = rings[type];
             const tickCount = ring.max - ring.min + 1;
-            
+
             ctx.strokeStyle = color;
             ctx.lineWidth = 2;
-            
+
             for (let i = 0; i < tickCount; i++) {
                 const angle = (i / (tickCount - 1)) * 360 - 90;
                 const radian = (angle * Math.PI) / 180;
-                
+
                 const x1 = centerX + Math.cos(radian) * (radius - 15);
                 const y1 = centerY + Math.sin(radian) * (radius - 15);
                 const x2 = centerX + Math.cos(radian) * (radius + 5);
                 const y2 = centerY + Math.sin(radian) * (radius + 5);
-                
+
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
                 ctx.stroke();
             }
         }
-        
+
         // 绘制当前选中标记
         function drawCurrentMarker(radius, angle, color) {
             const radian = ((angle - 90) * Math.PI) / 180;
             const x = centerX + Math.cos(radian) * radius;
             const y = centerY + Math.sin(radian) * radius;
-            
+
             // 发光效果
             ctx.shadowColor = color;
             ctx.shadowBlur = 20;
@@ -330,43 +343,44 @@
             ctx.arc(x, y, 8, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
-            
+
             // 内部高亮
             ctx.fillStyle = 'white';
             ctx.beginPath();
             ctx.arc(x, y, 4, 0, Math.PI * 2);
             ctx.fill();
         }
-        
+
         // 绘制数值
         function drawValues(type, radius) {
             const ring = rings[type];
             const tickCount = Math.min(ring.max - ring.min + 1, 12); // 限制显示数量
-            
+
             ctx.fillStyle = 'white';
             ctx.font = '12px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            
+
             for (let i = 0; i < tickCount; i++) {
                 const value = ring.min + Math.floor((i / (tickCount - 1)) * (ring.max - ring.min));
-                const angle = (i / (tickCount - 1)) * 360 - 90;
+                // const angle = (i / (tickCount - 1)) * 360 - 90;
+                const angle = ((i + 1) * 30) - 90;  // 🎯 修改2：每30度一个，像时钟
                 const radian = (angle * Math.PI) / 180;
-                
+
                 const textRadius = radius + 25;
                 const x = centerX + Math.cos(radian) * textRadius;
                 const y = centerY + Math.sin(radian) * textRadius;
-                
+
                 ctx.fillText(value.toString(), x, y);
             }
         }
-        
+
         // 绘制中心指针
         function drawPointer() {
             const gradient = ctx.createLinearGradient(centerX, centerY - 40, centerX, centerY + 40);
             gradient.addColorStop(0, '#FFD700');
             gradient.addColorStop(1, '#FFA500');
-            
+
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.moveTo(centerX, centerY - 40);
@@ -374,27 +388,27 @@
             ctx.lineTo(centerX + 3, centerY + 35);
             ctx.closePath();
             ctx.fill();
-            
+
             // 中心圆
             ctx.fillStyle = '#FFD700';
             ctx.beginPath();
             ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
             ctx.fill();
         }
-        
+
         // 设置事件监听器
         function setupEventListeners() {
             canvas.addEventListener('mousedown', handleMouseDown);
             canvas.addEventListener('mousemove', handleMouseMove);
             canvas.addEventListener('mouseup', handleMouseUp);
             canvas.addEventListener('mouseleave', handleMouseUp);
-            
+
             // 触摸事件
             canvas.addEventListener('touchstart', handleTouchStart);
             canvas.addEventListener('touchmove', handleTouchMove);
             canvas.addEventListener('touchend', handleTouchEnd);
         }
-        
+
         // 鼠标事件处理
         function handleMouseDown(e) {
             const rect = canvas.getBoundingClientRect();
@@ -402,7 +416,7 @@
             const y = e.clientY - rect.top;
             startDrag(x, y);
         }
-        
+
         function handleMouseMove(e) {
             if (!isDragging) return;
             const rect = canvas.getBoundingClientRect();
@@ -410,11 +424,11 @@
             const y = e.clientY - rect.top;
             updateDrag(x, y);
         }
-        
+
         function handleMouseUp() {
             endDrag();
         }
-        
+
         // 触摸事件处理
         function handleTouchStart(e) {
             e.preventDefault();
@@ -424,7 +438,7 @@
             const y = touch.clientY - rect.top;
             startDrag(x, y);
         }
-        
+
         function handleTouchMove(e) {
             e.preventDefault();
             if (!isDragging) return;
@@ -434,16 +448,16 @@
             const y = touch.clientY - rect.top;
             updateDrag(x, y);
         }
-        
+
         function handleTouchEnd(e) {
             e.preventDefault();
             endDrag();
         }
-        
+
         // 开始拖拽
         function startDrag(x, y) {
             const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-            
+
             // 确定拖拽的是哪个圆环
             for (const [type, ring] of Object.entries(rings)) {
                 if (Math.abs(distance - ring.radius) < ring.width / 2 + 10) {
@@ -455,41 +469,41 @@
                 }
             }
         }
-        
+
         // 更新拖拽
         function updateDrag(x, y) {
             if (!isDragging || !dragRing) return;
-            
+
             const currentAngle = Math.atan2(y - centerY, x - centerX) * 180 / Math.PI;
             let deltaAngle = currentAngle - lastAngle;
-            
+
             // 处理角度跨越
             if (deltaAngle > 180) deltaAngle -= 360;
             if (deltaAngle < -180) deltaAngle += 360;
-            
+
             // 更新圆环角度
             rings[dragRing].angle = (rings[dragRing].angle + deltaAngle + 360) % 360;
-            
+
             // 根据角度计算数值
             updateValueFromAngle(dragRing);
-            
+
             lastAngle = currentAngle;
             drawSundial();
             updateDisplay();
         }
-        
+
         // 结束拖拽
         function endDrag() {
             isDragging = false;
             dragRing = null;
             canvas.style.cursor = 'grab';
         }
-        
+
         // 根据角度更新数值
         function updateValueFromAngle(ringType) {
             const ring = rings[ringType];
             const normalizedAngle = ring.angle / 360;
-            
+
             if (ringType === 'day') {
                 const maxDays = getDaysInMonth();
                 ring.max = maxDays;
@@ -497,10 +511,10 @@
             } else {
                 ring.current = Math.round(normalizedAngle * (ring.max - ring.min)) + ring.min;
             }
-            
+
             // 确保数值在有效范围内
             ring.current = Math.max(ring.min, Math.min(ring.max, ring.current));
-            
+
             // 如果年份或月份改变，需要重新计算日期的最大值
             if (ringType === 'year' || ringType === 'month') {
                 const maxDays = getDaysInMonth();
@@ -511,16 +525,16 @@
                 rings.day.max = maxDays;
             }
         }
-        
+
         // 更新显示
         function updateDisplay() {
             const dateStr = `${rings.year.current}年${rings.month.current}月${rings.day.current}日`;
             const timeStr = `${rings.hour.current.toString().padStart(2, '0')}:00`;
-            
+
             document.getElementById('selectedDate').textContent = dateStr;
             document.getElementById('selectedTime').textContent = timeStr;
         }
-        
+
         // 确认选择
         function confirmSelection() {
             const selectedTime = {
@@ -531,30 +545,31 @@
                 timestamp: new Date(rings.year.current, rings.month.current - 1, rings.day.current, rings.hour.current).toISOString(),
                 formatted: `${rings.year.current}年${rings.month.current}月${rings.day.current}日 ${rings.hour.current.toString().padStart(2, '0')}:00`
             };
-            
+
             // 保存到sessionStorage
             sessionStorage.setItem('selectedTime', JSON.stringify(selectedTime));
-            
+
             // 跳转到位置选择页面
             window.location.href = '/location';
         }
-        
+
         // 颜色处理函数
         function darkenColor(color, factor) {
             const hex = color.replace('#', '');
             const r = parseInt(hex.substr(0, 2), 16);
             const g = parseInt(hex.substr(2, 2), 16);
             const b = parseInt(hex.substr(4, 2), 16);
-            
+
             const newR = Math.floor(r * (1 - factor));
             const newG = Math.floor(g * (1 - factor));
             const newB = Math.floor(b * (1 - factor));
-            
+
             return `rgb(${newR}, ${newG}, ${newB})`;
         }
-        
+
         // 初始化应用
         init();
     </script>
 </body>
+
 </html>

@@ -48,7 +48,6 @@ def map_to_params(element: str) -> tuple:
 def get_full_music_config(element: str, duration: int = 45) -> dict:
     """获取包含时长信息的完整音乐配置"""
     mapping = ELEMENT_MUSIC_MAP.get(element, ELEMENT_MUSIC_MAP["Wood"])
-    
     return {
         "element": element,
         "available_instruments": mapping["instruments"],
@@ -65,7 +64,7 @@ def get_duration_structure(duration: int) -> dict:
     if duration <= 30:
         return {
             "intro": "0-5s",
-            "main": "5-25s", 
+            "main": "5-25s",
             "outro": "25-30s",
             "structure": "Simple A-B-A form"
         }
@@ -73,7 +72,7 @@ def get_duration_structure(duration: int) -> dict:
         return {
             "intro": "0-8s",
             "verse": "8-20s",
-            "bridge": "20-35s", 
+            "bridge": "20-35s",
             "verse_repeat": "35-50s",
             "outro": "50-60s",
             "structure": "Extended A-B-A-B-C form"
@@ -89,7 +88,6 @@ def get_duration_structure(duration: int) -> dict:
 
 def create_enhanced_prompt(instrument: str, mode: str, element: str, style: str = "cinematic, ethereal", duration: int = 45) -> str:
     """创建包含时长和结构的增强型prompt"""
-    
     mapping = ELEMENT_MUSIC_MAP.get(element, ELEMENT_MUSIC_MAP["Wood"])
     mood = random.choice(mapping["mood"])
     duration_style = mapping["duration_style"]
@@ -103,5 +101,15 @@ def create_enhanced_prompt(instrument: str, mode: str, element: str, style: str 
         length_desc = "extended"
     
     prompt = f"{instrument}, {mode} mode, {style}, {mood} atmosphere, {length_desc} {duration}-second composition with {duration_style}, complete musical piece with clear beginning and ending"
-    
     return prompt
+
+# 新增：节气音乐配置函数
+def get_solar_term_music_config(solar_term, zodiac_sign):
+    """根据节气和星次获取音乐配置"""
+    return {
+        "solar_term": solar_term,
+        "zodiac_sign": zodiac_sign,
+        "instrument": "Traditional Chinese Orchestra",
+        "mode": "Pentatonic",
+        "style": "Traditional Chinese seasonal music"
+    }

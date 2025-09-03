@@ -1,0 +1,3688 @@
+{
+  "id": "western",
+  "region": "Europe",
+  "fallback_to_international_names": true,
+  "langs_use_native_names": ["en", "pt", "es"],
+  "constellations": [
+    {
+      "id": "CON chinese 001",
+      "lines": [[20889, 20648, 20455, 20205], [21421, 20885, 20713, 20205, 18724], [21421, 21683]],
+      "common_name": {"english": "Net", "pronounce": "Bìxiù", "native": "毕宿"}
+    },
+    {
+      "id": "CON chinese 002",
+      "lines": [[1067, 677]],
+      "common_name": {"english": "Wall", "pronounce": "Bìxiù", "native": "壁宿"}
+    },
+    {
+      "id": "CON chinese 003",
+      "lines": [[27989, 26727, 26311, 25930, 24436], [25930, 25336], [26727, 27366]],
+      "common_name": {"english": "Three Stars", "pronounce": "Shēnxiù", "native": "参宿"}
+    },
+    {
+      "id": "CON chinese 004",
+      "lines": [[72622, 74392, 76333, 74785]],
+      "common_name": {"english": "Root", "pronounce": "Dīxiù", "native": "氐宿"}
+    },
+    {
+      "id": "CON chinese 005",
+      "lines": [[89341, 90496, 92041, 92855, 93864, 93506]],
+      "common_name": {"english": "Dipper", "pronounce": "Dǒuxiù", "native": "斗宿"}
+    },
+    {
+      "id": "CON chinese 006",
+      "lines": [[78820, 78401, 78265, 78104]],
+      "common_name": {"english": "Room", "pronounce": "Fángxiù", "native": "房宿"}
+    },
+    {
+      "id": "CON chinese 007",
+      "lines": [[41822, 41909, 42806, 42911]],
+      "common_name": {"english": "Ghosts", "pronounce": "Guǐxiù", "native": "鬼宿"}
+    },
+    {
+      "id": "CON chinese 008",
+      "lines": [[88635, 89931, 90185, 89642]],
+      "common_name": {"english": "Winnowing Basket", "pronounce": "Jīxiù", "native": "箕宿"}
+    },
+    {
+      "id": "CON chinese 009",
+      "lines": [[65474, 66249]],
+      "common_name": {"english": "Horn", "pronounce": "Jiǎoxiù", "native": "角宿"}
+    },
+    {
+      "id": "CON chinese 010",
+      "lines": [[35350, 34088, 32921, 32246], [32921, 30883, 30343], [30883, 31681, 34088], [31681, 32362], [30343, 29655]],
+      "common_name": {"english": "Well", "pronounce": "Jǐngxiù", "native": "井宿"}
+    },
+    {
+      "id": "CON chinese 011",
+      "lines": [[69427, 69701, 70755], [69427, 69974]],
+      "common_name": {"english": "Neck", "pronounce": "Kàngxiù", "native": "亢宿"}
+    },
+    {
+      "id": "CON chinese 012",
+      "lines": [[4463, 3693, 3885, 3031, 3092, 2912, 3881, 4436, 5447, 5175, 5586, 6315, 6193, 5742, 5571, 5131, 4463]],
+      "common_name": {"english": "Legs", "pronounce": "Kuíxiù", "native": "奎宿"}
+    },
+    {
+      "id": "CON chinese 013",
+      "lines": [[42402, 42799, 43234, 43109], [42313, 43109], [43234, 43813, 44659, 45336]],
+      "common_name": {"english": "Willow", "pronounce": "Liǔxiù", "native": "柳宿"}
+    },
+    {
+      "id": "CON chinese 014",
+      "lines": [[9884, 8903, 8832]],
+      "common_name": {"english": "Bond", "pronounce": "Loúxiù", "native": "娄宿"}
+    },
+    {
+      "id": "CON chinese 015",
+      "lines": [[17499, 17531, 17579, 17573], [17499, 17608, 17702, 17847]],
+      "common_name": {"english": "Hairy Head", "pronounce": "Mǎoxiù", "native": "昴宿"}
+    },
+    {
+      "id": "CON chinese 016",
+      "lines": [[100345, 100064, 99572], [100345, 100881, 101123, 101027], [100881, 101027]],
+      "common_name": {"english": "Ox", "pronounce": "Niúxiù", "native": "牛宿"}
+    },
+    {
+      "id": "CON chinese 017",
+      "lines": [[102618, 103045, 102945, 102624]],
+      "common_name": {"english": "Girl", "pronounce": "Nǚxiù", "native": "女宿"}
+    },
+    {
+      "id": "CON chinese 018",
+      "lines": [[113963, 113881]],
+      "common_name": {"english": "Encampment", "pronounce": "Shìxiù", "native": "室宿"}
+    },
+    {
+      "id": "CON chinese 019",
+      "lines": [[57757, 55434, 55642, 54879, 54872]],
+      "common_name": {"english": "Supreme Palace Right Wall", "pronounce": "Tàiwēi Yòuyuán", "native": "太微右垣"}
+    },
+    {
+      "id": "CON chinese 020",
+      "lines": [[60129, 61941, 63090, 63608, 64241]],
+      "common_name": {"english": "Supreme Palace Left Wall", "pronounce": "Tàiwēi Zuǒyuán", "native": "太微左垣"}
+    },
+    {
+      "id": "CON chinese 021",
+      "lines": [[80816, 80170, 79043, 78072, 77233, 76276, 77070, 77622, 79593, 79882, 81377]],
+      "common_name": {"english": "Heavenly Market Right Wall", "pronounce": "Tiānshì Yòuyuán", "native": "天市右垣"}
+    },
+    {
+      "id": "CON chinese 022",
+      "lines": [[84379, 85693, 86974, 88794, 92614, 93747, 92946, 89962, 88048, 86263, 84012]],
+      "common_name": {"english": "Heavenly Market Left Wall", "pronounce": "Tiānshì Zuǒyuán", "native": "天市左垣"}
+    },
+    {
+      "id": "CON chinese 023",
+      "lines": [[109074, 109427, 107315]],
+      "common_name": {"english": "Rooftop", "pronounce": "Wēixiù", "native": "危宿"}
+    },
+    {
+      "id": "CON chinese 024",
+      "lines": [[82396, 82514, 82671, 84143, 86228, 87073, 86670, 85927, 85696], [82514, 82545]],
+      "common_name": {"english": "Tail", "pronounce": "Wěixiù", "native": "尾宿"}
+    },
+    {
+      "id": "CON chinese 025",
+      "lines": [[12719, 13061, 13209]],
+      "common_name": {"english": "Stomach", "pronounce": "Wèixiù", "native": "胃宿"}
+    },
+    {
+      "id": "CON chinese 026",
+      "lines": [[80112, 80763, 81266]],
+      "common_name": {"english": "Heart", "pronounce": "Xīnxiù", "native": "心宿"}
+    },
+    {
+      "id": "CON chinese 027",
+      "lines": [[46390, 46509, 46776, 47431], [46390, 45811, 45751, 46744], [46390, 46744]],
+      "common_name": {"english": "Star", "pronounce": "Xing Xiu"}
+    },
+    {
+      "id": "CON chinese 028",
+      "lines": [[106278, 104987]],
+      "common_name": {"english": "Emptiness", "pronounce": "Xūxiù", "native": "虚宿"}
+    },
+    {
+      "id": "CON chinese 029",
+      "lines": [[53740, 55705], [53740, 55598], [53740, 52943], [55705, 57283, 55598], [57283, 58188], [55705, 55282, 56802, 55874, 55687, 53975], [55687, 56633, 57587], [55598, 54682, 54204]],
+      "common_name": {"english": "Wings", "pronounce": "Yìxiù", "native": "翼宿"}
+    },
+    {
+      "id": "CON chinese 030",
+      "lines": [[48356, 49841, 51069, 49321], [48356, 49321], [48356, 47452], [51069, 52085]],
+      "common_name": {"english": "Extended Net", "pronounce": "Zhāngxiù", "native": "张宿"}
+    },
+    {
+      "id": "CON chinese 031",
+      "lines": [[61359, 60965, 59803, 59316], [59803, 60189], [60965, 61174], [59316, 59199]],
+      "common_name": {"english": "Chariot", "pronounce": "Zhěnxiù", "native": "轸宿"}
+    },
+    {
+      "id": "CON chinese 032",
+      "lines": [[68756, 61281, 56211, 46977, 33104, 22783, 15520]],
+      "common_name": {"english": "Purple Forbidden Right Wall", "pronounce": "Zǐwēi Yòuyuán", "native": "紫微右垣"}
+    },
+    {
+      "id": "CON chinese 033",
+      "lines": [[75458, 78527, 80331, 83895, 92782, 101260, 114222, 3721]],
+      "common_name": {"english": "Purple Forbidden Left Wall", "pronounce": "Zǐwēi Zuǒyuán", "native": "紫微左垣"}
+    },
+    {
+      "id": "CON chinese 034",
+      "lines": [[26207, 26176], [26207, 26366]],
+      "common_name": {"english": "Turtle Beak", "pronounce": "Zīxiù", "native": "觜宿"}
+    },
+    {
+      "id": "CON chinese 035",
+      "lines": [[28358, 27949, 27249, 24348], [27249, 23040], [23783, 23734, 27971]],
+      "common_name": {"english": "Eight Kinds of Crops", "pronounce": "Bāgǔ", "native": "八谷"}
+    },
+    {
+      "id": "CON chinese 036",
+      "lines": [[910, 301, 118178], [910, 355], [910, 1803], [910, 1170]],
+      "common_name": {"english": "Net for Catching Birds", "pronounce": "Bākuí", "native": "八魁"}
+    },
+    {
+      "id": "CON chinese 037",
+      "lines": [[101421, 101483, 101882, 101800, 101916]],
+      "common_name": {"english": "Rotten Gourd", "pronounce": "Bàiguā", "native": "败瓜"}
+    },
+    {
+      "id": "CON chinese 038",
+      "lines": [[108085, 109111, 112948, 112102]],
+      "common_name": {"english": "Decayed Mortar", "pronounce": "Bàijiù", "native": "败臼"}
+    },
+    {
+      "id": "CON chinese 039",
+      "lines": [[54061, 53910, 58001, 59774, 62956, 65378, 67301]],
+      "common_name": {"english": "Northern Dipper", "pronounce": "Běidǒu", "native": "北斗"}
+    },
+    {
+      "id": "CON chinese 040",
+      "lines": [[37826, 36850, 36366]],
+      "common_name": {"english": "North River", "pronounce": "Běihé", "native": "北河"}
+    },
+    {
+      "id": "CON chinese 041",
+      "lines": [[75097, 72607, 70692, 69112, 62572]],
+      "common_name": {"english": "Northern Pole", "pronounce": "Běijí", "native": "北极"}
+    },
+    {
+      "id": "CON chinese 042",
+      "lines": [[113368, 113368]],
+      "common_name": {"english": "North Gate of the Military Camp", "pronounce": "Běiluò Shīmén", "native": "北落师门"}
+    },
+    {
+      "id": "CON chinese 043",
+      "lines": [[90422, 92308, 93542, 94005, 94160, 94114, 93825, 93174, 92989, 90968, 90982, 90422]],
+      "common_name": {"english": "River Turtle", "pronounce": "Biē", "native": "鳖"}
+    },
+    {
+      "id": "CON chinese 044",
+      "lines": [[101772, 101772]],
+      "common_name": {"english": "Persia", "pronounce": "Bōsī", "native": "波斯"}
+    },
+    {
+      "id": "CON chinese 045",
+      "lines": [[88267, 88886]],
+      "common_name": {"english": "Textile Ruler", "pronounce": "Bódù", "native": "帛度"}
+    },
+    {
+      "id": "CON chinese 046",
+      "lines": [[22667, 22957, 22833, 22845, 22509, 22449, 22549, 22797, 23123]],
+      "common_name": {"english": "Banner of Three Stars", "pronounce": "Shēnqí", "native": "参旗"}
+    },
+    {
+      "id": "CON chinese 047",
+      "lines": [[25985, 25606, 27072, 27654]],
+      "common_name": {"english": "Toilet", "pronounce": "Cé", "native": "厕"}
+    },
+    {
+      "id": "CON chinese 048",
+      "lines": [[4427, 4427]],
+      "common_name": {"english": "Whip", "pronounce": "Cè", "native": "策"}
+    },
+    {
+      "id": "CON chinese 049",
+      "lines": [[63125, 62207, 61692, 61317, 60646, 59831, 58684]],
+      "common_name": {"english": "Royal Guards", "pronounce": "Chángchén", "native": "常陈"}
+    },
+    {
+      "id": "CON chinese 050",
+      "lines": [[112917, 111944, 110351, 106481, 103632, 104060, 106711]],
+      "common_name": {"english": "Big Yard for Chariots", "pronounce": "Chēfǔ", "native": "车府"}
+    },
+    {
+      "id": "CON chinese 051",
+      "lines": [[74395, 71536, 71121]],
+      "common_name": {"english": "Chariots and Cavalry", "pronounce": "Chēqí", "native": "车骑"}
+    },
+    {
+      "id": "CON chinese 052",
+      "lines": [[80628, 82369]],
+      "common_name": {"english": "Commodity Market", "pronounce": "Chēsì", "native": "车肆"}
+    },
+    {
+      "id": "CON chinese 053",
+      "lines": [[11345, 12002, 10642], [11261, 11029, 12390]],
+      "common_name": {"english": "Hay", "pronounce": "Chúhāo", "native": "刍藁"}
+    },
+    {
+      "id": "CON chinese 054",
+      "lines": [[86092, 85792, 85258]],
+      "common_name": {"english": "Pestle (In Winnowing Basket Mansion)", "pronounce": "Chǔ (Jīxiù)", "native": "杵 (箕宿)"}
+    },
+    {
+      "id": "CON chinese 055",
+      "lines": [[109937, 109410, 109056]],
+      "common_name": {"english": "Pestle (In Rooftop Mansion)", "pronounce": "Chǔ (Wēixiù)", "native": "杵 (危宿)"}
+    },
+    {
+      "id": "CON chinese 056",
+      "lines": [[60189, 60189]],
+      "common_name": {"english": "Changsha (Vassal of Chariot)", "pronounce": "Chángshā", "native": "长沙 (附轸宿)"}
+    },
+    {
+      "id": "CON chinese 057",
+      "lines": [[117371, 2707, 4714, 5589, 10438, 13665, 16228, 16281, 16292]],
+      "common_name": {"english": "Guest House", "pronounce": "Zhuànshè", "native": "传舍"}
+    },
+    {
+      "id": "CON chinese 058",
+      "lines": [[77634, 76945]],
+      "common_name": {"english": "Retinue (In Room Mansion)", "pronounce": "Cóngguān (Fángxiù)", "native": "从官 (房宿)"}
+    },
+    {
+      "id": "CON chinese 059",
+      "lines": [[56975, 56975]],
+      "common_name": {"english": "Retinue (In Supreme Palace Enclosure)", "pronounce": "Cóngguān (Tàiwēiyuán)", "native": "从官 (太微垣)"}
+    },
+    {
+      "id": "CON chinese 060",
+      "lines": [[69673, 69673]],
+      "common_name": {"english": "Great Horn", "pronounce": "Dàjiǎo", "native": "大角"}
+    },
+    {
+      "id": "CON chinese 061",
+      "lines": [[59504, 59504]],
+      "common_name": {"english": "Chief Judge", "pronounce": "Dàlǐ", "native": "大理"}
+    },
+    {
+      "id": "CON chinese 062",
+      "lines": [[11060, 13531, 14632, 14668, 14576, 14354, 13254, 12623]],
+      "common_name": {"english": "Mausoleum", "pronounce": "Dàlíng", "native": "大陵"}
+    },
+    {
+      "id": "CON chinese 063",
+      "lines": [],
+      "common_name": {"english": "Celestial Temple", "pronounce": "Tiānmiào", "native": "天庙"}
+    },
+    {
+      "id": "CON chinese 064",
+      "lines": [[69226, 68478, 68103]],
+      "common_name": {"english": "Mattress of the Emperor", "pronounce": "Dìxí", "native": "帝席"}
+    },
+    {
+      "id": "CON chinese 065",
+      "lines": [[84345, 84345]],
+      "common_name": {"english": "Emperor's Seat", "pronounce": "Dì zuò", "native": "帝座"}
+    },
+    {
+      "id": "CON chinese 066",
+      "lines": [[80894, 80569, 80343, 80975]],
+      "common_name": {"english": "Eastern Door", "pronounce": "Dōngxián", "native": "东咸"}
+    },
+    {
+      "id": "CON chinese 067",
+      "lines": [[80463, 79492, 79634, 81008, 81354]],
+      "common_name": {"english": "Dipper for Liquids", "pronounce": "Dǒu", "native": "斗"}
+    },
+    {
+      "id": "CON chinese 068",
+      "lines": [[74604, 75177]],
+      "common_name": {"english": "Trials", "pronounce": "Dùnwán", "native": "顿顽"}
+    },
+    {
+      "id": "CON chinese 069",
+      "lines": [[26237, 26235, 26241], [26237, 26311]],
+      "common_name": {"english": "Send Armed Forces To Suppress (Vassal of Three Stars)", "pronounce": "Fá", "native": "伐 (附参宿)"}
+    },
+    {
+      "id": "CON chinese 070",
+      "lines": [[79672, 79005, 78400]],
+      "common_name": {"english": "Punishment", "pronounce": "Fá", "native": "罚"}
+    },
+    {
+      "id": "CON chinese 071",
+      "lines": [[44382, 34481], [44382, 41312], [44382, 40817], [44382, 35228], [44382, 37504]],
+      "common_name": {"english": "Flying Fish", "pronounce": "Fēiyú", "native": "飞鱼"}
+    },
+    {
+      "id": "CON chinese 072",
+      "lines": [[110960, 110395], [110960, 111497], [110960, 110672], [110960, 109074]],
+      "common_name": {"english": "Tomb (Vassal of Rooftop)", "pronounce": "Fénmù", "native": "坟墓 (附危宿)"}
+    },
+    {
+      "id": "CON chinese 073",
+      "lines": [[116889, 117089, 117629]],
+      "common_name": {"english": "Axe", "pronounce": "Fūyuè", "native": "鈇钺"}
+    },
+    {
+      "id": "CON chinese 074",
+      "lines": [[6960, 9347, 9061]],
+      "common_name": {"english": "Sickle", "pronounce": "Fūzhì", "native": "鈇锧"}
+    },
+    {
+      "id": "CON chinese 075",
+      "lines": [[91755, 90905, 90156, 92512, 92997, 93340, 93713]],
+      "common_name": {"english": "Basket for Mulberry Leaves", "pronounce": "Fúkuāng", "native": "扶筐"}
+    },
+    {
+      "id": "CON chinese 076",
+      "lines": [[17678, 13244]],
+      "common_name": {"english": "White Patched Nearby", "pronounce": "Fùbái", "native": "附白"}
+    },
+    {
+      "id": "CON chinese 077",
+      "lines": [[2920, 2920]],
+      "common_name": {"english": "Auxiliary Road", "pronounce": "Fùlù", "native": "附路"}
+    },
+    {
+      "id": "CON chinese 078",
+      "lines": [[87261, 87261]],
+      "common_name": {"english": "Fu Yue", "pronounce": "Fù Yuè", "native": "傅说"}
+    },
+    {
+      "id": "CON chinese 079",
+      "lines": [[108874, 108991]],
+      "common_name": {"english": "Roofing", "pronounce": "Gàiwū", "native": "盖屋"}
+    },
+    {
+      "id": "CON chinese 080",
+      "lines": [[17959, 14862, 9763, 9802, 9598, 10031, 9480, 8016, 7078]],
+      "common_name": {"english": "Canopy Support (Vassal of Canopy of the Emperor)", "pronounce": "Gàng", "native": "杠 (附华盖)"}
+    },
+    {
+      "id": "CON chinese 081",
+      "lines": [[11569, 8886, 6686, 5542, 3801, 3504]],
+      "common_name": {"english": "Flying Corridor", "pronounce": "Gédào", "native": "阁道"}
+    },
+    {
+      "id": "CON chinese 082",
+      "lines": [[72105, 71284, 71053]],
+      "common_name": {"english": "Celestial Lance", "pronounce": "Gěnghé", "native": "梗河"}
+    },
+    {
+      "id": "CON chinese 083",
+      "lines": [[113116, 5372, 11767, 85822, 82080, 77055]],
+      "common_name": {"english": "Curved Array", "pronounce": "Gōuchén", "native": "勾陈"}
+    },
+    {
+      "id": "CON chinese 084",
+      "lines": [[78933, 78990], [78933, 78820]],
+      "common_name": {"english": "Lock (Vassal of Room)", "pronounce": "Gōuqián", "native": "钩钤 (附房宿)"}
+    },
+    {
+      "id": "CON chinese 085",
+      "lines": [[96465, 95477]],
+      "common_name": {"english": "Dog", "pronounce": "Gǒu", "native": "狗"}
+    },
+    {
+      "id": "CON chinese 086",
+      "lines": [[98066, 98353, 98688, 98162, 98066]],
+      "common_name": {"english": "Territory of Dog", "pronounce": "Gǒuguó", "native": "狗国"}
+    },
+    {
+      "id": "CON chinese 087",
+      "lines": [[77048, 76127, 75695, 76267, 76952, 77512, 78159, 78493, 78459]],
+      "common_name": {"english": "Coiled Thong", "pronounce": "Guànsuǒ", "native": "贯索"}
+    },
+    {
+      "id": "CON chinese 088",
+      "lines": [[40023, 40881, 41377, 40240]],
+      "common_name": {"english": "Beacon Fire", "pronounce": "Guàn", "native": "爟"}
+    },
+    {
+      "id": "CON chinese 089",
+      "lines": [[83153, 85267, 85727, 82363, 83081]],
+      "common_name": {"english": "Tortoise", "pronounce": "Gui"}
+    },
+    {
+      "id": "CON chinese 090",
+      "lines": [[51232, 52558, 56561, 57363]],
+      "common_name": {"english": "Sea and Mountain", "pronounce": "Hǎishān", "native": "海山"}
+    },
+    {
+      "id": "CON chinese 091",
+      "lines": [[41037, 45556, 46974, 47854, 48002]],
+      "common_name": {"english": "Sea Rock", "pronounce": "Hǎishí", "native": "海石"}
+    },
+    {
+      "id": "CON chinese 092",
+      "lines": [],
+      "common_name": {"english": "Military Gate", "pronounce": "Jūnmén", "native": "军门"}
+    },
+    {
+      "id": "CON chinese 093",
+      "lines": [[98036, 97649, 97278]],
+      "common_name": {"english": "Drum at the River", "pronounce": "Hégǔ", "native": "河鼓"}
+    },
+    {
+      "id": "CON chinese 094",
+      "lines": [[109268, 112122, 112623, 112374, 114996, 113638, 112122, 114421], [112122, 114131], [112122, 112203, 110936], [112122, 111043, 109908]],
+      "common_name": {"english": "Crane", "pronounce": "Hè", "native": "鹤"}
+    },
+    {
+      "id": "CON chinese 095",
+      "lines": [[67464, 67472, 68245, 68862]],
+      "common_name": {"english": "Railings", "pronounce": "Héng", "native": "衡"}
+    },
+    {
+      "id": "CON chinese 096",
+      "lines": [[86032, 86032]],
+      "common_name": {"english": "Astrologer", "pronounce": "Hòu", "native": "候"}
+    },
+    {
+      "id": "CON chinese 097",
+      "lines": [[34444, 35904, 37819, 38901, 38070, 37229, 35904, 33579, 32759, 35264, 37819]],
+      "common_name": {"english": "Bow and Arrow", "pronounce": "Húshǐ", "native": "弧矢"}
+    },
+    {
+      "id": "CON chinese 098",
+      "lines": [[82673, 83000, 82402, 82073]],
+      "common_name": {"english": "Dipper for Solids", "pronounce": "Hú", "native": "斛"}
+    },
+    {
+      "id": "CON chinese 099",
+      "lines": [[54951, 54951]],
+      "common_name": {"english": "Emperor's Bodyguard", "pronounce": "Yézhě", "native": "虎贲"}
+    },
+    {
+      "id": "CON chinese 100",
+      "lines": [[102532, 101958, 101769, 102281, 102532], [101769, 101589]],
+      "common_name": {"english": "Good Gourd", "pronounce": "Hùguā", "native": "瓠瓜"}
+    },
+    {
+      "id": "CON chinese 101",
+      "lines": [[7078, 7650], [7078, 5926], [7078, 5518], [7078, 6692], [7078, 7965], [7078, 9009]],
+      "common_name": {"english": "Canopy of the Emperor", "pronounce": "Huágài", "native": "华盖"}
+    },
+    {
+      "id": "CON chinese 102",
+      "lines": [[83430, 83478, 83613, 84177]],
+      "common_name": {"english": "Eunuch Official", "pronounce": "Huàngzhě", "native": "宦者"}
+    },
+    {
+      "id": "CON chinese 103",
+      "lines": [[116231, 116389, 116602, 765, 2072, 2081, 3245, 2472, 5165, 6867]],
+      "common_name": {"english": "Firebird", "pronounce": "Huǒniǎo", "native": "火鸟"}
+    },
+    {
+      "id": "CON chinese 104",
+      "lines": [[42673, 42673]],
+      "common_name": {"english": "Cumulative Corpses", "pronounce": "Jīshī", "native": "积尸"}
+    },
+    {
+      "id": "CON chinese 105",
+      "lines": [[13879, 13879]],
+      "common_name": {"english": "Heap of Corpses", "pronounce": "JīShī", "native": "积尸"}
+    },
+    {
+      "id": "CON chinese 106",
+      "lines": [[19167, 19167]],
+      "common_name": {"english": "Stored water", "pronounce": "Jīshuǐ", "native": "积水"}
+    },
+    {
+      "id": "CON chinese 107",
+      "lines": [[37740, 37740]],
+      "common_name": {"english": "Pile of Firewood", "pronounce": "Jīxīn", "native": "积薪"}
+    },
+    {
+      "id": "CON chinese 108",
+      "lines": [[78918, 78384]],
+      "common_name": {"english": "Group of Soldiers", "pronounce": "Jīzú", "native": "积卒"}
+    },
+    {
+      "id": "CON chinese 109",
+      "lines": [[24372, 19780]],
+      "common_name": {"english": "White Patches Attached", "pronounce": "Jiābái", "native": "夹白"}
+    },
+    {
+      "id": "CON chinese 110",
+      "lines": [[93085, 93683, 94141, 94820, 95168, 95176]],
+      "common_name": {"english": "Establishment", "pronounce": "Jiàn", "native": "建"}
+    },
+    {
+      "id": "CON chinese 111",
+      "lines": [[92791, 92420, 93194, 93903]],
+      "common_name": {"english": "Clepsydra Terrace", "pronounce": "Jiàntái", "native": "渐台"}
+    },
+    {
+      "id": "CON chinese 112",
+      "lines": [[79374, 79374]],
+      "common_name": {"english": "Door Bolt", "pronounce": "Jiànbì", "native": "键闭"}
+    },
+    {
+      "id": "CON chinese 113",
+      "lines": [[19893, 21281, 26069, 27100, 29134]],
+      "common_name": {"english": "Goldfish", "pronounce": "Jīnyú", "native": "金鱼"}
+    },
+    {
+      "id": "CON chinese 114",
+      "lines": [[63414, 63414]],
+      "common_name": {"english": "Recommending Virtuous Men", "pronounce": "Jìnxiǎn", "native": "进贤"}
+    },
+    {
+      "id": "CON chinese 115",
+      "lines": [[35710, 35710]],
+      "common_name": {"english": "Accumulated Water", "pronounce": "Jīshuǐ", "native": "积水"}
+    },
+    {
+      "id": "CON chinese 116",
+      "lines": [[104680, 104680]],
+      "common_name": {"english": "Nine Water Wells", "pronounce": "Jiǔkǎn", "native": "九坎"}
+    },
+    {
+      "id": "CON chinese 117",
+      "lines": [[61960, 62267, 61579]],
+      "common_name": {"english": "Nine Senior Officers", "pronounce": "Jiǔqīng", "native": "九卿"}
+    },
+    {
+      "id": "CON chinese 118",
+      "lines": [[21515, 22109, 22701, 23221, 23231, 22479, 22263, 21763, 23474]],
+      "common_name": {"english": "Imperial Military Flag", "pronounce": "Jiǔyoú", "native": "九斿"}
+    },
+    {
+      "id": "CON chinese 119",
+      "lines": [[19777, 19587, 20507, 21444, 22024, 21986]],
+      "common_name": {"english": "Interpreters of Nine Dialects", "pronounce": "Jiǔzhōu Shūkǒu", "native": "九州殊口"}
+    },
+    {
+      "id": "CON chinese 120",
+      "lines": [[47723, 46771, 46454]],
+      "common_name": {"english": "Banner of Wine Shop", "pronounce": "Jiǔqí", "native": "酒旗"}
+    },
+    {
+      "id": "CON chinese 121",
+      "lines": [[110371, 109176, 107354, 107310]],
+      "common_name": {"english": "Mortar", "pronounce": "Jiù", "native": "臼"}
+    },
+    {
+      "id": "CON chinese 122",
+      "lines": [[17529, 18532, 18614, 18246, 17448, 17313]],
+      "common_name": {"english": "Rolled Tongue", "pronounce": "Juǎnshé", "native": "卷舌"}
+    },
+    {
+      "id": "CON chinese 123",
+      "lines": [[24244, 24327, 24845, 24873]],
+      "common_name": {"english": "Military Well", "pronounce": "Jūnjǐng", "native": "军井"}
+    },
+    {
+      "id": "CON chinese 124",
+      "lines": [[5434, 5434]],
+      "common_name": {"english": "Southern Military Gate", "pronounce": "Nánjūnmén", "native": "军南门"}
+    },
+    {
+      "id": "CON chinese 125",
+      "lines": [[30324, 31700, 33092, 33248, 33152, 31125, 30324]],
+      "common_name": {"english": "Market for Soldiers", "pronounce": "Jūnshì", "native": "军市"}
+    },
+    {
+      "id": "CON chinese 126",
+      "lines": [[85423, 85423]],
+      "common_name": {"english": "Chaff", "pronounce": "Kāng", "native": "糠"}
+    },
+    {
+      "id": "CON chinese 127",
+      "lines": [[70027, 69260, 69536, 69989]],
+      "common_name": {"english": "Boats and Lake", "pronounce": "Kàngchí", "native": "亢池"}
+    },
+    {
+      "id": "CON chinese 128",
+      "lines": [[86929, 88866, 90797, 92609, 93015, 99240, 102395, 91792, 98495, 105858, 100751]],
+      "common_name": {"english": "Peafowl", "pronounce": "Kǒngquè", "native": "孔雀"}
+    },
+    {
+      "id": "CON chinese 129",
+      "lines": [[108036, 109472]],
+      "common_name": {"english": "Crying", "pronounce": "Kū", "native": "哭"}
+    },
+    {
+      "id": "CON chinese 130",
+      "lines": [[68002, 71352, 68933, 67457, 65936, 63945, 61932, 61622, 60517, 60823]],
+      "common_name": {"english": "Arsenal", "pronounce": "Kùlóu", "native": "库楼"}
+    },
+    {
+      "id": "CON chinese 131",
+      "lines": [[62763, 62763]],
+      "common_name": {"english": "Captain of the Bodyguards", "pronounce": "Lángjiàng", "native": "郎将"}
+    },
+    {
+      "id": "CON chinese 132",
+      "lines": [[60742, 60697, 60746, 60904, 60514, 60351, 61071, 60941, 59847, 61394, 61724, 60957, 59501, 58858]],
+      "common_name": {"english": "Officers of the Imperial Guard", "pronounce": "Lángwèi", "native": "郎位"}
+    },
+    {
+      "id": "CON chinese 133",
+      "lines": [[30438, 30438]],
+      "common_name": {"english": "Old Man", "pronounce": "Lǎorén", "native": "老人"}
+    },
+    {
+      "id": "CON chinese 134",
+      "lines": [[115919, 115444, 114144, 112935, 112447, 112029]],
+      "common_name": {"english": "Thunder and Lightning", "pronounce": "Léidiàn", "native": "雷电"}
+    },
+    {
+      "id": "CON chinese 135",
+      "lines": [[145, 118209, 154, 443, 145], [118209, 114724, 112961, 111123, 109139, 107556, 106985, 106723, 107188, 107556]],
+      "common_name": {"english": "Line of Ramparts", "pronounce": "Lěibìzhèn", "native": "垒壁阵"}
+    },
+    {
+      "id": "CON chinese 136",
+      "lines": [[112440, 112748], [112051, 112158], [115250, 115623], [113881, 112748], [113881, 112158], [113881, 115250]],
+      "common_name": {"english": "Resting Palace (Vassal of Encampment)", "pronounce": "Lígōng", "native": "离宫 (附室宿)"}
+    },
+    {
+      "id": "CON chinese 137",
+      "lines": [[105140, 106067]],
+      "common_name": {"english": "Jade Ornament on Ladies' Wear", "pronounce": "Líyù", "native": "离瑜"}
+    },
+    {
+      "id": "CON chinese 138",
+      "lines": [[101936, 101847, 101692, 101101]],
+      "common_name": {"english": "Pearls on Ladies' Wear", "pronounce": "Lízhū", "native": "离珠"}
+    },
+    {
+      "id": "CON chinese 139",
+      "lines": [[19205, 19513, 20430, 20250]],
+      "common_name": {"english": "Whetstone", "pronounce": "Lìshí", "native": "砺石"}
+    },
+    {
+      "id": "CON chinese 140",
+      "lines": [[80179, 80883]],
+      "common_name": {"english": "Jewel Market", "pronounce": "Lièsì", "native": "列肆"}
+    },
+    {
+      "id": "CON chinese 141",
+      "lines": [[54182, 53824, 53807]],
+      "common_name": {"english": "Astronomical Observatory", "pronounce": "Língtaí", "native": "灵台"}
+    },
+    {
+      "id": "CON chinese 142",
+      "lines": [[32439, 33694, 39538, 36547, 23265, 25110]],
+      "common_name": {"english": "Six Jia", "pronounce": "Liùjiǎ", "native": "六甲"}
+    },
+    {
+      "id": "CON chinese 143",
+      "lines": [[101923, 101984, 102487]],
+      "common_name": {"english": "Network of Dykes", "pronounce": "Luóyàn", "native": "罗堰"}
+    },
+    {
+      "id": "CON chinese 144",
+      "lines": [[68702, 68702]],
+      "common_name": {"english": "Horse's Abdomen", "pronounce": "Mǎfù", "native": "马腹"}
+    },
+    {
+      "id": "CON chinese 145",
+      "lines": [[60710, 59449, 59196]],
+      "common_name": {"english": "Horse's Tail", "pronounce": "Mǎwěi", "native": "马尾"}
+    },
+    {
+      "id": "CON chinese 146",
+      "lines": [[62322, 61585]],
+      "common_name": {"english": "Bee", "pronounce": "Mìfēng", "native": "蜜蜂"}
+    },
+    {
+      "id": "CON chinese 147",
+      "lines": [[55945, 56647, 56127]],
+      "common_name": {"english": "The Hall of Glory", "pronounce": "Míngtáng", "native": "明堂"}
+    },
+    {
+      "id": "CON chinese 148",
+      "lines": [[50371, 51576, 52419, 50099, 45238]],
+      "common_name": {"english": "Southern Boat", "pronounce": "Nánchuán", "native": "南船"}
+    },
+    {
+      "id": "CON chinese 149",
+      "lines": [[36041, 36188, 37279]],
+      "common_name": {"english": "South River", "pronounce": "Nánhé", "native": "南河"}
+    },
+    {
+      "id": "CON chinese 150",
+      "lines": [],
+      "common_name": {"english": "Dongou", "pronounce": "Dōngōu", "native": "东瓯"}
+    },
+    {
+      "id": "CON chinese 151",
+      "lines": [[66657, 71683]],
+      "common_name": {"english": "Southern Gate", "pronounce": "Nánmén", "native": "南门"}
+    },
+    {
+      "id": "CON chinese 152",
+      "lines": [[62423, 63076]],
+      "common_name": {"english": "Inner Kitchen", "pronounce": "Nèichú", "native": "内厨"}
+    },
+    {
+      "id": "CON chinese 153",
+      "lines": [[41704, 45333, 43903], [46733, 43644, 45455]],
+      "common_name": {"english": "Inner Steps", "pronounce": "Nèijiē", "native": "内阶"}
+    },
+    {
+      "id": "CON chinese 154",
+      "lines": [[50218, 49593, 47631, 48742]],
+      "common_name": {"english": "High Judge", "pronounce": "Nèipíng", "native": "内平"}
+    },
+    {
+      "id": "CON chinese 155",
+      "lines": [[57328, 57380, 58590, 58948]],
+      "common_name": {"english": "Inner Screen", "pronounce": "Nèipíng", "native": "内屏"}
+    },
+    {
+      "id": "CON chinese 156",
+      "lines": [[92862, 94481, 94713, 95556, 97295]],
+      "common_name": {"english": "Imperial Passageway", "pronounce": "Niǎndào", "native": "辇道"}
+    },
+    {
+      "id": "CON chinese 157",
+      "lines": [[110130, 110838, 118092, 2484, 3330, 1599, 118322]],
+      "common_name": {"english": "Bird's Beak", "pronounce": "Niǎohuì", "native": "鸟喙"}
+    },
+    {
+      "id": "CON chinese 158",
+      "lines": [[91918, 91918]],
+      "common_name": {"english": "Peasant", "pronounce": "Nóngzhàngrén", "native": "农丈人"}
+    },
+    {
+      "id": "CON chinese 159",
+      "lines": [[84380, 84606, 85112]],
+      "common_name": {"english": "Woman's Bed", "pronounce": "Nǚchuáng", "native": "女床"}
+    },
+    {
+      "id": "CON chinese 160",
+      "lines": [[87728, 87728]],
+      "common_name": {"english": "Female Protocol", "pronounce": "Nǚshǐ", "native": "女史"}
+    },
+    {
+      "id": "CON chinese 161",
+      "lines": [[113889, 114971, 115830, 116771, 118268]],
+      "common_name": {"english": "Thunderbolt", "pronounce": "Pīlì", "native": "霹雳"}
+    },
+    {
+      "id": "CON chinese 162",
+      "lines": [[64962, 68895]],
+      "common_name": {"english": "Judging", "pronounce": "Ping"}
+    },
+    {
+      "id": "CON chinese 163",
+      "lines": [[64238, 66803]],
+      "common_name": {"english": "Flat Road", "pronounce": "Píngdào", "native": "平道"}
+    },
+    {
+      "id": "CON chinese 164",
+      "lines": [[24305, 23685]],
+      "common_name": {"english": "Screen", "pronounce": "Píng", "native": "屏"}
+    },
+    {
+      "id": "CON chinese 165",
+      "lines": [[81497, 79992, 79101, 77760, 75973, 75411, 74666]],
+      "common_name": {"english": "Seven Excellencies", "pronounce": "Qīgōng", "native": "七公"}
+    },
+    {
+      "id": "CON chinese 166",
+      "lines": [],
+      "common_name": {"english": "House for Musical Instruments", "pronounce": "Qìfǔ", "native": "器府"}
+    },
+    {
+      "id": "CON chinese 167",
+      "lines": [[76297, 75141, 73334, 73273, 74117, 75264, 74911, 73807, 72683, 71860]],
+      "common_name": {"english": "Imperial Guards", "pronounce": "Qíguān", "native": "骑官"}
+    },
+    {
+      "id": "CON chinese 168",
+      "lines": [[74376, 74376]],
+      "common_name": {"english": "Chariots and Cavalry General", "pronounce": "Qízhèn Jiāngjūn", "native": "骑阵将军"}
+    },
+    {
+      "id": "CON chinese 169",
+      "lines": [[110273, 110003]],
+      "common_name": {"english": "Weeping", "pronounce": "Qì", "native": "泣"}
+    },
+    {
+      "id": "CON chinese 170",
+      "lines": [],
+      "common_name": {"english": "Celestial Cereals", "pronounce": "Tiānjì", "native": "天稷"}
+    },
+    {
+      "id": "CON chinese 171",
+      "lines": [[57936, 58158, 56280, 56332, 56343, 56452, 56922]],
+      "common_name": {"english": "Green Hill", "pronounce": "Qīngqiū", "native": "青丘"}
+    },
+    {
+      "id": "CON chinese 172",
+      "lines": [[34724, 32578]],
+      "common_name": {"english": "Palace Gate", "pronounce": "Quèqiū", "native": "阙丘"}
+    },
+    {
+      "id": "CON chinese 173",
+      "lines": [[106140, 105502, 107348, 107472]],
+      "common_name": {"english": "Humans", "pronounce": "Rén", "native": "人"}
+    },
+    {
+      "id": "CON chinese 174",
+      "lines": [[76880, 76880]],
+      "common_name": {"english": "Solar Star", "pronounce": "Rì", "native": "日"}
+    },
+    {
+      "id": "CON chinese 175",
+      "lines": [[61968, 62443]],
+      "common_name": {"english": "Three Excellencies (In Supreme Palace Enclosure)", "pronounce": "Sāngōng(Tàiwēiyuán)", "native": "三公 (太微垣)"}
+    },
+    {
+      "id": "CON chinese 176",
+      "lines": [[66234, 64906]],
+      "common_name": {"english": "Three Excellencies (In Purple Forbidden Enclosure)", "pronounce": "Sāngōng(Zǐwēiyuán)", "native": "三公 (紫微垣)"}
+    },
+    {
+      "id": "CON chinese 177",
+      "lines": [[74946, 77952, 82273, 74946]],
+      "common_name": {"english": "Triangle", "pronounce": "Sānjiǎoxíng", "native": "三角形"}
+    },
+    {
+      "id": "CON chinese 178",
+      "lines": [[44390, 44857]],
+      "common_name": {"english": "Three Top Instructors", "pronounce": "Sānshī", "native": "三师"}
+    },
+    {
+      "id": "CON chinese 179",
+      "lines": [[44127, 44471, 50372, 50801, 55219, 55203]],
+      "common_name": {"english": "Three Steps", "pronounce": "Sāntái", "native": "三台"}
+    },
+    {
+      "id": "CON chinese 180",
+      "lines": [[85805, 80650], [85805, 81660], [85805, 80161], [85805, 82860]],
+      "common_name": {"english": "Royal Secretary", "pronounce": "Shàngshū", "native": "尚书"}
+    },
+    {
+      "id": "CON chinese 181",
+      "lines": [[54347, 53417, 52457, 52686]],
+      "common_name": {"english": "Junior Officers", "pronounce": "Shàowēi", "native": "少微"}
+    },
+    {
+      "id": "CON chinese 182",
+      "lines": [[12876, 12394, 11001, 8928]],
+      "common_name": {"english": "Snake's Abdomen", "pronounce": "Shéfù", "native": "蛇腹"}
+    },
+    {
+      "id": "CON chinese 183",
+      "lines": [[9236, 17440]],
+      "common_name": {"english": "Snake's Head", "pronounce": "Shéshǒu", "native": "蛇首"}
+    },
+    {
+      "id": "CON chinese 184",
+      "lines": [[2021, 110078, 107089, 104043]],
+      "common_name": {"english": "Snake's Tail", "pronounce": "Shéwěi", "native": "蛇尾"}
+    },
+    {
+      "id": "CON chinese 185",
+      "lines": [[82676, 82676]],
+      "common_name": {"english": "Changing Room (Vassal of Tail)", "pronounce": "shéngōng", "native": "神宫 (附尾宿)"}
+    },
+    {
+      "id": "CON chinese 186",
+      "lines": [[104019, 103703], [104139, 105143], [105515, 106568], [104429, 104452]],
+      "common_name": {"english": "Twelve States", "pronounce": "Shíèrguó", "native": "十二国"}
+    },
+    {
+      "id": "CON chinese 187",
+      "lines": [[61084, 60718], [62434, 59747]],
+      "common_name": {"english": "Cross", "pronounce": "Shízìjià", "native": "十字架"}
+    },
+    {
+      "id": "CON chinese 188",
+      "lines": [[27204, 27204]],
+      "common_name": {"english": "Excrement", "pronounce": "Shǐ", "native": "屎"}
+    },
+    {
+      "id": "CON chinese 189",
+      "lines": [[86284, 86565], [88404, 84880], [85397, 86768]],
+      "common_name": {"english": "Municipal Office", "pronounce": "Shìlóu", "native": "市楼"}
+    },
+    {
+      "id": "CON chinese 190",
+      "lines": [[51685, 51556, 52638, 53229]],
+      "common_name": {"english": "Eunuch", "pronounce": "Shì", "native": "势"}
+    },
+    {
+      "id": "CON chinese 191",
+      "lines": [[29038, 29426, 29704, 29434]],
+      "common_name": {"english": "Official for Irrigation", "pronounce": "Shuǐfǔ", "native": "水府"}
+    },
+    {
+      "id": "CON chinese 192",
+      "lines": [[7588, 5348, 3405]],
+      "common_name": {"english": "Crooked Running Water", "pronounce": "Shuǐweǐ", "native": "水委"}
+    },
+    {
+      "id": "CON chinese 193",
+      "lines": [[36425, 37921, 39567, 40167]],
+      "common_name": {"english": "Water Level", "pronounce": "Shuǐweì", "native": "水位"}
+    },
+    {
+      "id": "CON chinese 194",
+      "lines": [[104521, 104858]],
+      "common_name": {"english": "Deified Judge of Right and Wrong", "pronounce": "Sīfēi", "native": "司非"}
+    },
+    {
+      "id": "CON chinese 195",
+      "lines": [[28237, 28734, 28716, 27913]],
+      "common_name": {"english": "Deity in Charge of Monsters", "pronounce": "Sīguài", "native": "司怪"}
+    },
+    {
+      "id": "CON chinese 196",
+      "lines": [[107575, 106944]],
+      "common_name": {"english": "Deified Judge of Rank", "pronounce": "Sīlù", "native": "司禄"}
+    },
+    {
+      "id": "CON chinese 197",
+      "lines": [[106942, 107144]],
+      "common_name": {"english": "Deified Judge of Life", "pronounce": "Sīmìng", "native": "司命"}
+    },
+    {
+      "id": "CON chinese 198",
+      "lines": [[105570, 105413]],
+      "common_name": {"english": "Deified Judge of Disaster and Good Fortune", "pronounce": "Sīwēi", "native": "司危"}
+    },
+    {
+      "id": "CON chinese 199",
+      "lines": [[34033, 32533, 31216, 30419]],
+      "common_name": {"english": "Four Channels", "pronounce": "Sìdú", "native": "四渎"}
+    },
+    {
+      "id": "CON chinese 200",
+      "lines": [[51502, 51384]],
+      "common_name": {"english": "Four Advisors", "pronounce": "Sìfǔ", "native": "四辅"}
+    },
+    {
+      "id": "CON chinese 201",
+      "lines": [[29807, 29034]],
+      "common_name": {"english": "Grandson", "pronounce": "Sūn", "native": "孙"}
+    },
+    {
+      "id": "CON chinese 202",
+      "lines": [[57399, 57399]],
+      "common_name": {"english": "Guard of the Sun", "pronounce": "Tàiyángshǒu", "native": "太阳守"}
+    },
+    {
+      "id": "CON chinese 203",
+      "lines": [[66798, 66798]],
+      "common_name": {"english": "First Great One", "pronounce": "Tàiyǐ", "native": "太乙"}
+    },
+    {
+      "id": "CON chinese 204",
+      "lines": [[57565, 57565]],
+      "common_name": {"english": "Crown Prince", "pronounce": "Tàizǐ", "native": "太子"}
+    },
+    {
+      "id": "CON chinese 205",
+      "lines": [[54539, 54539]],
+      "common_name": {"english": "Royals", "pronounce": "Tiānláo", "native": "太尊"}
+    },
+    {
+      "id": "CON chinese 206",
+      "lines": [[111169, 110609, 107533, 107136, 106886, 108165, 109857, 110538, 118243, 117863, 117301, 115990, 111674, 113919, 114570, 115022, 116584, 117221, 116805, 116631]],
+      "common_name": {"english": "Flying Serpent", "pronounce": "Téngshé", "native": "螣蛇"}
+    },
+    {
+      "id": "CON chinese 207",
+      "lines": [[15696, 15696]],
+      "common_name": {"english": "Celestial Concave", "pronounce": "Tiānē", "native": "天阿"}
+    },
+    {
+      "id": "CON chinese 208",
+      "lines": [[87585, 85829, 85670, 87833, 86414]],
+      "common_name": {"english": "Celestial Flail", "pronounce": "Tiānbàng", "native": "天棓"}
+    },
+    {
+      "id": "CON chinese 209",
+      "lines": [[91117, 91726, 91845, 92175, 93026, 93429, 93805, 93717, 93526]],
+      "common_name": {"english": "Market Officer", "pronounce": "Tiānbiàn", "native": "天弁"}
+    },
+    {
+      "id": "CON chinese 210",
+      "lines": [[1562, 5364, 6537, 8645, 8102, 9326]],
+      "common_name": {"english": "Square Celestial Granary", "pronounce": "Tiāncāng", "native": "天仓"}
+    },
+    {
+      "id": "CON chinese 211",
+      "lines": [[17886, 17886]],
+      "common_name": {"english": "Celestial Slander", "pronounce": "Tiānchán", "native": "天谗"}
+    },
+    {
+      "id": "CON chinese 212",
+      "lines": [[94376, 96100, 97433, 98702, 98583, 95081]],
+      "common_name": {"english": "Celestial Kitchen", "pronounce": "Tiānchú", "native": "天厨"}
+    },
+    {
+      "id": "CON chinese 213",
+      "lines": [[13268, 14328, 15863, 16826, 17358, 19343, 19812, 20156, 19949]],
+      "common_name": {"english": "Celestial Boat", "pronounce": "Tiānchuán", "native": "天船"}
+    },
+    {
+      "id": "CON chinese 214",
+      "lines": [[69373, 74605, 77277], [79414, 73199, 72181]],
+      "common_name": {"english": "Celestial Bed", "pronounce": "Tiānchuáng", "native": "天床"}
+    },
+    {
+      "id": "CON chinese 215",
+      "lines": [[9640, 8068, 7607, 6999, 7719, 7513, 7818, 9021, 10064, 10670, 10644, 9640]],
+      "common_name": {"english": "Great General of Heaven", "pronounce": "Tiāndàjiāngjūn", "native": "天大将军"}
+    },
+    {
+      "id": "CON chinese 216",
+      "lines": [[99473, 98844, 97980, 97804]],
+      "common_name": {"english": "Celestial Drumstick", "pronounce": "Tiānfú", "native": "天桴"}
+    },
+    {
+      "id": "CON chinese 217",
+      "lines": [[76470, 76600]],
+      "common_name": {"english": "Celestial Spokes", "pronounce": "Tiānfú", "native": "天辐"}
+    },
+    {
+      "id": "CON chinese 218",
+      "lines": [[113246, 113246]],
+      "common_name": {"english": "Materials for Making Tents", "pronounce": "Tiāngāng", "native": "天纲"}
+    },
+    {
+      "id": "CON chinese 219",
+      "lines": [[23497, 22565, 23949, 24822, 23497]],
+      "common_name": {"english": "Celestial High Terrace", "pronounce": "Tiāngāo", "native": "天高"}
+    },
+    {
+      "id": "CON chinese 220",
+      "lines": [[102253, 99731, 101093, 102422, 105199, 108917, 110817, 112724, 115088]],
+      "common_name": {"english": "Celestial Hook", "pronounce": "Tiāngōu", "native": "天钩"}
+    },
+    {
+      "id": "CON chinese 221",
+      "lines": [[42312, 42884, 42515, 42828, 43409, 43825]],
+      "common_name": {"english": "Celestial Dog", "pronounce": "Tiāngǒu", "native": "天狗"}
+    },
+    {
+      "id": "CON chinese 222",
+      "lines": [[26451, 26451]],
+      "common_name": {"english": "Celestial Pass", "pronounce": "Tiānguān", "native": "天关"}
+    },
+    {
+      "id": "CON chinese 223",
+      "lines": [[109693, 109693]],
+      "common_name": {"english": "Great Emperor of Heaven", "pronounce": "Tiānhuángdàdì", "native": "天皇大帝"}
+    },
+    {
+      "id": "CON chinese 224",
+      "lines": [[24879, 25541], [24879, 25292], [24879, 24340], [24879, 24504]],
+      "common_name": {"english": "Celestial Pier", "pronounce": "Tiānhua8ng", "native": "天潢"}
+    },
+    {
+      "id": "CON chinese 225",
+      "lines": [[4257, 4371, 3559, 3455]],
+      "common_name": {"english": "Celestial Pigsty", "pronounce": "Tiānhùn", "native": "天溷"}
+    },
+    {
+      "id": "CON chinese 226",
+      "lines": [[96950, 97290]],
+      "common_name": {"english": "Celestial Cock", "pronounce": "Tiānjī", "native": "天鸡"}
+    },
+    {
+      "id": "CON chinese 227",
+      "lines": [[44816, 44816]],
+      "common_name": {"english": "Judge for Estimating the Age of Animals", "pronounce": "Tiānjì", "native": "天记"}
+    },
+    {
+      "id": "CON chinese 228",
+      "lines": [[80181, 81693, 83207, 83313, 83462, 84573, 86178, 87808]],
+      "common_name": {"english": "Celestial Discipline", "pronounce": "Tiānjì", "native": "天纪"}
+    },
+    {
+      "id": "CON chinese 229",
+      "lines": [[84314, 84405, 84970, 85340]],
+      "common_name": {"english": "Celestial River", "pronounce": "Tiānjiāng", "native": "天江"}
+    },
+    {
+      "id": "CON chinese 230",
+      "lines": [[20641, 19990]],
+      "common_name": {"english": "Celestial Street", "pronounce": "Tiānjiē", "native": "天街"}
+    },
+    {
+      "id": "CON chinese 231",
+      "lines": [[20732, 21273], [20732, 20219, 20901, 21589, 21735, 21402, 20522]],
+      "common_name": {"english": "Celestial Tally", "pronounce": "Tiānjié", "native": "天节"}
+    },
+    {
+      "id": "CON chinese 232",
+      "lines": [[104732, 105138, 104887, 103413, 102098, 99639, 97165, 100453, 102488, 104732]],
+      "common_name": {"english": "Celestial Ford", "pronounce": "Tiānjīn", "native": "天津"}
+    },
+    {
+      "id": "CON chinese 233",
+      "lines": [[1366, 1686, 1473]],
+      "common_name": {"english": "Celestial Stable", "pronounce": "Tiānjiù", "native": "天厩"}
+    },
+    {
+      "id": "CON chinese 234",
+      "lines": [[32349, 32349]],
+      "common_name": {"english": "Celestial Wolf", "pronounce": "Tiānláng", "native": "天狼"}
+    },
+    {
+      "id": "CON chinese 235",
+      "lines": [[53295, 56034], [53721, 56148], [53838, 55560]],
+      "common_name": {"english": "Celestial Prison", "pronounce": "Tàizūn", "native": "天牢"}
+    },
+    {
+      "id": "CON chinese 236",
+      "lines": [[106786, 107382, 107487, 107517, 107527, 105668, 104974, 103728, 103640, 104459, 105019, 105574, 105761]],
+      "common_name": {"english": "Celestial Ramparts", "pronounce": "Tiānlěichéng", "native": "天垒城"}
+    },
+    {
+      "id": "CON chinese 237",
+      "lines": [[55060, 55797, 58181, 58259, 55060]],
+      "common_name": {"english": "Judge for Nobility", "pronounce": "Tiānlǐ", "native": "天理"}
+    },
+    {
+      "id": "CON chinese 238",
+      "lines": [[16369, 16322, 16083, 15900]],
+      "common_name": {"english": "Celestial Foodstuff", "pronounce": "Tiānlǐn", "native": "天廪"}
+    },
+    {
+      "id": "CON chinese 239",
+      "lines": [[64407, 65639]],
+      "common_name": {"english": "Celestial Gate", "pronounce": "Tiānmén", "native": "天门"}
+    },
+    {
+      "id": "CON chinese 240",
+      "lines": [[108952, 107608, 107380, 109285, 109422, 108952]],
+      "common_name": {"english": "Celestial Money", "pronounce": "Tiānqián", "native": "天钱"}
+    },
+    {
+      "id": "CON chinese 241",
+      "lines": [[69481, 69713, 70497]],
+      "common_name": {"english": "Celestial Spear", "pronounce": "Tiānqiāng", "native": "天枪"}
+    },
+    {
+      "id": "CON chinese 242",
+      "lines": [[14135, 15619, 13954, 12828, 10324, 11484, 12093, 12706, 12387, 11791, 11046, 10234, 10305]],
+      "common_name": {"english": "Circular Celestial Granary", "pronounce": "Tiānqūn", "native": "天囷"}
+    },
+    {
+      "id": "CON chinese 243",
+      "lines": [[77516, 77516]],
+      "common_name": {"english": "Celestial Milk", "pronounce": "Tiānrǔ", "native": "天乳"}
+    },
+    {
+      "id": "CON chinese 244",
+      "lines": [[39953, 42570, 42913, 45941, 46701]],
+      "common_name": {"english": "Celestial Earth God's Temple", "pronounce": "Tiānshè", "native": "天社"}
+    },
+    {
+      "id": "CON chinese 245",
+      "lines": [[68520, 66200]],
+      "common_name": {"english": "Celestial Farmland (In Horn Mansion)", "pronounce": "Tiāntián (Jiǎoxiù)", "native": "天田 (角宿)"}
+    },
+    {
+      "id": "CON chinese 246",
+      "lines": [[104750, 102978], [104750, 104234, 102485], [102978, 102485]],
+      "common_name": {"english": "Celestial Farmland (In Ox Mansion)", "pronounce": "Tiāntián (Niúxiù)", "native": "天田 (牛宿)"}
+    },
+    {
+      "id": "CON chinese 247",
+      "lines": [[49812, 50414]],
+      "common_name": {"english": "Celestial Premier", "pronounce": "Tiānxiàng", "native": "天相"}
+    },
+    {
+      "id": "CON chinese 248",
+      "lines": [[67627, 67627]],
+      "common_name": {"english": "Celestial Great One", "pronounce": "Tiānyǐ", "native": "天乙"}
+    },
+    {
+      "id": "CON chinese 249",
+      "lines": [[15737, 15110, 14838]],
+      "common_name": {"english": "Celestial Yin Force", "pronounce": "Tiānyīn", "native": "天阴"}
+    },
+    {
+      "id": "CON chinese 250",
+      "lines": [[11918, 11918]],
+      "common_name": {"english": "Ricks of Grain", "pronounce": "Tiānyǔ", "native": "天庾"}
+    },
+    {
+      "id": "CON chinese 251",
+      "lines": [[95294, 95241, 95347]],
+      "common_name": {"english": "Celestial Spring", "pronounce": "Tiānyuān", "native": "天渊"}
+    },
+    {
+      "id": "CON chinese 252",
+      "lines": [[7083, 9007, 10602, 11407, 12413, 13847, 17351, 17797, 17874, 20042, 20535, 21393, 21248]],
+      "common_name": {"english": "Celestial Orchard", "pronounce": "Tiānyuán", "native": "天园"}
+    },
+    {
+      "id": "CON chinese 253",
+      "lines": [[18543, 17593, 17378, 16537, 15197, 13701, 12770, 12843, 13288, 14146, 15474, 16611, 17651, 17717, 18216, 18673]],
+      "common_name": {"english": "Celestial Meadows", "pronounce": "Tiānyuàn", "native": "天苑"}
+    },
+    {
+      "id": "CON chinese 254",
+      "lines": [[87706, 86736, 86352, 86060, 85755, 85783, 87072]],
+      "common_name": {"english": "Celestial Keyhole", "pronounce": "Tiānyuè", "native": "天籥"}
+    },
+    {
+      "id": "CON chinese 255",
+      "lines": [[102208, 104105, 98401, 94083, 88127]],
+      "common_name": {"english": "Celestial Pillar", "pronounce": "Tiānzhù", "native": "天柱"}
+    },
+    {
+      "id": "CON chinese 256",
+      "lines": [[35846, 35550, 33927]],
+      "common_name": {"english": "Celestial Wine Cup", "pronounce": "Tiānzūn", "native": "天樽"}
+    },
+    {
+      "id": "CON chinese 257",
+      "lines": [[90139, 88657]],
+      "common_name": {"english": "Butcher's Shops", "pronounce": "Túsì", "native": "屠肆"}
+    },
+    {
+      "id": "CON chinese 258",
+      "lines": [[194, 2025]],
+      "common_name": {"english": "Official for Earthworks and Buildings", "pronounce": "Tǔgōng", "native": "土公"}
+    },
+    {
+      "id": "CON chinese 259",
+      "lines": [[110386, 110986]],
+      "common_name": {"english": "Official for Materials Supply", "pronounce": "Tǔgōnglì", "native": "土公吏"}
+    },
+    {
+      "id": "CON chinese 260",
+      "lines": [[3419, 3419]],
+      "common_name": {"english": "Master of Constructions", "pronounce": "Tǔsīkōng", "native": "土司空"}
+    },
+    {
+      "id": "CON chinese 261",
+      "lines": [[41375, 42835, 43305]],
+      "common_name": {"english": "Outer Kitchen", "pronounce": "Wàichú", "native": "外厨"}
+    },
+    {
+      "id": "CON chinese 262",
+      "lines": [[9487, 8833, 7884, 7007, 5737, 4906, 3786]],
+      "common_name": {"english": "Outer Fence", "pronounce": "Wàipíng", "native": "外屏"}
+    },
+    {
+      "id": "CON chinese 263",
+      "lines": [[746, 2599, 3821, 3179, 2505]],
+      "common_name": {"english": "Wang Liang", "pronounce": "Wáng Liáng", "native": "王良"}
+    },
+    {
+      "id": "CON chinese 264",
+      "lines": [],
+      "common_name": {"english": "Master of Constructions (In Legs Mansion)", "pronounce": "Tǔsīkōng", "native": "王良 (土司空)"}
+    },
+    {
+      "id": "CON chinese 265",
+      "lines": [[48319, 48402, 46853, 44901, 45493]],
+      "common_name": {"english": "Administrative Center", "pronounce": "Wénchāng", "native": "文昌"}
+    },
+    {
+      "id": "CON chinese 266",
+      "lines": [[23015, 24608, 28360, 28380, 25428]],
+      "common_name": {"english": "Five Chariots", "pronounce": "Wǔchē", "native": "五车"}
+    },
+    {
+      "id": "CON chinese 267",
+      "lines": [[14417, 9727], [14417, 13055], [14417, 15547], [14417, 19461]],
+      "common_name": {"english": "Interior Seats of the Five Emperors", "pronounce": "Wǔdì NèiZuò", "native": "五帝内座"}
+    },
+    {
+      "id": "CON chinese 268",
+      "lines": [[57632, 57646], [57632, 57320], [57632, 58159], [57632, 57779]],
+      "common_name": {"english": "Seats of the Five Emperors", "pronounce": "Wǔdì Zuò", "native": "五帝座"}
+    },
+    {
+      "id": "CON chinese 269",
+      "lines": [[33018, 34693, 36046, 36962, 38538]],
+      "common_name": {"english": "Five Feudal Kings", "pronounce": "Wǔ Zhūhóu", "native": "五诸侯"}
+    },
+    {
+      "id": "CON chinese 270",
+      "lines": [[63948, 63355, 62356, 59819]],
+      "common_name": {"english": "Five Lords", "pronounce": "Wǔ Zhūhóu", "native": "五诸侯"}
+    },
+    {
+      "id": "CON chinese 271",
+      "lines": [[78727, 78207, 77853, 77060]],
+      "common_name": {"english": "Western Door", "pronounce": "Xīxián", "native": "西咸"}
+    },
+    {
+      "id": "CON chinese 272",
+      "lines": [[94779, 95853, 96441, 96895]],
+      "common_name": {"english": "Xi Zhong", "pronounce": "Xī Zhòng", "native": "奚仲"}
+    },
+    {
+      "id": "CON chinese 273",
+      "lines": [[25048, 25810, 24813]],
+      "common_name": {"english": "Pool of Harmony", "pronounce": "Xiánchí", "native": "咸池"}
+    },
+    {
+      "id": "CON chinese 274",
+      "lines": [[60485, 60485]],
+      "common_name": {"english": "Prime Minister", "pronounce": "Xiàng", "native": "相"}
+    },
+    {
+      "id": "CON chinese 275",
+      "lines": [[60000, 58484, 51839, 52633, 46928, 46107, 43012, 40888, 36982]],
+      "common_name": {"english": "Little Dipper", "pronounce": "Xiǎodǒu", "native": "小斗"}
+    },
+    {
+      "id": "CON chinese 276",
+      "lines": [[58519, 58519]],
+      "common_name": {"english": "Officer of Honour", "pronounce": "Xìngchén", "native": "幸臣"}
+    },
+    {
+      "id": "CON chinese 277",
+      "lines": [[110023, 110578, 111710, 113345]],
+      "common_name": {"english": "Temple", "pronounce": "Xūliáng", "native": "虚梁"}
+    },
+    {
+      "id": "CON chinese 278",
+      "lines": [[44248, 44700, 45688, 45860, 47617, 47701, 46146, 46750, 47908, 48455, 50335, 50583, 49583, 49669, 47508], [49669, 51624], [49669, 49637]],
+      "common_name": {"english": "Xuanyuan", "pronounce": "Xuānyuán", "native": "轩辕"}
+    },
+    {
+      "id": "CON chinese 279",
+      "lines": [[69732, 69732]],
+      "common_name": {"english": "Sombre Lance", "pronounce": "Xuángē", "native": "玄戈"}
+    },
+    {
+      "id": "CON chinese 280",
+      "lines": [[29655, 29655]],
+      "common_name": {"english": "Battle Axe (Vassal of Well)", "pronounce": "Yué", "native": "钺 (附井宿)"}
+    },
+    {
+      "id": "CON chinese 281",
+      "lines": [[71865, 72010]],
+      "common_name": {"english": "Gate of Yang", "pronounce": "Yángmén", "native": "阳门"}
+    },
+    {
+      "id": "CON chinese 282",
+      "lines": [[31592, 31592]],
+      "common_name": {"english": "Wild Cockerel", "pronounce": "Yějī", "native": "野鸡"}
+    },
+    {
+      "id": "CON chinese 283",
+      "lines": [[60172, 60172]],
+      "common_name": {"english": "Usher to the Court", "pronounce": "Yézhě", "native": "谒者"}
+    },
+    {
+      "id": "CON chinese 284",
+      "lines": [[84969, 84979, 81852, 81065, 70638, 80047, 69896], [80047, 72370, 70248]],
+      "common_name": {"english": "Exotic Bird", "pronounce": "Yìquè", "native": "异雀"}
+    },
+    {
+      "id": "CON chinese 285",
+      "lines": [[51734, 51808]],
+      "common_name": {"english": "Hidden Virtue", "pronounce": "Yīndé", "native": "阴德"}
+    },
+    {
+      "id": "CON chinese 286",
+      "lines": [[6706, 7097, 7535, 8198, 7710]],
+      "common_name": {"english": "Official in Charge of Pasturing", "pronounce": "Yòugēng", "native": "右更"}
+    },
+    {
+      "id": "CON chinese 287",
+      "lines": [[96229, 96665, 95501, 95585, 96468, 96392, 96556, 96483, 97928]],
+      "common_name": {"english": "Right Flag", "pronounce": "Yòuqí", "native": "右旗"}
+    },
+    {
+      "id": "CON chinese 288",
+      "lines": [[67927, 67275, 67459]],
+      "common_name": {"english": "Right Conductor", "pronounce": "Yòushètí", "native": "右摄提"}
+    },
+    {
+      "id": "CON chinese 289",
+      "lines": [[87616, 87616]],
+      "common_name": {"english": "Fish", "pronounce": "Yú", "native": "鱼"}
+    },
+    {
+      "id": "CON chinese 290",
+      "lines": [[108797, 109332, 109786], [110391, 110529, 109789], [110641, 111954, 112862], [112362, 111449, 112529], [112211, 111539, 110778], [111086, 110602, 110179], [111200, 111843, 112161], [112615, 113031, 112716], [112542, 113136, 113148], [114341, 114375, 114119], [116247, 116118, 115669], [115438, 115404, 115125], [115115, 115033, 114855], [114164, 114054, 113996], [114939, 116758, 116971]],
+      "common_name": {"english": "Palace Guard", "pronounce": "Yǔlínjūn", "native": "羽林军"}
+    },
+    {
+      "id": "CON chinese 291",
+      "lines": [[23972, 23364, 23875, 24674]],
+      "common_name": {"english": "Jade Well", "pronounce": "Yùjǐng", "native": "玉井"}
+    },
+    {
+      "id": "CON chinese 292",
+      "lines": [[94648, 92112, 85852], [94648, 89937]],
+      "common_name": {"english": "Maids-in-waiting", "pronounce": "Yùnǚ", "native": "御女"}
+    },
+    {
+      "id": "CON chinese 293",
+      "lines": [[19038, 19038]],
+      "common_name": {"english": "Lunar Star", "pronounce": "Yuè", "native": "月"}
+    },
+    {
+      "id": "CON chinese 294",
+      "lines": [[21683, 21683]],
+      "common_name": {"english": "Whisper (Vassal of Net)", "pronounce": "Fùěr", "native": "附耳 (附毕宿)"}
+    },
+    {
+      "id": "CON chinese 295",
+      "lines": [[115738, 115951, 117491, 116928]],
+      "common_name": {"english": "Cloud and Rain", "pronounce": "Yúnyǔ", "native": "云雨"}
+    },
+    {
+      "id": "CON chinese 296",
+      "lines": [[110991, 109492, 109556, 107259, 107418]],
+      "common_name": {"english": "Zaofu", "pronounce": "Zàofǔ", "native": "造父"}
+    },
+    {
+      "id": "CON chinese 297",
+      "lines": [[51585, 52689, 52911, 51775]],
+      "common_name": {"english": "Long Wall", "pronounce": "Chángyuán", "native": "长垣"}
+    },
+    {
+      "id": "CON chinese 298",
+      "lines": [[26634, 25859]],
+      "common_name": {"english": "Grandfather", "pronounce": "Zhàngrén", "native": "丈人"}
+    },
+    {
+      "id": "CON chinese 299",
+      "lines": [[71075, 71075]],
+      "common_name": {"english": "Twinkling Indicator", "pronounce": "Zhāoyáo", "native": "招摇"}
+    },
+    {
+      "id": "CON chinese 300",
+      "lines": [[65477, 65477]],
+      "common_name": {"english": "Assistant (Vassal of Northern Dipper)", "pronounce": "Fǔ", "native": "辅 (附北斗)"}
+    },
+    {
+      "id": "CON chinese 301",
+      "lines": [[69415, 71652, 71974, 72929, 73714]],
+      "common_name": {"english": "Executions", "pronounce": "Zhéwēi", "native": "折威"}
+    },
+    {
+      "id": "CON chinese 302",
+      "lines": [[72571, 73566, 74857]],
+      "common_name": {"english": "Battle Chariots", "pronounce": "Zhènchē", "native": "阵车"}
+    },
+    {
+      "id": "CON chinese 303",
+      "lines": [[59199, 59199]],
+      "common_name": {"english": "Right linchpin (Vassal of Chariot)", "pronounce": "Yoùxiá", "native": "右辖 (附轸宿)"}
+    },
+    {
+      "id": "CON chinese 304",
+      "lines": [[91919, 91262, 91971]],
+      "common_name": {"english": "Weaving Girl", "pronounce": "Zhinǚ", "native": "织女"}
+    },
+    {
+      "id": "CON chinese 305",
+      "lines": [[61174, 61174]],
+      "common_name": {"english": "Left linchpin (Vassal of Chariot)", "pronounce": "Zuǒxiá", "native": "左辖 (附轸宿)"}
+    },
+    {
+      "id": "CON chinese 306",
+      "lines": [[64394, 63462, 64022]],
+      "common_name": {"english": "Tripod of the Zhou", "pronounce": "Zhōudǐng", "native": "周鼎"}
+    },
+    {
+      "id": "CON chinese 307",
+      "lines": [[27830, 26640, 25695, 23900, 23068, 21881]],
+      "common_name": {"english": "Feudal Kings", "pronounce": "Zhūwáng", "native": "诸王"}
+    },
+    {
+      "id": "CON chinese 308",
+      "lines": [[23416, 23453, 23767, 23416], [27639, 27673, 27483, 27639], [25984, 26536]],
+      "common_name": {"english": "Pillars (In Net Mansion)", "pronounce": "Zhù (Bìxiù)", "native": "柱 (毕宿)"}
+    },
+    {
+      "id": "CON chinese 309",
+      "lines": [[70300, 70090], [68523, 68282], [69996, 70574], [67786, 67669, 67153], [65109, 65109]],
+      "common_name": {"english": "Pillars (In Horn Mansion)", "pronounce": "Zhù (Jiǎoxiù)", "native": "柱 (角宿)"}
+    },
+    {
+      "id": "CON chinese 310",
+      "lines": [[89908, 89908]],
+      "common_name": {"english": "Official of Royal Archives", "pronounce": "Zhùshǐ", "native": "柱史"}
+    },
+    {
+      "id": "CON chinese 311",
+      "lines": [[27810, 27628]],
+      "common_name": {"english": "Son", "pronounce": "Zǐ", "native": "子"}
+    },
+    {
+      "id": "CON chinese 312",
+      "lines": [[92043, 92161]],
+      "common_name": {"english": "Patriarchal Clan", "pronounce": "Zōng", "native": "宗"}
+    },
+    {
+      "id": "CON chinese 313",
+      "lines": [[88149, 88192, 88290, 88601]],
+      "common_name": {"english": "Official of Religious Ceremonies", "pronounce": "Zōngrén", "native": "宗人"}
+    },
+    {
+      "id": "CON chinese 314",
+      "lines": [[86742, 87108]],
+      "common_name": {"english": "Official for the Royal Clan", "pronounce": "Zōngzhèng", "native": "宗正"}
+    },
+    {
+      "id": "CON chinese 315",
+      "lines": [[12332, 12640, 12803, 13327, 13165]],
+      "common_name": {"english": "Official in Charge of the Forest", "pronounce": "Zuǒgēng", "native": "左更"}
+    },
+    {
+      "id": "CON chinese 316",
+      "lines": [[96757, 96837, 97365, 97496, 98337, 98438, 98234, 98754, 99742]],
+      "common_name": {"english": "Left Flag", "pronounce": "Zuǒqí", "native": "左旗"}
+    },
+    {
+      "id": "CON chinese 317",
+      "lines": [[72125, 71762, 71795]],
+      "common_name": {"english": "Left Conductor", "pronounce": "Zuǒshètí", "native": "左摄提"}
+    },
+    {
+      "id": "CON chinese 318",
+      "lines": [[32562, 33485, 32173, 32480, 31832, 32844, 31789, 31771, 33041]],
+      "common_name": {"english": "Seat Flags", "pronounce": "Zuòqí", "native": "座旗"}
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {
+      "id": "CON western Aql",
+      "lines": [[98036, 97649, 97278], [97649, 95501, 97804], [99473, 97804], [95501, 93747, 93244], [95501, 93805]],
+      "image": {
+        "file": "illustrations/aquila.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [163, 232], "hip": 97649},
+          {"pos": [385, 131], "hip": 93244},
+          {"pos": [397, 397], "hip": 93805}
+        ]
+      },
+      "common_name": {"english": "Eagle", "native": "天鹰座", "chinese": "天鹰座"},
+      "iau": "Aql"
+    },
+    {
+      "id": "CON western And",
+      "lines": [[677, 3092, 5447], [9640, 5447, 4436, 3881]],
+      "image": {
+        "file": "illustrations/andromeda.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [198, 215], "hip": 3881},
+          {"pos": [337, 136], "hip": 3092},
+          {"pos": [224, 428], "hip": 9640}
+        ]
+      },
+      "common_name": {"english": "Chained Maiden", "native": "仙女座", "chinese": "仙女座"},
+      "iau": "And"
+    },
+    {
+      "id": "CON western Scl",
+      "lines": [[116231, 4577, 115102, 116231]],
+      "image": {
+        "file": "illustrations/sculptor.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [231, 39], "hip": 115102},
+          {"pos": [240, 106], "hip": 116231},
+          {"pos": [32, 174], "hip": 4577}
+        ]
+      },
+      "common_name": {"english": "Sculptor", "native": "玉夫座", "chinese": "玉夫座"},
+      "iau": "Scl"
+    },
+    {
+      "id": "CON western Ara",
+      "lines": [[88714, 85792, 83081, 82363, 85727, 85267, 85258, 88714]],
+      "image": {
+        "file": "illustrations/ara.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [98, 70], "hip": 83081},
+          {"pos": [191, 93], "hip": 85727},
+          {"pos": [107, 249], "hip": 88714}
+        ]
+      },
+      "common_name": {"english": "Altar", "native": "天坛座", "chinese": "天坛座"},
+      "iau": "Ara"
+    },
+    {
+      "id": "CON western Lib",
+      "lines": [[77853, 76333, 74785, 72622, 73714, 76333]],
+      "image": {
+        "file": "illustrations/libra.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [41, 27], "hip": 74785},
+          {"pos": [58, 170], "hip": 77853},
+          {"pos": [224, 107], "hip": 73714}
+        ]
+      },
+      "common_name": {"english": "Scales", "native": "天秤座", "chinese": "天秤座"},
+      "iau": "Lib"
+    },
+    {
+      "id": "CON western Cet",
+      "lines": [[10324, 11484], [8102, 3419, 1562], [3419, 5364, 6537, 8645, 11345, 12390, 12770, 11783, 8102], [10826, 12390], [10826, 12387, 12706, 14135, 13954, 12828, 11484, 12093, 12706]],
+      "image": {
+        "file": "illustrations/cetus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [87, 63], "hip": 14143},
+          {"pos": [28, 274], "hip": 12770},
+          {"pos": [412, 440], "hip": 1562}
+        ]
+      },
+      "common_name": {"english": "Sea Monster", "native": "鲸鱼座", "chinese": "鲸鱼座"},
+      "iau": "Cet"
+    },
+    {
+      "id": "CON western Ari",
+      "lines": [[13209, 9884, 8903, 8832]],
+      "image": {
+        "file": "illustrations/aries.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [12, 130], "hip": 13209},
+          {"pos": [58, 206], "hip": 13914},
+          {"pos": [210, 47], "hip": 8832}
+        ]
+      },
+      "common_name": {"english": "Ram", "native": "白羊座", "chinese": "白羊座"},
+      "iau": "Ari"
+    },
+    {
+      "id": "CON western Sct",
+      "lines": [[92175, 92202, 92814, 90595, 91117, 92175]],
+      "image": {
+        "file": "illustrations/scutum.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [52, 17], "hip": 92175},
+          {"pos": [224, 124], "hip": 90595},
+          {"pos": [139, 206], "hip": 92814}
+        ]
+      },
+      "common_name": {"english": "Shield", "native": "盾牌座", "chinese": "盾牌座"},
+      "iau": "Sct"
+    },
+    {
+      "id": "CON western Pyx",
+      "lines": [[42515, 42828, 43409]],
+      "image": {
+        "file": "illustrations/pyxis.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [152, 220], "hip": 41723},
+          {"pos": [94, 159], "hip": 42828},
+          {"pos": [44, 202], "hip": 42515}
+        ]
+      },
+      "common_name": {"english": "Compass", "native": "罗盘座", "chinese": "罗盘座"},
+      "iau": "Pyx"
+    },
+    {
+      "id": "CON western Boo",
+      "lines": [[71795, 69673, 72105, 74666, 73555, 71075, 71053, 69673, 67927, 67459]],
+      "image": {
+        "file": "illustrations/bootes.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [225, 222], "hip": 72105},
+          {"pos": [365, 184], "hip": 71075},
+          {"pos": [207, 401], "hip": 67927}
+        ]
+      },
+      "common_name": {"english": "Herdsman", "native": "牧夫座", "chinese": "牧夫座"},
+      "iau": "Boo"
+    },
+    {
+      "id": "CON western Cae",
+      "lines": [[21060, 21770, 21861]],
+      "image": {
+        "file": "illustrations/caelum.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [16, 231], "hip": 21060},
+          {"pos": [76, 145], "hip": 21770},
+          {"pos": [199, 75], "hip": 21861}
+        ]
+      },
+      "common_name": {"english": "Engraving Tool", "native": "雕具座", "chinese": "雕具座"},
+      "iau": "Cae"
+    },
+    {
+      "id": "CON western Cha",
+      "lines": [[40702, 51839, 60000]],
+      "image": {
+        "file": "illustrations/chamaeleon.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [29, 214], "hip": 60000},
+          {"pos": [73, 123], "hip": 51839},
+          {"pos": [184, 33], "hip": 40702}
+        ]
+      },
+      "common_name": {"english": "Chameleon", "native": "蝘蜓座", "chinese": "蝘蜓座"},
+      "iau": "Cha"
+    },
+    {
+      "id": "CON western Cnc",
+      "lines": [[43103, 42806, 40843], [42806, 42911, 40526], [42911, 44066]],
+      "image": {
+        "file": "illustrations/cancer.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [29, 166], "hip": 44066},
+          {"pos": [101, 255], "hip": 40526},
+          {"pos": [206, 91], "hip": 40843}
+        ]
+      },
+      "common_name": {"english": "Crab", "native": "巨蟹座", "chinese": "巨蟹座"},
+      "iau": "Cnc"
+    },
+    {
+      "id": "CON western Cap",
+      "lines": [[100064, 100345, 104139, 105515, 106985, 107556], [105515, 105881, 104139], [100345, 102485], [104139, 102978]],
+      "image": {
+        "file": "illustrations/capricornus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [15, 436], "hip": 107556},
+          {"pos": [403, 7], "hip": 100064},
+          {"pos": [460, 438], "hip": 102978}
+        ]
+      },
+      "common_name": {"english": "Sea Goat", "native": "摩羯座", "chinese": "摩羯座"},
+      "iau": "Cap"
+    },
+    {
+      "id": "CON western Car",
+      "lines": [[45238, 50099, 52419, 52468, 54463, 53253, 51232, 50371, 45556], [42568, 41037, 30438], [45080, 45556], [45080, 42568], [30438, 31685], [41037, 39429]],
+      "image": {
+        "file": "illustrations/argonavis.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [202, 455], "hip": 45238},
+          {"pos": [62, 216], "hip": 50191},
+          {"pos": [298, 22], "hip": 39757}
+        ]
+      },
+      "common_name": {"english": "Keel", "native": "船底座", "chinese": "船底座"},
+      "iau": "Car"
+    },
+    {
+      "id": "CON western Cas",
+      "lines": [[8886, 6686, 4427, 3179, 746]],
+      "image": {
+        "file": "illustrations/cassiopeia.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [390, 336], "hip": 8886},
+          {"pos": [163, 156], "hip": 3179},
+          {"pos": [73, 243], "hip": 746}
+        ]
+      },
+      "common_name": {"english": "Seated Queen", "native": "仙后座", "chinese": "仙后座"},
+      "iau": "Cas"
+    },
+    {
+      "id": "CON western Cen",
+      "lines": [[71683, 68702, 66657, 68002, 68282, 67472, 67464, 65936, 65109], [67464, 68933], [67472, 71352, 73334], [68002, 61932, 60823, 59196, 56480, 56561]],
+      "image": {
+        "file": "illustrations/centaurus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [118, 157], "hip": 68933},
+          {"pos": [194, 444], "hip": 71683},
+          {"pos": [463, 412], "hip": 56561}
+        ]
+      },
+      "common_name": {"english": "Centaur", "native": "半人马座", "chinese": "半人马座"},
+      "iau": "Cen"
+    },
+    {
+      "id": "CON western Cep",
+      "lines": [[109492, 112724, 106032, 105199, 109492], [112724, 116727, 106032]],
+      "image": {
+        "file": "illustrations/cepheus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [60, 335], "hip": 116727},
+          {"pos": [125, 170], "hip": 106032},
+          {"pos": [335, 147], "hip": 109492}
+        ]
+      },
+      "common_name": {"english": "King", "native": "仙王座", "chinese": "仙王座"},
+      "iau": "Cep"
+    },
+    {
+      "id": "CON western Com",
+      "lines": [[64241, 64394, 60742]],
+      "image": {
+        "file": "illustrations/coma-berenices.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [27, 199], "hip": 64241},
+          {"pos": [38, 58], "hip": 64394},
+          {"pos": [172, 64], "hip": 60742}
+        ]
+      },
+      "common_name": {"english": "Bernice's Hair", "native": "后发座", "chinese": "后发座"},
+      "iau": "Com"
+    },
+    {
+      "id": "CON western Cvn",
+      "lines": [[61317, 63125]],
+      "image": {
+        "file": "illustrations/canes-venatici.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [117, 113], "hip": 63901},
+          {"pos": [206, 40], "hip": 61317},
+          {"pos": [207, 152], "hip": 61309}
+        ]
+      },
+      "common_name": {"english": "Hunting Dogs", "native": "猎犬座", "chinese": "猎犬座"},
+      "iau": "Cvn"
+    },
+    {
+      "id": "CON western Aur",
+      "lines": [[28380, 28360, 24608, 23453, 23015], [25428, 23015], [25428, 28380]],
+      "image": {
+        "file": "illustrations/auriga.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [196, 189], "hip": 28380},
+          {"pos": [419, 208], "hip": 24608},
+          {"pos": [290, 423], "hip": 23015}
+        ]
+      },
+      "common_name": {"english": "Charioteer", "native": "御夫座", "chinese": "御夫座"},
+      "iau": "Aur"
+    },
+    {
+      "id": "CON western Col",
+      "lines": [[30277, 29807, 28199, 27628, 28328], [27628, 26634, 25859]],
+      "image": {
+        "file": "illustrations/columba.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [139, 29], "hip": 30277},
+          {"pos": [40, 190], "hip": 28328},
+          {"pos": [204, 211], "hip": 25859}
+        ]
+      },
+      "common_name": {"english": "Dove", "native": "天鸽座", "chinese": "天鸽座"},
+      "iau": "Col"
+    },
+    {
+      "id": "CON western Cir",
+      "lines": [[71908, 75323], [71908, 74824]],
+      "image": {
+        "file": "illustrations/circinus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [5, 36], "hip": 75323},
+          {"pos": [39, 11], "hip": 74824},
+          {"pos": [235, 239], "hip": 71908}
+        ]
+      },
+      "common_name": {"english": "Compass", "native": "圆规座", "chinese": "圆规座"},
+      "iau": "Cir"
+    },
+    {
+      "id": "CON western Crt",
+      "lines": [[53740, 54682, 55705, 55282, 53740], [55282, 55687, 56633, 58188, 57283, 55705]],
+      "image": {
+        "file": "illustrations/crater.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [45, 41], "hip": 58188},
+          {"pos": [160, 149], "hip": 55282},
+          {"pos": [55, 242], "hip": 54682}
+        ]
+      },
+      "common_name": {"english": "Cup", "native": "巨爵座", "chinese": "巨爵座"},
+      "iau": "Crt"
+    },
+    {
+      "id": "CON western CrA",
+      "lines": [[91875, 92989, 93174, 93825, 94114, 94160, 94005, 93542, 92953], [91875, 90887]],
+      "image": {
+        "file": "illustrations/corona-australis.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [14, 142], "hip": 93825},
+          {"pos": [218, 34], "hip": 90887},
+          {"pos": [195, 208], "hip": 92953}
+        ]
+      },
+      "common_name": {"english": "Southern Crown", "native": "南冕座", "chinese": "南冕座"},
+      "iau": "CrA"
+    },
+    {
+      "id": "CON western CrB",
+      "lines": [[76127, 75695, 76267, 76952, 77512, 78159, 78493]],
+      "image": {
+        "file": "illustrations/corona-borealis.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [16, 186], "hip": 78493},
+          {"pos": [201, 203], "hip": 76952},
+          {"pos": [157, 20], "hip": 76127}
+        ]
+      },
+      "common_name": {"english": "Northern Crown", "native": "北冕座", "chinese": "北冕座"},
+      "iau": "CrB"
+    },
+    {
+      "id": "CON western Crv",
+      "lines": [[61174, 60965, 59803, 59316, 59199], [59316, 61359, 60965]],
+      "image": {
+        "file": "illustrations/corvus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [65, 59], "hip": 60965},
+          {"pos": [77, 235], "hip": 61359},
+          {"pos": [213, 187], "hip": 59316}
+        ]
+      },
+      "common_name": {"english": "Crow", "native": "乌鸦座", "chinese": "乌鸦座"},
+      "iau": "Crv"
+    },
+    {
+      "id": "CON western Cru",
+      "lines": [[61084, 60718], [62434, 59747]],
+      "image": {
+        "file": "illustrations/crux.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [112, 21], "hip": 61084},
+          {"pos": [42, 20], "hip": 62434},
+          {"pos": [21, 106], "hip": 60718}
+        ]
+      },
+      "common_name": {"english": "Southern Cross", "native": "南十字座", "chinese": "南十字座"},
+      "iau": "Cru"
+    },
+    {
+      "id": "CON western Cyg",
+      "lines": [[94779, 95853, 97165, 100453, 102098], [100453, 102488, 104732, 107310], [100453, 98110, 95947]],
+      "image": {
+        "file": "illustrations/cygnus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [7, 382], "hip": 107310},
+          {"pos": [474, 46], "hip": 94779},
+          {"pos": [467, 453], "hip": 95947}
+        ]
+      },
+      "common_name": {"english": "Swan", "native": "天鹅座", "chinese": "天鹅座"},
+      "iau": "Cyg"
+    },
+    {
+      "id": "CON western Del",
+      "lines": [[101421, 101769, 101958, 102532, 102281, 101769]],
+      "image": {
+        "file": "illustrations/delphinus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [59, 31], "hip": 102532},
+          {"pos": [75, 148], "hip": 102805},
+          {"pos": [211, 143], "hip": 101421}
+        ]
+      },
+      "common_name": {"english": "Dolphin", "native": "海豚座", "chinese": "海豚座"},
+      "iau": "Del"
+    },
+    {
+      "id": "CON western Dor",
+      "lines": [[27100, 27890, 26069, 27100], [26069, 21281, 19893]],
+      "image": {
+        "file": "illustrations/dorado.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [56, 197], "hip": 27890},
+          {"pos": [75, 228], "hip": 27100},
+          {"pos": [219, 46], "hip": 19893}
+        ]
+      },
+      "common_name": {"english": "Swordfish", "native": "剑鱼座", "chinese": "剑鱼座"},
+      "iau": "Dor"
+    },
+    {
+      "id": "CON western Dra",
+      "lines": [[87585, 87833, 85670, 85829, 87585, 94376, 97433, 94648, 89937, 83895, 80331, 78527, 75458, 68756, 61281, 56211]],
+      "image": {
+        "file": "illustrations/draco.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [13, 411], "hip": 56211},
+          {"pos": [361, 154], "hip": 85670},
+          {"pos": [449, 429], "hip": 97433}
+        ]
+      },
+      "common_name": {"english": "Dragon", "native": "天龙座", "chinese": "天龙座"},
+      "iau": "Dra"
+    },
+    {
+      "id": "CON western Nor",
+      "lines": [[79509, 80000, 80582, 78639, 80000], [78639, 79509]],
+      "image": {
+        "file": "illustrations/norma.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [17, 45], "hip": 78639},
+          {"pos": [101, 38], "hip": 79509},
+          {"pos": [16, 112], "hip": 80582}
+        ]
+      },
+      "common_name": {"english": "Carpenter's Square", "native": "矩尺座", "chinese": "矩尺座"},
+      "iau": "Nor"
+    },
+    {
+      "id": "CON western Eri",
+      "lines": [[7588, 9007, 10602, 11407, 12413, 12486, 13847, 15510, 17797, 17874, 20042, 20535, 21393, 17651, 16611, 15474, 14146, 12843, 13701, 15197, 16537, 17378, 21444, 22109, 22701, 23875, 23972, 21594]],
+      "image": {
+        "file": "illustrations/eridanus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [41, 95], "hip": 22109},
+          {"pos": [296, 44], "hip": 13701},
+          {"pos": [493, 490], "hip": 7588}
+        ]
+      },
+      "common_name": {"english": "River", "native": "波江座", "chinese": "波江座"},
+      "iau": "Eri"
+    },
+    {
+      "id": "CON western Sge",
+      "lines": [[96837, 97365, 96757], [97365, 98337, 98920]],
+      "image": {
+        "file": "illustrations/sagitta.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [6, 12], "hip": 98920},
+          {"pos": [249, 213], "hip": 96757},
+          {"pos": [218, 243], "hip": 96837}
+        ]
+      },
+      "common_name": {"english": "Arrow", "native": "天箭座", "chinese": "天箭座"},
+      "iau": "Sge"
+    },
+    {
+      "id": "CON western For",
+      "lines": [[13147, 14879]],
+      "image": {
+        "file": "illustrations/fornax.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [42, 125], "hip": 14879},
+          {"pos": [128, 37], "hip": 13202},
+          {"pos": [190, 129], "hip": 13147}
+        ]
+      },
+      "common_name": {"english": "Furnace", "native": "天炉座", "chinese": "天炉座"},
+      "iau": "For"
+    },
+    {
+      "id": "CON western Gem",
+      "lines": [[31681, 34088, 35550, 35350, 32362], [35550, 36962, 37740], [36962, 37826], [36962, 36046, 34693, 36850], [34693, 33018], [34693, 32246, 30883], [32246, 30343, 29655, 28734]],
+      "image": {
+        "file": "illustrations/gemini.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [14, 81], "hip": 37740},
+          {"pos": [117, 252], "hip": 32362},
+          {"pos": [249, 165], "hip": 28734}
+        ]
+      },
+      "common_name": {"english": "Twins", "native": "双子座", "chinese": "双子座"},
+      "iau": "Gem"
+    },
+    {
+      "id": "CON western Cam",
+      "lines": [[16228, 18505, 22783], [16228, 17959, 22783], [17959, 25110]],
+      "image": {
+        "file": "illustrations/camelopardalis.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [77, 46], "hip": 25110},
+          {"pos": [128, 135], "hip": 22783},
+          {"pos": [219, 136], "hip": 16228}
+        ]
+      },
+      "common_name": {"english": "Giraffe", "native": "鹿豹座", "chinese": "鹿豹座"},
+      "iau": "Cam"
+    },
+    {
+      "id": "CON western CMa",
+      "lines": [[33160, 34045, 33347, 32349, 33977, 34444, 35037, 35904], [33579, 33856, 34444], [33856, 33152, 31592, 31416], [31592, 30324], [31592, 32349], [33579, 32759], [30122, 33579], [33347, 33160]],
+      "image": {
+        "file": "illustrations/canis-major.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [21, 347], "hip": 35904},
+          {"pos": [321, 24], "hip": 33160},
+          {"pos": [318, 492], "hip": 30122}
+        ]
+      },
+      "common_name": {"english": "Great Dog", "native": "大犬座", "chinese": "大犬座"},
+      "iau": "CMa"
+    },
+    {
+      "id": "CON western UMa",
+      "lines": [[67301, 65378, 62956, 59774, 54061, 53910, 58001, 59774], [58001, 57399, 54539, 50372], [54539, 50801], [53910, 48402, 46853, 44471], [46853, 44127], [48402, 48319, 41704, 46733, 54061]],
+      "image": {
+        "file": "illustrations/ursa-major.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [26, 75], "hip": 67301},
+          {"pos": [452, 272], "hip": 41704},
+          {"pos": [258, 394], "hip": 50372}
+        ]
+      },
+      "common_name": {"english": "Great Bear", "native": "大熊座", "chinese": "大熊座"},
+      "iau": "UMa"
+    },
+    {
+      "id": "CON western Gru",
+      "lines": [[114131, 110997, 109268, 112122, 114421, 114131], [112122, 113638], [112122, 112623], [109268, 109111, 108085]],
+      "image": {
+        "file": "illustrations/grus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [49, 109], "hip": 114131},
+          {"pos": [85, 206], "hip": 112623},
+          {"pos": [220, 45], "hip": 108085}
+        ]
+      },
+      "common_name": {"english": "Crane", "native": "天鹤座", "chinese": "天鹤座"},
+      "iau": "Gru"
+    },
+    {
+      "id": "CON western Her",
+      "lines": [[86414, 87808, 85112, 84606, 84380, 81833, 81126, 79992, 77760], [81833, 81693, 80816, 80170], [81693, 83207, 85693, 84379], [86974, 87933, 88794], [83207, 84380], [86974, 85693]],
+      "image": {
+        "file": "illustrations/hercules.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [44, 115], "hip": 80170},
+          {"pos": [254, 477], "hip": 79992},
+          {"pos": [441, 102], "hip": 88794}
+        ]
+      },
+      "common_name": {"english": "Hercules", "native": "武仙座", "chinese": "武仙座"},
+      "iau": "Her"
+    },
+    {
+      "id": "CON western Hor",
+      "lines": [[19747, 12484, 14240]],
+      "image": {
+        "file": "illustrations/horlogium.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [16, 235], "hip": 19747},
+          {"pos": [184, 67], "hip": 12484},
+          {"pos": [235, 119], "hip": 14240}
+        ]
+      },
+      "common_name": {"english": "Clock", "native": "时钟座", "chinese": "时钟座"},
+      "iau": "Hor"
+    },
+    {
+      "id": "CON western Hya",
+      "lines": [[42799, 42402, 42313, 43109, 43234, 42799], [43234, 43813, 45336, 46776, 46509, 46390, 48356, 49841, 51069, 52943, 56343, 57936, 64166, 64962]],
+      "image": {
+        "file": "illustrations/hydra.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [26, 491], "hip": 64962},
+          {"pos": [111, 149], "hip": 55434},
+          {"pos": [401, 33], "hip": 43813}
+        ]
+      },
+      "common_name": {"english": "Female Water Snake", "native": "长蛇座", "chinese": "长蛇座"},
+      "iau": "Hya"
+    },
+    {
+      "id": "CON western Hyi",
+      "lines": [[2021, 17678, 12394, 11001, 9236]],
+      "image": {
+        "file": "illustrations/hydrus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [14, 204], "hip": 9236},
+          {"pos": [201, 43], "hip": 2021},
+          {"pos": [241, 215], "hip": 17678}
+        ]
+      },
+      "common_name": {"english": "Male Water Snake", "native": "水蛇座", "chinese": "水蛇座"},
+      "iau": "Hyi"
+    },
+    {
+      "id": "CON western Ind",
+      "lines": [[105319, 101772, 103227, 105319]],
+      "image": {
+        "file": "illustrations/indus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [64, 143], "hip": 101772},
+          {"pos": [154, 20], "hip": 103227},
+          {"pos": [175, 98], "hip": 105319}
+        ]
+      },
+      "common_name": {"english": "Indian", "native": "印第安座", "chinese": "印第安座"},
+      "iau": "Ind"
+    },
+    {
+      "id": "CON western Lac",
+      "lines": [[109937, 111104, 111022, 110609, 110538, 111169, 111022]],
+      "image": {
+        "file": "illustrations/lacerta.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [249, 42], "hip": 110538},
+          {"pos": [108, 123], "hip": 111104},
+          {"pos": [67, 215], "hip": 109937}
+        ]
+      },
+      "common_name": {"english": "Lizard", "native": "蝎虎座", "chinese": "蝎虎座"},
+      "iau": "Lac"
+    },
+    {
+      "id": "CON western Mon",
+      "lines": [[29651, 30867, 34769, 30419, 29151], [34769, 39863, 37447]],
+      "image": {
+        "file": "illustrations/monoceros.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [20, 306], "hip": 39863},
+          {"pos": [394, 80], "hip": 31978},
+          {"pos": [509, 359], "hip": 29651}
+        ]
+      },
+      "common_name": {"english": "Unicorn", "native": "麒麟座", "chinese": "麒麟座"},
+      "iau": "Mon"
+    },
+    {
+      "id": "CON western Lep",
+      "lines": [[28910, 28103, 27288, 25985, 24305], [25985, 27654, 27072, 25606, 23685], [25985, 25606], [24305, 24845], [24305, 24327], [23685, 24305], [24327, 24244], [24845, 24873]],
+      "image": {
+        "file": "illustrations/lepus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [21, 48], "hip": 28910},
+          {"pos": [246, 62], "hip": 24244},
+          {"pos": [213, 235], "hip": 23685}
+        ]
+      },
+      "common_name": {"english": "Hare", "native": "天兔座", "chinese": "天兔座"},
+      "iau": "Lep"
+    },
+    {
+      "id": "CON western Leo",
+      "lines": [[57632, 54879, 49669, 49583, 50583, 54872, 57632], [50583, 50335, 48455, 47908], [54872, 54879]],
+      "image": {
+        "file": "illustrations/leo.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [69, 411], "hip": 57632},
+          {"pos": [383, 186], "hip": 49669},
+          {"pos": [321, 32], "hip": 47908}
+        ]
+      },
+      "common_name": {"english": "Lion", "native": "狮子座", "chinese": "狮子座"},
+      "iau": "Leo"
+    },
+    {
+      "id": "CON western Lup",
+      "lines": [[77634, 78970, 78384, 77634], [78384, 76297, 75141, 75177], [75141, 73273], [76297, 76552, 74395, 71860], [74395, 71536], [71860, 70576], [71860, 73273]],
+      "image": {
+        "file": "illustrations/lupus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [90, 257], "hip": 74395},
+          {"pos": [207, 435], "hip": 70576},
+          {"pos": [425, 239], "hip": 75177}
+        ]
+      },
+      "common_name": {"english": "Wolf", "native": "豺狼座", "chinese": "豺狼座"},
+      "iau": "Lup"
+    },
+    {
+      "id": "CON western Lyn",
+      "lines": [[45860, 45688, 44700, 44248, 41075, 36145, 33449, 30060]],
+      "image": {
+        "file": "illustrations/lynx.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [100, 216], "hip": 44248},
+          {"pos": [337, 212], "hip": 36145},
+          {"pos": [472, 119], "hip": 30060}
+        ]
+      },
+      "common_name": {"english": "Lynx", "native": "天猫座", "chinese": "天猫座"},
+      "iau": "Lyn"
+    },
+    {
+      "id": "CON western Lyr",
+      "lines": [[91262, 91971, 92420, 93194, 92791, 91971]],
+      "image": {
+        "file": "illustrations/lyra.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [100, 96], "hip": 92791},
+          {"pos": [157, 38], "hip": 91262},
+          {"pos": [139, 162], "hip": 92420}
+        ]
+      },
+      "common_name": {"english": "Lyre", "native": "天琴座", "chinese": "天琴座"},
+      "iau": "Lyr"
+    },
+    {
+      "id": "CON western Ant",
+      "lines": [[51172, 48926]],
+      "image": {
+        "file": "illustrations/antlia.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [4, 84], "hip": 51172},
+          {"pos": [72, 69], "hip": 47758},
+          {"pos": [42, 120], "hip": 48926}
+        ]
+      },
+      "common_name": {"english": "Air Pump", "native": "唧筒座", "chinese": "唧筒座"},
+      "iau": "Ant"
+    },
+    {
+      "id": "CON western Mic",
+      "lines": [[105140, 103738, 102831]],
+      "image": {
+        "file": "illustrations/microscopium.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [122, 226], "hip": 105140},
+          {"pos": [168, 148], "hip": 103738},
+          {"pos": [234, 115], "hip": 102831}
+        ]
+      },
+      "common_name": {"english": "Microscope", "native": "显微镜座", "chinese": "显微镜座"},
+      "iau": "Mic"
+    },
+    {
+      "id": "CON western Mus",
+      "lines": [[62322, 57363, 61199, 61585, 62322]],
+      "image": {
+        "file": "illustrations/musca.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [57, 52], "hip": 61199},
+          {"pos": [177, 68], "hip": 62322},
+          {"pos": [129, 236], "hip": 57363}
+        ]
+      },
+      "common_name": {"english": "Fly", "native": "苍蝇座", "chinese": "苍蝇座"},
+      "iau": "Mus"
+    },
+    {
+      "id": "CON western Oct",
+      "lines": [[107089, 112405, 70638, 107089]],
+      "image": {
+        "file": "illustrations/octans.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [15, 16], "hip": 70638},
+          {"pos": [236, 239], "hip": 107089},
+          {"pos": [247, 140], "hip": 112405}
+        ]
+      },
+      "common_name": {"english": "Octant", "native": "南极座", "chinese": "南极座"},
+      "iau": "Oct"
+    },
+    {
+      "id": "CON western Aps",
+      "lines": [[72370, 81065, 81852]],
+      "image": {
+        "file": "illustrations/apus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [66, 60], "hip": 81852},
+          {"pos": [76, 87], "hip": 81065},
+          {"pos": [163, 110], "hip": 72370}
+        ]
+      },
+      "common_name": {"english": "Bird of Paradise", "native": "天燕座", "chinese": "天燕座"},
+      "iau": "Aps"
+    },
+    {
+      "id": "CON western Oph",
+      "lines": [[86032, 86742], [84012, 86742], [86032, 83000, 79882, 81377, 84012, 85755]],
+      "image": {
+        "file": "illustrations/ophiuchus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [5, 183], "hip": 92946},
+          {"pos": [452, 47], "hip": 77233},
+          {"pos": [238, 453], "hip": 85755}
+        ]
+      },
+      "common_name": {"english": "Serpent Bearer", "native": "蛇夫座", "chinese": "蛇夫座"},
+      "iau": "Oph"
+    },
+    {
+      "id": "CON western Ori",
+      "lines": [[26727, 26311, 25930], [28691, 29426, 29038, 27913], [29426, 28614, 27989, 26727, 27366, 24436, 25930, 25336, 26207, 27989], [25336, 22449, 22549, 22730, 23123], [22449, 22509, 22845], [29038, 28614]],
+      "image": {
+        "file": "illustrations/orion.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [59, 11], "hip": 27913},
+          {"pos": [329, 477], "hip": 27366},
+          {"pos": [421, 91], "hip": 22449}
+        ]
+      },
+      "common_name": {"english": "Hunter", "native": "猎户座", "chinese": "猎户座"},
+      "iau": "Ori"
+    },
+    {
+      "id": "CON western Pav",
+      "lines": [[100751, 105858, 102395, 99240, 100751], [99240, 98495, 91792, 93015, 99240], [93015, 92609, 90098, 88866, 92609], [88866, 86929]],
+      "image": {
+        "file": "illustrations/pavo.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [55, 60], "hip": 100751},
+          {"pos": [110, 208], "hip": 98495},
+          {"pos": [235, 146], "hip": 86929}
+        ]
+      },
+      "common_name": {"english": "Peacock", "native": "孔雀座", "chinese": "孔雀座"},
+      "iau": "Pav"
+    },
+    {
+      "id": "CON western Peg",
+      "lines": [[1067, 113963], [113881, 112158, 109352], [113881, 112748, 112440, 109176, 107354], [113963, 112447, 112029, 109427, 107315], [677, 113881], [677, 1067], [113881, 113963]],
+      "image": {
+        "file": "illustrations/pegasus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [164, 41], "hip": 107315},
+          {"pos": [47, 283], "hip": 109410},
+          {"pos": [409, 349], "hip": 1067}
+        ]
+      },
+      "common_name": {"english": "Winged Horse", "native": "飞马座", "chinese": "飞马座"},
+      "iau": "Peg"
+    },
+    {
+      "id": "CON western Pic",
+      "lines": [[32607, 27530, 27321]],
+      "image": {
+        "file": "illustrations/pictor.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [4, 252], "hip": 32607},
+          {"pos": [148, 138], "hip": 27530},
+          {"pos": [167, 38], "hip": 27321}
+        ]
+      },
+      "common_name": {"english": "Painter's Easel", "native": "绘架座", "chinese": "绘架座"},
+      "iau": "Pic"
+    },
+    {
+      "id": "CON western Per",
+      "lines": [[17448, 18246, 18614, 18532, 17358, 15863, 14328, 13268], [15863, 14576, 14354, 13254]],
+      "image": {
+        "file": "illustrations/perseus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [164, 323], "hip": 18532},
+          {"pos": [299, 175], "hip": 15863},
+          {"pos": [385, 386], "hip": 13254}
+        ]
+      },
+      "common_name": {"english": "Hero", "native": "英仙座", "chinese": "英仙座"},
+      "iau": "Per"
+    },
+    {
+      "id": "CON western Equ",
+      "lines": [[104521, 104858, 105570, 104987, 104521]],
+      "image": {
+        "file": "illustrations/equuleus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [17, 180], "hip": 104521},
+          {"pos": [149, 86], "hip": 104987},
+          {"pos": [160, 160], "hip": 105570}
+        ]
+      },
+      "common_name": {"english": "Little Horse", "native": "小马座", "chinese": "小马座"},
+      "iau": "Equ"
+    },
+    {
+      "id": "CON western CMi",
+      "lines": [[37279, 36188]],
+      "image": {
+        "file": "illustrations/canis-minor.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [96, 43], "hip": 37921},
+          {"pos": [101, 171], "hip": 37279},
+          {"pos": [184, 124], "hip": 36188}
+        ]
+      },
+      "common_name": {"english": "Lesser Dog", "native": "小犬座", "chinese": "小犬座"},
+      "iau": "CMi"
+    },
+    {
+      "id": "CON western LMi",
+      "lines": [[53229, 51233, 49593, 46952], [49593, 53229]],
+      "image": {
+        "file": "illustrations/leo-minor.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [8, 40], "hip": 53229},
+          {"pos": [214, 127], "hip": 46952},
+          {"pos": [61, 155], "hip": 50303}
+        ]
+      },
+      "common_name": {"english": "Lesser Lion", "native": "小狮座", "chinese": "小狮座"},
+      "iau": "LMi"
+    },
+    {
+      "id": "CON western Vul",
+      "lines": [[95771, 98543]],
+      "image": {
+        "file": "illustrations/vulpecula.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [35, 133], "hip": 98543},
+          {"pos": [174, 111], "hip": 95771},
+          {"pos": [242, 135], "hip": 94703}
+        ]
+      },
+      "common_name": {"english": "Fox", "native": "狐狸座", "chinese": "狐狸座"},
+      "iau": "Vul"
+    },
+    {
+      "id": "CON western UMi",
+      "lines": [[11767, 85822, 82080, 77055, 79822, 75097, 72607, 77055]],
+      "image": {
+        "file": "illustrations/ursa-minor.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [15, 20], "hip": 11767},
+          {"pos": [193, 51], "hip": 59504},
+          {"pos": [93, 209], "hip": 79822}
+        ]
+      },
+      "common_name": {"english": "Little Bear", "native": "小熊座", "chinese": "小熊座"},
+      "iau": "UMi"
+    },
+    {
+      "id": "CON western Phe",
+      "lines": [[5348, 5165, 2072, 5348], [5165, 7083, 8837, 5165, 6867, 2072, 2081, 765, 2072]],
+      "image": {
+        "file": "illustrations/phoenix.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [55, 243], "hip": 8837},
+          {"pos": [209, 15], "hip": 765},
+          {"pos": [229, 214], "hip": 5348}
+        ]
+      },
+      "common_name": {"english": "Phoenix", "native": "凤凰座", "chinese": "凤凰座"},
+      "iau": "Phe"
+    },
+    {
+      "id": "CON western Psc",
+      "lines": [[4889, 5742], [4889, 6193, 5742, 7097, 8198, 9487, 8833, 7884, 7007, 4906, 3760, 1645, 118268, 116771, 116928, 115738, 114971, 115830, 116771]],
+      "image": {
+        "file": "illustrations/pisces.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [24, 104], "hip": 4889},
+          {"pos": [111, 489], "hip": 9487},
+          {"pos": [481, 155], "hip": 114971}
+        ]
+      },
+      "common_name": {"english": "Fishes", "native": "双鱼座", "chinese": "双鱼座"},
+      "iau": "Psc"
+    },
+    {
+      "id": "CON western PsA",
+      "lines": [[113368, 111954, 108661, 107608, 109422, 111188, 113246]],
+      "image": {
+        "file": "illustrations/piscis-austrinus.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [190, 5], "hip": 113246},
+          {"pos": [82, 202], "hip": 107608},
+          {"pos": [236, 92], "hip": 111954}
+        ]
+      },
+      "common_name": {"english": "Southern Fish", "native": "南鱼座", "chinese": "南鱼座"},
+      "iau": "PsA"
+    },
+    {
+      "id": "CON western Vol",
+      "lines": [[37504, 34481, 39794, 37504], [39794, 35228], [39794, 41312, 44382, 39794]],
+      "image": {
+        "file": "illustrations/volans.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [55, 85], "hip": 44382},
+          {"pos": [210, 122], "hip": 35228},
+          {"pos": [207, 163], "hip": 34481}
+        ]
+      },
+      "common_name": {"english": "Flying Fish", "native": "飞鱼座", "chinese": "飞鱼座"},
+      "iau": "Vol"
+    },
+    {
+      "id": "CON western Pup",
+      "lines": [[39757, 38146, 35264, 31685, 32768, 36377, 39429, 39757]],
+      "common_name": {"english": "Stern", "native": "船尾座", "chinese": "船尾座"},
+      "iau": "Pup"
+    },
+    {
+      "id": "CON western Ret",
+      "lines": [[19780, 19921, 18597, 17440, 19780]],
+      "image": {
+        "file": "illustrations/reticulum.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [47, 56], "hip": 18597},
+          {"pos": [78, 88], "hip": 19780},
+          {"pos": [16, 111], "hip": 19921}
+        ]
+      },
+      "common_name": {"english": "Reticle", "native": "网罟座", "chinese": "网罟座"},
+      "iau": "Ret"
+    },
+    {
+      "id": "CON western Sgr",
+      "lines": [[89931, 90496], [89642, 90185, 88635, 87072], [88635, 89931, 90185, 93506, 92041, 89931], [92041, 90496, 89341], [93506, 93864, 92855, 92041], [92855, 93085, 93683, 94820, 95168], [93864, 96406, 98688, 98412, 98032, 95347], [98032, 95294]],
+      "image": {
+        "file": "illustrations/sagittarius.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [96, 82], "hip": 95168},
+          {"pos": [307, 492], "hip": 95294},
+          {"pos": [506, 100], "hip": 87072}
+        ]
+      },
+      "common_name": {"english": "Archer", "native": "射手座", "chinese": "射手座"},
+      "iau": "Sgr"
+    },
+    {
+      "id": "CON western Sco",
+      "lines": [[85927, 86670, 87073, 86228, 84143, 82671, 82514, 82396, 81266, 80763, 78401], [80763, 78265], [80763, 78820]],
+      "image": {
+        "file": "illustrations/scorpius.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [447, 29], "hip": 78820},
+          {"pos": [62, 365], "hip": 85927},
+          {"pos": [217, 462], "hip": 82729}
+        ]
+      },
+      "common_name": {"english": "Scorpion", "native": "天蝎座", "chinese": "天蝎座"},
+      "iau": "Sco"
+    },
+    {
+      "id": "CON western Ser",
+      "lines": [[77516, 77622, 77070, 76276, 77233, 78072, 77450, 77233], [92946, 89962, 86565, 86263, 84880]],
+      "common_name": {"english": "Serpent", "native": "巨蛇座", "chinese": "巨蛇座"},
+      "iau": "Ser"
+    },
+    {
+      "id": "CON western Sex",
+      "lines": [[51437, 49641]],
+      "image": {
+        "file": "illustrations/sextans.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [26, 54], "hip": 51437},
+          {"pos": [68, 36], "hip": 49641},
+          {"pos": [118, 84], "hip": 48437}
+        ]
+      },
+      "common_name": {"english": "Sextant", "native": "六分仪座", "chinese": "六分仪座"},
+      "iau": "Sex"
+    },
+    {
+      "id": "CON western Men",
+      "lines": [[25918, 21949]],
+      "image": {
+        "file": "illustrations/mensa.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [100, 67], "hip": 21949},
+          {"pos": [179, 136], "hip": 25918},
+          {"pos": [54, 183], "hip": 29134}
+        ]
+      },
+      "common_name": {"english": "Table Mountain", "native": "山案座", "chinese": "山案座"},
+      "iau": "Men"
+    },
+    {
+      "id": "CON western Tau",
+      "lines": [[25428, 21881, 20889], [21421, 26451], [20205, 20455], [20205, 18724, 15900], [21421, 20889], [21421, 20894, 20205], [20889, 20648, 20455, 17847]],
+      "image": {
+        "file": "illustrations/taurus.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [13, 92], "hip": 26451},
+          {"pos": [399, 438], "hip": 15900},
+          {"pos": [382, 192], "hip": 17847}
+        ]
+      },
+      "common_name": {"english": "Bull", "native": "金牛座", "chinese": "金牛座"},
+      "iau": "Tau"
+    },
+    {
+      "id": "CON western Tel",
+      "lines": [[90568, 90422]],
+      "image": {
+        "file": "illustrations/telescopium.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [30, 66], "hip": 91589},
+          {"pos": [101, 40], "hip": 90422},
+          {"pos": [106, 92], "hip": 90568}
+        ]
+      },
+      "common_name": {"english": "Telescope", "native": "望远镜座", "chinese": "望远镜座"},
+      "iau": "Tel"
+    },
+    {
+      "id": "CON western Tuc",
+      "lines": [[110130, 114996, 1599], [114996, 2484]],
+      "image": {
+        "file": "illustrations/tucana.webp",
+        "size": [256, 256],
+        "anchors": [
+          {"pos": [53, 121], "hip": 2484},
+          {"pos": [154, 86], "hip": 114996},
+          {"pos": [224, 141], "hip": 110130}
+        ]
+      },
+      "common_name": {"english": "Toucan", "native": "杜鹃座", "chinese": "杜鹃座"},
+      "iau": "Tuc"
+    },
+    {
+      "id": "CON western Tri",
+      "lines": [[10670, 10064, 8796, 10670]],
+      "image": {
+        "file": "illustrations/triangulum.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [16, 42], "hip": 10064},
+          {"pos": [13, 70], "hip": 10559},
+          {"pos": [97, 78], "hip": 8796}
+        ]
+      },
+      "common_name": {"english": "Triangle", "native": "三角座", "chinese": "三角座"},
+      "iau": "Tri"
+    },
+    {
+      "id": "CON western Tra",
+      "lines": [[82273, 74946, 77952, 82273]],
+      "image": {
+        "file": "illustrations/triangulum-australe.webp",
+        "size": [128, 128],
+        "anchors": [
+          {"pos": [26, 12], "hip": 77952},
+          {"pos": [108, 15], "hip": 74946},
+          {"pos": [60, 106], "hip": 82273}
+        ]
+      },
+      "common_name": {"english": "Southern Triangle", "native": "南三角座", "chinese": "南三角座"},
+      "iau": "Tra"
+    },
+    {
+      "id": "CON western Aqr",
+      "lines": [[106278, 109074, 110395, 110960, 111497, 112961, 114855, 115438], [109074, 110003, 109139], [110003, 111123, 112716, 113136, 114341], [102618, 106278]],
+      "image": {
+        "file": "illustrations/aquarius.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [144, 464], "hip": 115438},
+          {"pos": [179, 98], "hip": 109074},
+          {"pos": [465, 49], "hip": 102618}
+        ]
+      },
+      "common_name": {"english": "Water Bearer", "native": "水瓶座", "chinese": "水瓶座"},
+      "iau": "Aqr"
+    },
+    {
+      "id": "CON western Vir",
+      "lines": [[57380, 60030, 61941, 65474, 69427, 69701, 71957], [65474, 66249, 68520, 72220], [66249, 63090, 63608], [63090, 61941]],
+      "image": {
+        "file": "illustrations/virgo.webp",
+        "size": [512, 512],
+        "anchors": [
+          {"pos": [65, 389], "hip": 72220},
+          {"pos": [454, 57], "hip": 57380},
+          {"pos": [338, 382], "hip": 65474}
+        ]
+      },
+      "common_name": {"english": "Maiden", "native": "处女座", "chinese": "处女座"},
+      "iau": "Vir"
+    },
+    {
+      "id": "CON western Vel",
+      "lines": [[39953, 42536, 42913, 45941, 48774, 52727, 51986, 50191, 46651, 44816, 39953]],
+      "common_name": {"english": "Sails", "native": "船帆座", "chinese": "船帆座"},
+      "iau": "Vel"
+    }
+  ],
+  "edges_source": "http://pbarbier.com/constellations/edges_18.txt",
+  "edges": [
+    "001:002 M+ 22:52:00 +34:30:00 22:52:00 +52:30:00 AND LAC",
+    "002:003 P+ 22:52:00 +52:30:00 23:20:00 +52:30:00 AND CAS",
+    "004:005 P+ 23:20:00 +50:00:00 23:35:00 +50:00:00 AND CAS",
+    "006:007 P+ 23:35:00 +48:00:00 00:10:00 +48:00:00 AND CAS",
+    "008:009 P+ 00:10:00 +46:00:00 00:52:00 +46:00:00 AND CAS",
+    "009:010 M+ 00:52:00 +46:00:00 00:52:00 +48:00:00 AND CAS",
+    "010:011 P+ 00:52:00 +48:00:00 01:07:00 +48:00:00 AND CAS",
+    "011:012 M+ 01:07:00 +48:00:00 01:07:00 +50:00:00 AND CAS",
+    "012:013 P+ 01:07:00 +50:00:00 01:22:00 +50:00:00 AND CAS",
+    "013:014 P+ 01:22:00 +50:00:00 01:40:00 +50:00:00 AND PER",
+    "015:016 P+ 01:40:00 +47:00:00 02:02:30 +47:00:00 AND PER",
+    "016:017 M+ 02:02:30 +47:00:00 02:02:30 +50:30:00 AND PER",
+    "017:018 P+ 02:02:30 +50:30:00 02:31:00 +50:30:00 AND PER",
+    "025:026 P+ 00:43:00 +23:45:00 00:51:00 +23:45:00 AND PSC",
+    "028:029 M+ 00:08:30 +21:00:00 00:08:30 +22:00:00 AND PEG",
+    "030:031 M+ 00:04:00 +22:00:00 00:04:00 +28:00:00 AND PEG",
+    "032:033 M+ 00:00:00 +28:00:00 00:00:00 +31:20:00 AND PEG",
+    "034:035 M+ 23:45:00 +31:20:00 23:45:00 +32:05:00 AND PEG",
+    "036:037 M+ 23:30:00 +32:05:00 23:30:00 +34:30:00 AND PEG",
+    "038:050 P+ 09:22:00 -24:00:00 09:45:00 -24:00:00 ANT HYA",
+    "049:048 P+ 09:45:00 -26:30:00 10:15:00 -26:30:00 ANT HYA",
+    "047:046 P+ 10:15:00 -29:10:00 10:35:00 -29:10:00 ANT HYA",
+    "045:044 P+ 10:35:00 -31:10:00 10:50:00 -31:10:00 ANT HYA",
+    "043:042 P+ 10:50:00 -35:00:00 11:00:00 -35:00:00 ANT HYA",
+    "040:039 M+ 09:22:00 -39:45:00 09:22:00 -36:45:00 ANT VEL",
+    "039:038 M+ 09:22:00 -36:45:00 09:22:00 -24:00:00 ANT PYX",
+    "051:060 M+ 13:40:00 -82:30:00 13:40:00 -75:00:00 APS CHA",
+    "060:059 M+ 13:40:00 -75:00:00 13:40:00 -70:00:00 APS MUS",
+    "059:058 P+ 13:40:00 -70:00:00 14:45:00 -70:00:00 APS CIR",
+    "058:057 P+ 14:45:00 -70:00:00 17:00:00 -70:00:00 APS TRA",
+    "057:056 M+ 17:00:00 -70:00:00 17:00:00 -67:30:00 APS TRA",
+    "056:055 P+ 17:00:00 -67:30:00 17:30:00 -67:30:00 APS ARA",
+    "055:054 P+ 17:30:00 -67:30:00 18:00:00 -67:30:00 APS PAV",
+    "061:062 M+ 20:32:00 +00:00:00 20:32:00 +02:00:00 AQR AQL",
+    "062:063 P+ 20:32:00 +02:00:00 20:50:00 +02:00:00 AQR DEL",
+    "063:064 P+ 20:50:00 +02:00:00 21:20:00 +02:00:00 AQR EQU",
+    "064:065 P+ 21:20:00 +02:00:00 21:28:00 +02:00:00 AQR PEG",
+    "065:066 M+ 21:28:00 +02:00:00 21:28:00 +02:45:00 AQR PEG",
+    "066:067 P+ 21:28:00 +02:45:00 21:40:00 +02:45:00 AQR PEG",
+    "068:069 P+ 21:40:00 +01:45:00 22:00:00 +01:45:00 AQR PEG",
+    "069:070 M+ 22:00:00 +01:45:00 22:00:00 +02:00:00 AQR PEG",
+    "070:071 P+ 22:00:00 +02:00:00 22:45:00 +02:00:00 AQR PEG",
+    "073:074 P+ 22:45:00 -04:00:00 23:50:00 -04:00:00 AQR PSC",
+    "078:079 M+ 21:52:00 -25:30:00 21:52:00 -09:00:00 AQR CAP",
+    "082:083 M+ 20:32:00 -15:00:00 20:32:00 -09:00:00 AQR CAP",
+    "083:061 M+ 20:32:00 -09:00:00 20:32:00 +00:00:00 AQR AQL",
+    "084:085 M+ 18:35:00 +00:00:00 18:35:00 +02:00:00 AQL SER2",
+    "085:086 P+ 18:35:00 +02:00:00 18:52:00 +02:00:00 AQL SER2",
+    "086:087 M+ 18:52:00 +02:00:00 18:52:00 +06:15:00 AQL SER2",
+    "088:089 M+ 18:39:44 +06:15:00 18:39:44 +12:00:00 AQL OPH",
+    "089:090 P+ 18:39:44 +12:00:00 18:52:00 +12:00:00 AQL HER",
+    "090:091 M+ 18:52:00 +12:00:00 18:52:00 +18:30:00 AQL HER",
+    "091:092 P+ 18:52:00 +18:30:00 19:00:00 +18:30:00 AQL SGE",
+    "093:094 P+ 19:00:00 +16:10:00 19:50:00 +16:10:00 AQL SGE",
+    "095:096 P+ 19:50:00 +15:45:00 20:08:30 +15:45:00 AQL SGE",
+    "097:098 P+ 20:08:30 +08:30:00 20:18:00 +08:30:00 AQL DEL",
+    "099:062 P+ 20:18:00 +02:00:00 20:32:00 +02:00:00 AQL DEL",
+    "102:103 M+ 18:52:00 -12:02:00 18:52:00 -04:00:00 AQL SCT",
+    "104:084 M+ 18:35:00 -04:00:00 18:35:00 +00:00:00 AQL SER2",
+    "105:106 M+ 16:25:15 -60:00:00 16:25:15 -45:30:00 ARA NOR",
+    "106:107 P+ 16:25:15 -45:30:00 17:50:00 -45:30:00 ARA SCO",
+    "107:108 P+ 17:50:00 -45:30:00 18:00:00 -45:30:00 ARA CRA",
+    "111:112 M+ 16:50:00 -67:30:00 16:50:00 -65:00:00 ARA TRA",
+    "113:114 M+ 16:45:00 -65:00:00 16:45:00 -63:35:00 ARA TRA",
+    "115:116 M+ 16:35:00 -63:35:00 16:35:00 -61:00:00 ARA TRA",
+    "117:105 M+ 16:25:15 -61:00:00 16:25:15 -60:00:00 ARA TRA",
+    "119:120 M+ 01:40:00 +09:55:00 01:40:00 +25:00:00 ARI PSC",
+    "120:121 P+ 01:40:00 +25:00:00 01:55:00 +25:00:00 ARI TRI",
+    "121:122 M+ 01:55:00 +25:00:00 01:55:00 +27:15:00 ARI TRI",
+    "122:123 P+ 01:55:00 +27:15:00 02:25:00 +27:15:00 ARI TRI",
+    "123:124 M+ 02:25:00 +27:15:00 02:25:00 +30:40:00 ARI TRI",
+    "124:125 P+ 02:25:00 +30:40:00 02:43:00 +30:40:00 ARI TRI",
+    "125:126 P+ 02:43:00 +30:40:00 03:22:00 +30:40:00 ARI PER",
+    "130:131 M+ 04:30:00 +30:40:00 04:30:00 +36:00:00 AUR PER",
+    "131:132 P+ 04:30:00 +36:00:00 04:41:30 +36:00:00 AUR PER",
+    "132:133 M+ 04:41:30 +36:00:00 04:41:30 +52:30:00 AUR PER",
+    "133:134 P+ 04:41:30 +52:30:00 05:00:00 +52:30:00 AUR CAM",
+    "134:135 M+ 05:00:00 +52:30:00 05:00:00 +56:00:00 AUR CAM",
+    "135:136 P+ 05:00:00 +56:00:00 06:06:00 +56:00:00 AUR CAM",
+    "137:138 P+ 06:06:00 +54:00:00 06:30:00 +54:00:00 AUR LYN",
+    "139:140 P+ 06:30:00 +50:00:00 06:48:00 +50:00:00 AUR LYN",
+    "141:142 P+ 06:48:00 +44:30:00 07:22:00 +44:30:00 AUR LYN",
+    "146:147 M+ 05:53:00 +28:00:00 05:53:00 +28:30:00 AUR TAU",
+    "148:149 M+ 04:45:00 +28:30:00 04:45:00 +30:00:00 AUR TAU",
+    "150:130 M+ 04:30:00 +30:00:00 04:30:00 +30:40:00 AUR TAU",
+    "152:153 M+ 13:30:00 +08:00:00 13:30:00 +15:00:00 BOO VIR",
+    "153:154 M+ 13:30:00 +15:00:00 13:30:00 +28:30:00 BOO COM",
+    "154:155 P+ 13:30:00 +28:30:00 13:57:30 +28:30:00 BOO CVN",
+    "155:156 M+ 13:57:30 +28:30:00 13:57:30 +30:45:00 BOO CVN",
+    "156:157 P+ 13:57:30 +30:45:00 14:02:00 +30:45:00 BOO CVN",
+    "157:158 M+ 14:02:00 +30:45:00 14:02:00 +48:30:00 BOO CVN",
+    "158:159 M+ 14:02:00 +48:30:00 14:02:00 +55:30:00 BOO UMA",
+    "159:160 P+ 14:02:00 +55:30:00 14:25:00 +55:30:00 BOO UMA",
+    "160:161 P+ 14:25:00 +55:30:00 15:15:00 +55:30:00 BOO DRA",
+    "162:163 P+ 15:15:00 +53:00:00 15:45:00 +53:00:00 BOO DRA",
+    "171:184 M+ 04:16:00 -40:00:00 04:16:00 -37:00:00 CAE ERI",
+    "184:183 P+ 04:16:00 -37:00:00 04:35:00 -37:00:00 CAE ERI",
+    "183:182 M+ 04:35:00 -37:00:00 04:35:00 -30:00:00 CAE ERI",
+    "182:181 P+ 04:35:00 -30:00:00 04:42:00 -30:00:00 CAE ERI",
+    "181:180 M+ 04:42:00 -30:00:00 04:42:00 -27:15:00 CAE ERI",
+    "180:179 P+ 04:42:00 -27:15:00 04:50:00 -27:15:00 CAE ERI",
+    "179:178 P+ 04:50:00 -27:15:00 05:00:00 -27:15:00 CAE LEP",
+    "172:171 M+ 04:16:00 -49:00:00 04:16:00 -40:00:00 CAE HOR",
+    "185:186 M+ 03:20:00 +52:30:00 03:20:00 +55:00:00 CAM PER",
+    "187:188 M+ 03:10:00 +55:00:00 03:10:00 +57:00:00 CAM PER",
+    "189:190 M+ 03:06:00 +57:00:00 03:06:00 +68:00:00 CAM CAS",
+    "190:191 P+ 03:06:00 +68:00:00 03:25:00 +68:00:00 CAM CAS",
+    "191:192 M+ 03:25:00 +68:00:00 03:25:00 +77:00:00 CAM CAS",
+    "192:193 P+ 03:25:00 +77:00:00 03:30:30 +77:00:00 CAM CEP",
+    "193:194 M+ 03:30:30 +77:00:00 03:30:30 +80:00:00 CAM CEP",
+    "194:195 P+ 03:30:30 +80:00:00 05:00:00 +80:00:00 CAM CEP",
+    "195:196 M+ 05:00:00 +80:00:00 05:00:00 +85:00:00 CAM CEP",
+    "196:197 P+ 05:00:00 +85:00:00 08:00:00 +85:00:00 CAM CEP",
+    "197:198 M+ 08:00:00 +85:00:00 08:00:00 +86:30:00 CAM CEP",
+    "198:199 P+ 08:00:00 +86:30:00 14:30:00 +86:30:00 CAM UMI",
+    "204:205 M+ 11:30:00 +77:00:00 11:30:00 +80:00:00 CAM DRA",
+    "206:207 M+ 10:40:00 +80:00:00 10:40:00 +82:00:00 CAM DRA",
+    "212:213 M+ 07:00:00 +60:00:00 07:00:00 +62:00:00 CAM LYN",
+    "217:218 M+ 07:55:30 +07:00:00 07:55:30 +10:00:00 CNC CMI",
+    "219:220 M+ 07:48:30 +10:00:00 07:48:30 +13:30:00 CNC CMI",
+    "220:221 M+ 07:48:30 +13:30:00 07:48:30 +20:00:00 CNC GEM",
+    "221:222 P+ 07:48:30 +20:00:00 07:53:00 +20:00:00 CNC GEM",
+    "222:223 M+ 07:53:00 +20:00:00 07:53:00 +28:00:00 CNC GEM",
+    "223:224 P+ 07:53:00 +28:00:00 08:00:00 +28:00:00 CNC GEM",
+    "224:225 M+ 08:00:00 +28:00:00 08:00:00 +33:30:00 CNC GEM",
+    "225:226 P+ 08:00:00 +33:30:00 09:15:00 +33:30:00 CNC LYN",
+    "227:228 M+ 12:00:00 +34:00:00 12:00:00 +45:00:00 CVN UMA",
+    "228:229 P+ 12:00:00 +45:00:00 12:05:00 +45:00:00 CVN UMA",
+    "229:230 M+ 12:05:00 +45:00:00 12:05:00 +53:00:00 CVN UMA",
+    "230:231 P+ 12:05:00 +53:00:00 13:30:00 +53:00:00 CVN UMA",
+    "232:158 P+ 13:30:00 +48:30:00 14:02:00 +48:30:00 CVN UMA",
+    "233:234 M+ 13:15:00 +28:30:00 13:15:00 +32:00:00 CVN COM",
+    "235:236 M+ 12:20:00 +32:00:00 12:20:00 +34:00:00 CVN COM",
+    "237:238 P+ 06:07:00 -11:00:00 07:22:00 -11:00:00 CMA MON",
+    "241:242 M+ 06:07:00 -33:00:00 06:07:00 -27:15:00 CMA COL",
+    "242:237 M+ 06:07:00 -27:15:00 06:07:00 -11:00:00 CMA LEP",
+    "244:245 M+ 07:12:00 +00:00:00 07:12:00 +01:30:00 CMI MON",
+    "246:247 M+ 07:01:00 +01:30:00 07:01:00 +05:30:00 CMI MON",
+    "248:249 M+ 07:00:00 +05:30:00 07:00:00 +10:00:00 CMI MON",
+    "249:250 M+ 07:00:00 +10:00:00 07:00:00 +12:30:00 CMI GEM",
+    "250:251 P+ 07:00:00 +12:30:00 07:30:00 +12:30:00 CMI GEM",
+    "251:252 M+ 07:30:00 +12:30:00 07:30:00 +13:30:00 CMI GEM",
+    "252:220 P+ 07:30:00 +13:30:00 07:48:30 +13:30:00 CMI GEM",
+    "219:218 P+ 07:48:30 +10:00:00 07:55:30 +10:00:00 CMI CNC",
+    "217:216 P+ 07:55:30 +07:00:00 08:05:00 +07:00:00 CMI CNC",
+    "082:081 P+ 20:32:00 -15:00:00 21:20:00 -15:00:00 CAP AQR",
+    "081:080 M+ 21:20:00 -15:00:00 21:20:00 -09:00:00 CAP AQR",
+    "080:079 P+ 21:20:00 -09:00:00 21:52:00 -09:00:00 CAP AQR",
+    "253:101 M+ 20:00:00 -28:00:00 20:00:00 -12:02:00 CAP SGR",
+    "101:100 M+ 20:00:00 -12:02:00 20:00:00 -09:00:00 CAP AQL",
+    "100:083 P+ 20:00:00 -09:00:00 20:32:00 -09:00:00 CAP AQL",
+    "275:274 M+ 09:02:00 -75:00:00 09:02:00 -64:00:00 CAR VOL",
+    "273:272 M+ 06:50:00 -64:00:00 06:50:00 -58:00:00 CAR PIC",
+    "271:270 M+ 06:30:00 -58:00:00 06:30:00 -55:00:00 CAR PIC",
+    "269:268 M+ 06:10:00 -55:00:00 06:10:00 -52:30:00 CAR PIC",
+    "267:266 M+ 06:00:00 -52:30:00 06:00:00 -50:45:00 CAR PIC",
+    "266:265 P+ 06:00:00 -50:45:00 08:00:00 -50:45:00 CAR PUP",
+    "265:264 P+ 08:00:00 -50:45:00 08:10:00 -50:45:00 CAR VEL",
+    "263:262 P+ 08:10:00 -53:00:00 08:27:00 -53:00:00 CAR VEL",
+    "261:260 P+ 08:27:00 -54:30:00 08:50:00 -54:30:00 CAR VEL",
+    "259:258 P+ 08:50:00 -56:30:00 11:00:00 -56:30:00 CAR VEL",
+    "258:257 P+ 11:00:00 -56:30:00 11:15:00 -56:30:00 CAR CEN",
+    "002:278 M+ 22:52:00 +52:30:00 22:52:00 +56:15:00 CAS LAC",
+    "278:279 M+ 22:52:00 +56:15:00 22:52:00 +59:05:00 CAS CEP",
+    "279:280 P+ 22:52:00 +59:05:00 23:10:00 +59:05:00 CAS CEP",
+    "280:281 M+ 23:10:00 +59:05:00 23:10:00 +63:00:00 CAS CEP",
+    "281:282 P+ 23:10:00 +63:00:00 23:35:00 +63:00:00 CAS CEP",
+    "282:283 M+ 23:35:00 +63:00:00 23:35:00 +66:00:00 CAS CEP",
+    "283:284 P+ 23:35:00 +66:00:00 00:20:00 +66:00:00 CAS CEP",
+    "284:285 M+ 00:20:00 +66:00:00 00:20:00 +77:00:00 CAS CEP",
+    "285:192 P+ 00:20:00 +77:00:00 03:25:00 +77:00:00 CAS CEP",
+    "286:287 M+ 02:26:00 +57:00:00 02:26:00 +58:30:00 CAS PER",
+    "008:007 M+ 00:10:00 +46:00:00 00:10:00 +48:00:00 CAS AND",
+    "006:005 M+ 23:35:00 +48:00:00 23:35:00 +50:00:00 CAS AND",
+    "004:003 M+ 23:20:00 +50:00:00 23:20:00 +52:30:00 CAS AND",
+    "042:307 P+ 11:00:00 -35:00:00 12:15:00 -35:00:00 CEN HYA",
+    "307:306 M+ 12:15:00 -35:00:00 12:15:00 -33:00:00 CEN HYA",
+    "306:305 P+ 12:15:00 -33:00:00 12:35:00 -33:00:00 CEN HYA",
+    "305:304 M+ 12:35:00 -33:00:00 12:35:00 -29:30:00 CEN HYA",
+    "304:303 P+ 12:35:00 -29:30:00 14:55:00 -29:30:00 CEN HYA",
+    "300:299 P+ 14:10:00 -55:00:00 14:32:00 -55:00:00 CEN LUP",
+    "296:295 M+ 12:50:00 -64:00:00 12:50:00 -55:00:00 CEN CRU",
+    "277:257 M+ 11:15:00 -64:00:00 11:15:00 -56:30:00 CEN CAR",
+    "258:041 M+ 11:00:00 -56:30:00 11:00:00 -39:45:00 CEN VEL",
+    "041:042 M+ 11:00:00 -39:45:00 11:00:00 -35:00:00 CEN ANT",
+    "308:309 M+ 20:00:00 +59:30:00 20:00:00 +61:30:00 CEP DRA",
+    "309:310 P+ 20:00:00 +61:30:00 20:25:00 +61:30:00 CEP DRA",
+    "310:311 M+ 20:25:00 +61:30:00 20:25:00 +67:00:00 CEP DRA",
+    "311:312 P+ 20:25:00 +67:00:00 20:40:00 +67:00:00 CEP DRA",
+    "312:313 M+ 20:40:00 +67:00:00 20:40:00 +75:00:00 CEP DRA",
+    "314:315 M+ 20:10:00 +75:00:00 20:10:00 +80:00:00 CEP DRA",
+    "315:316 P+ 20:10:00 +80:00:00 21:00:00 +80:00:00 CEP DRA",
+    "316:317 M+ 21:00:00 +80:00:00 21:00:00 +86:00:00 CEP DRA",
+    "317:318 M+ 21:00:00 +86:00:00 21:00:00 +86:10:00 CEP UMI",
+    "318:319 P+ 21:00:00 +86:10:00 23:00:00 +86:10:00 CEP UMI",
+    "319:320 M+ 23:00:00 +86:10:00 23:00:00 +88:00:00 CEP UMI",
+    "320:321 P+ 23:00:00 +88:00:00 08:00:00 +88:00:00 CEP UMI",
+    "326:327 M+ 21:58:00 +52:45:00 21:58:00 +54:50:00 CEP CYG",
+    "328:329 M+ 20:36:00 +54:50:00 20:36:00 +60:55:00 CEP CYG",
+    "332:333 M+ 00:20:00 +00:00:00 00:20:00 +02:00:00 CET PSC",
+    "333:334 P+ 00:20:00 +02:00:00 02:00:00 +02:00:00 CET PSC",
+    "334:118 M+ 02:00:00 +02:00:00 02:00:00 +09:55:00 CET PSC",
+    "118:129 P+ 02:00:00 +09:55:00 03:17:00 +09:55:00 CET ARI",
+    "076:075 M+ 23:50:00 -25:30:00 23:50:00 -07:00:00 CET AQR",
+    "075:341 P+ 23:50:00 -07:00:00 00:20:00 -07:00:00 CET PSC",
+    "341:332 M+ 00:20:00 -07:00:00 00:20:00 +00:00:00 CET PSC",
+    "342:343 M+ 07:40:00 -82:30:00 07:40:00 -75:00:00 CHA MEN",
+    "343:275 P+ 07:40:00 -75:00:00 09:02:00 -75:00:00 CHA VOL",
+    "275:276 P+ 09:02:00 -75:00:00 11:15:00 -75:00:00 CHA CAR",
+    "276:060 P+ 11:15:00 -75:00:00 13:40:00 -75:00:00 CHA MUS",
+    "297:298 P+ 13:30:00 -64:00:00 14:32:00 -64:00:00 CIR CEN",
+    "298:299 M+ 14:32:00 -64:00:00 14:32:00 -55:00:00 CIR CEN",
+    "299:354 P+ 14:32:00 -55:00:00 15:03:00 -55:00:00 CIR LUP",
+    "354:353 P+ 15:03:00 -55:00:00 15:20:00 -55:00:00 CIR NOR",
+    "059:345 M+ 13:40:00 -70:00:00 13:40:00 -65:00:00 CIR MUS",
+    "344:297 M+ 13:30:00 -65:00:00 13:30:00 -64:00:00 CIR MUS",
+    "177:178 M+ 05:00:00 -43:00:00 05:00:00 -27:15:00 COL CAE",
+    "178:242 P+ 05:00:00 -27:15:00 06:07:00 -27:15:00 COL LEP",
+    "241:240 P+ 06:07:00 -33:00:00 06:35:00 -33:00:00 COL CMA",
+    "357:358 M+ 11:52:00 +14:00:00 11:52:00 +29:00:00 COM LEO",
+    "358:359 P+ 11:52:00 +29:00:00 12:00:00 +29:00:00 COM UMA",
+    "359:227 M+ 12:00:00 +29:00:00 12:00:00 +34:00:00 COM UMA",
+    "227:236 P+ 12:00:00 +34:00:00 12:20:00 +34:00:00 COM CVN",
+    "235:234 P+ 12:20:00 +32:00:00 13:15:00 +32:00:00 COM CVN",
+    "233:154 P+ 13:15:00 +28:30:00 13:30:00 +28:30:00 COM CVN",
+    "362:363 P+ 17:50:00 -37:00:00 19:10:00 -37:00:00 CRA SGR",
+    "107:362 M+ 17:50:00 -45:30:00 17:50:00 -37:00:00 CRA SCO",
+    "169:168 M+ 15:11:00 +26:00:00 15:11:00 +33:00:00 CRB BOO",
+    "168:167 P+ 15:11:00 +33:00:00 15:26:00 +33:00:00 CRB BOO",
+    "167:166 M+ 15:26:00 +33:00:00 15:26:00 +40:00:00 CRB BOO",
+    "166:165 P+ 15:26:00 +40:00:00 15:45:00 +40:00:00 CRB BOO",
+    "165:365 P+ 15:45:00 +40:00:00 16:20:00 +40:00:00 CRB HER",
+    "372:371 M+ 11:50:00 -24:30:00 11:50:00 -11:00:00 CRV CRT",
+    "371:370 P+ 11:50:00 -11:00:00 12:50:00 -11:00:00 CRV VIR",
+    "376:382 P+ 10:45:00 -06:00:00 11:31:00 -06:00:00 CRT LEO",
+    "382:381 P+ 11:31:00 -06:00:00 11:50:00 -06:00:00 CRT VIR",
+    "380:379 M+ 10:50:00 -24:30:00 10:50:00 -19:00:00 CRT HYA",
+    "378:377 M+ 10:45:00 -19:00:00 10:45:00 -11:00:00 CRT HYA",
+    "377:376 M+ 10:45:00 -11:00:00 10:45:00 -06:00:00 CRT SEX",
+    "294:295 P+ 11:50:00 -55:00:00 12:50:00 -55:00:00 CRU CEN",
+    "293:294 M+ 11:50:00 -64:00:00 11:50:00 -55:00:00 CRU CEN",
+    "383:384 M+ 19:15:30 +27:30:00 19:15:30 +30:00:00 CYG LYR",
+    "384:385 P+ 19:15:30 +30:00:00 19:21:30 +30:00:00 CYG LYR",
+    "385:386 M+ 19:21:30 +30:00:00 19:21:30 +36:30:00 CYG LYR",
+    "386:387 P+ 19:21:30 +36:30:00 19:24:00 +36:30:00 CYG LYR",
+    "387:388 M+ 19:24:00 +36:30:00 19:24:00 +43:30:00 CYG LYR",
+    "389:390 M+ 19:10:00 +43:30:00 19:10:00 +47:30:00 CYG LYR",
+    "391:392 M+ 19:05:00 +47:30:00 19:05:00 +55:30:00 CYG DRA",
+    "392:393 P+ 19:05:00 +55:30:00 19:25:00 +55:30:00 CYG DRA",
+    "393:394 M+ 19:25:00 +55:30:00 19:25:00 +58:00:00 CYG DRA",
+    "394:395 P+ 19:25:00 +58:00:00 19:46:00 +58:00:00 CYG DRA",
+    "395:396 M+ 19:46:00 +58:00:00 19:46:00 +59:30:00 CYG DRA",
+    "396:308 P+ 19:46:00 +59:30:00 20:00:00 +59:30:00 CYG DRA",
+    "308:331 P+ 20:00:00 +59:30:00 20:32:12 +59:30:00 CYG CEP",
+    "331:330 M+ 20:32:12 +59:30:00 20:32:12 +60:55:00 CYG CEP",
+    "330:329 P+ 20:32:12 +60:55:00 20:36:00 +60:55:00 CYG CEP",
+    "328:327 P+ 20:36:00 +54:50:00 21:58:00 +54:50:00 CYG CEP",
+    "405:406 M+ 20:55:00 +28:00:00 20:55:00 +29:00:00 CYG VUL",
+    "099:098 M+ 20:18:00 +02:00:00 20:18:00 +08:30:00 DEL AQL",
+    "097:096 M+ 20:08:30 +08:30:00 20:08:30 +15:45:00 DEL AQL",
+    "096:409 P+ 20:08:30 +15:45:00 20:15:00 +15:45:00 DEL SGE",
+    "409:410 M+ 20:15:00 +15:45:00 20:15:00 +20:30:00 DEL SGE",
+    "410:411 P+ 20:15:00 +20:30:00 20:34:00 +20:30:00 DEL VUL",
+    "412:413 P+ 20:34:00 +19:30:00 21:03:00 +19:30:00 DEL VUL",
+    "418:437 M+ 03:50:00 -53:10:00 03:50:00 -51:00:00 DOR HOR",
+    "437:436 P+ 03:50:00 -51:00:00 04:05:00 -51:00:00 DOR HOR",
+    "436:435 M+ 04:05:00 -51:00:00 04:05:00 -49:00:00 DOR HOR",
+    "435:172 P+ 04:05:00 -49:00:00 04:16:00 -49:00:00 DOR HOR",
+    "172:173 P+ 04:16:00 -49:00:00 04:30:00 -49:00:00 DOR CAE",
+    "434:433 P+ 04:30:00 -54:00:00 05:00:00 -54:00:00 DOR PIC",
+    "432:431 P+ 05:00:00 -57:30:00 05:30:00 -57:30:00 DOR PIC",
+    "430:429 P+ 05:30:00 -61:00:00 06:00:00 -61:00:00 DOR PIC",
+    "428:427 P+ 06:00:00 -64:00:00 06:35:00 -64:00:00 DOR PIC",
+    "425:424 M+ 04:35:00 -70:00:00 04:35:00 -67:30:00 DOR HYI",
+    "424:423 M+ 04:35:00 -67:30:00 04:35:00 -59:00:00 DOR RET",
+    "422:421 M+ 04:20:00 -59:00:00 04:20:00 -56:30:00 DOR RET",
+    "420:419 M+ 04:00:00 -56:30:00 04:00:00 -53:10:00 DOR RET",
+    "209:208 M+ 09:10:00 +73:30:00 09:10:00 +82:00:00 DRA CAM",
+    "208:207 P+ 09:10:00 +82:00:00 10:40:00 +82:00:00 DRA CAM",
+    "206:205 P+ 10:40:00 +80:00:00 11:30:00 +80:00:00 DRA CAM",
+    "204:203 P+ 11:30:00 +77:00:00 13:00:00 +77:00:00 DRA CAM",
+    "438:439 P+ 13:00:00 +70:00:00 14:00:00 +70:00:00 DRA UMI",
+    "440:441 P+ 14:00:00 +66:00:00 15:40:00 +66:00:00 DRA UMI",
+    "441:442 M+ 15:40:00 +66:00:00 15:40:00 +70:00:00 DRA UMI",
+    "442:443 P+ 15:40:00 +70:00:00 16:32:00 +70:00:00 DRA UMI",
+    "443:444 M+ 16:32:00 +70:00:00 16:32:00 +75:00:00 DRA UMI",
+    "444:445 P+ 16:32:00 +75:00:00 17:30:00 +75:00:00 DRA UMI",
+    "445:446 M+ 17:30:00 +75:00:00 17:30:00 +80:00:00 DRA UMI",
+    "446:447 P+ 17:30:00 +80:00:00 18:00:00 +80:00:00 DRA UMI",
+    "447:448 M+ 18:00:00 +80:00:00 18:00:00 +86:00:00 DRA UMI",
+    "448:317 P+ 18:00:00 +86:00:00 21:00:00 +86:00:00 DRA UMI",
+    "314:313 P+ 20:10:00 +75:00:00 20:40:00 +75:00:00 DRA CEP",
+    "449:450 M+ 18:14:00 +47:30:00 18:14:00 +50:30:00 DRA HER",
+    "451:452 M+ 17:00:00 +50:30:00 17:00:00 +51:30:00 DRA HER",
+    "164:163 M+ 15:45:00 +51:30:00 15:45:00 +53:00:00 DRA BOO",
+    "162:161 M+ 15:15:00 +53:00:00 15:15:00 +55:30:00 DRA BOO",
+    "160:453 M+ 14:25:00 +55:30:00 14:25:00 +63:00:00 DRA UMA",
+    "454:455 M+ 13:30:00 +63:00:00 13:30:00 +64:00:00 DRA UMA",
+    "456:457 M+ 12:00:00 +64:00:00 12:00:00 +66:30:00 DRA UMA",
+    "458:459 M+ 11:20:00 +66:30:00 11:20:00 +73:30:00 DRA UMA",
+    "063:417 M+ 20:50:00 +02:00:00 20:50:00 +06:00:00 EQU DEL",
+    "417:416 P+ 20:50:00 +06:00:00 20:52:30 +06:00:00 EQU DEL",
+    "416:415 M+ 20:52:30 +06:00:00 20:52:30 +11:50:00 EQU DEL",
+    "415:414 P+ 20:52:30 +11:50:00 21:03:00 +11:50:00 EQU DEL",
+    "414:460 P+ 21:03:00 +11:50:00 21:07:00 +11:50:00 EQU PEG",
+    "460:461 M+ 21:07:00 +11:50:00 21:07:00 +12:30:00 EQU PEG",
+    "461:462 P+ 21:07:00 +12:30:00 21:20:00 +12:30:00 EQU PEG",
+    "463:464 P+ 03:35:00 +00:00:00 04:37:00 +00:00:00 ERI TAU",
+    "464:465 P+ 04:37:00 +00:00:00 04:40:00 +00:00:00 ERI ORI",
+    "466:467 P+ 04:40:00 -04:00:00 05:05:00 -04:00:00 ERI ORI",
+    "484:485 M+ 01:20:00 -58:30:00 01:20:00 -53:30:00 ERI PHE",
+    "485:486 P+ 01:20:00 -53:30:00 01:35:00 -53:30:00 ERI PHE",
+    "486:487 M+ 01:35:00 -53:30:00 01:35:00 -51:30:00 ERI PHE",
+    "487:488 P+ 01:35:00 -51:30:00 01:50:00 -51:30:00 ERI PHE",
+    "488:489 M+ 01:50:00 -51:30:00 01:50:00 -48:10:00 ERI PHE",
+    "489:490 P+ 01:50:00 -48:10:00 02:20:00 -48:10:00 ERI PHE",
+    "490:491 M+ 02:20:00 -48:10:00 02:20:00 -40:00:00 ERI PHE",
+    "491:492 P+ 02:20:00 -40:00:00 03:00:00 -40:00:00 ERI FOR",
+    "492:493 M+ 03:00:00 -40:00:00 03:00:00 -39:35:00 ERI FOR",
+    "493:494 P+ 03:00:00 -39:35:00 03:30:00 -39:35:00 ERI FOR",
+    "494:495 M+ 03:30:00 -39:35:00 03:30:00 -36:00:00 ERI FOR",
+    "495:496 P+ 03:30:00 -36:00:00 03:45:00 -36:00:00 ERI FOR",
+    "496:497 M+ 03:45:00 -36:00:00 03:45:00 -24:23:00 ERI FOR",
+    "338:337 M+ 02:39:00 -24:23:00 02:39:00 -01:45:00 ERI CET",
+    "337:336 P+ 02:39:00 -01:45:00 03:17:00 -01:45:00 ERI CET",
+    "336:498 P+ 03:17:00 -01:45:00 03:35:00 -01:45:00 ERI TAU",
+    "498:463 M+ 03:35:00 -01:45:00 03:35:00 +00:00:00 ERI TAU",
+    "339:338 P+ 01:40:00 -24:23:00 02:39:00 -24:23:00 FOR CET",
+    "338:497 P+ 02:39:00 -24:23:00 03:45:00 -24:23:00 FOR ERI",
+    "499:340 M+ 01:40:00 -40:00:00 01:40:00 -25:30:00 FOR SCL",
+    "340:339 M+ 01:40:00 -25:30:00 01:40:00 -24:23:00 FOR CET",
+    "500:501 M+ 06:18:30 +12:00:00 06:18:30 +17:30:00 GEM ORI",
+    "502:503 M+ 06:13:00 +17:30:00 06:13:00 +21:30:00 GEM ORI",
+    "504:505 M+ 05:53:00 +21:30:00 05:53:00 +22:50:00 GEM ORI",
+    "505:146 M+ 05:53:00 +22:50:00 05:53:00 +28:00:00 GEM TAU",
+    "146:145 P+ 05:53:00 +28:00:00 06:32:00 +28:00:00 GEM AUR",
+    "145:144 M+ 06:32:00 +28:00:00 06:32:00 +35:30:00 GEM AUR",
+    "144:143 P+ 06:32:00 +35:30:00 07:22:00 +35:30:00 GEM AUR",
+    "143:506 P+ 07:22:00 +35:30:00 07:45:00 +35:30:00 GEM LYN",
+    "507:225 P+ 07:45:00 +33:30:00 08:00:00 +33:30:00 GEM LYN",
+    "508:509 M+ 06:56:00 +10:00:00 06:56:00 +12:00:00 GEM MON",
+    "510:518 P+ 21:20:00 -37:00:00 23:00:00 -37:00:00 GRU PSA",
+    "518:517 P+ 23:00:00 -37:00:00 23:20:00 -37:00:00 GRU SCL",
+    "514:513 M+ 22:00:00 -57:00:00 22:00:00 -50:00:00 GRU IND",
+    "512:511 M+ 21:20:00 -50:00:00 21:20:00 -45:30:00 GRU IND",
+    "511:510 M+ 21:20:00 -45:30:00 21:20:00 -37:00:00 GRU MIC",
+    "520:521 M+ 16:05:00 +04:00:00 16:05:00 +16:00:00 HER SER1",
+    "522:523 M+ 15:55:00 +16:00:00 15:55:00 +22:00:00 HER SER1",
+    "523:524 P+ 15:55:00 +22:00:00 16:02:00 +22:00:00 HER SER1",
+    "524:369 M+ 16:02:00 +22:00:00 16:02:00 +26:00:00 HER SER1",
+    "369:368 P+ 16:02:00 +26:00:00 16:10:00 +26:00:00 HER CRB",
+    "368:367 M+ 16:10:00 +26:00:00 16:10:00 +27:00:00 HER CRB",
+    "367:366 P+ 16:10:00 +27:00:00 16:20:00 +27:00:00 HER CRB",
+    "366:365 M+ 16:20:00 +27:00:00 16:20:00 +40:00:00 HER CRB",
+    "165:164 M+ 15:45:00 +40:00:00 15:45:00 +51:30:00 HER BOO",
+    "164:452 P+ 15:45:00 +51:30:00 17:00:00 +51:30:00 HER DRA",
+    "451:450 P+ 17:00:00 +50:30:00 18:14:00 +50:30:00 HER DRA",
+    "526:527 P+ 18:10:30 +30:00:00 18:22:00 +30:00:00 HER LYR",
+    "528:529 P+ 18:22:00 +26:00:00 18:52:00 +26:00:00 HER LYR",
+    "532:533 M+ 18:15:00 +12:00:00 18:15:00 +14:20:00 HER OPH",
+    "542:483 M+ 02:10:00 -67:30:00 02:10:00 -58:30:00 HOR HYI",
+    "483:482 M+ 02:10:00 -58:30:00 02:10:00 -54:00:00 HOR ERI",
+    "482:481 P+ 02:10:00 -54:00:00 02:25:00 -54:00:00 HOR ERI",
+    "481:480 M+ 02:25:00 -54:00:00 02:25:00 -51:00:00 HOR ERI",
+    "480:479 P+ 02:25:00 -51:00:00 02:40:00 -51:00:00 HOR ERI",
+    "479:478 M+ 02:40:00 -51:00:00 02:40:00 -49:00:00 HOR ERI",
+    "478:477 P+ 02:40:00 -49:00:00 03:00:00 -49:00:00 HOR ERI",
+    "477:476 M+ 03:00:00 -49:00:00 03:00:00 -46:00:00 HOR ERI",
+    "476:475 P+ 03:00:00 -46:00:00 03:25:00 -46:00:00 HOR ERI",
+    "475:474 M+ 03:25:00 -46:00:00 03:25:00 -44:00:00 HOR ERI",
+    "474:473 P+ 03:25:00 -44:00:00 03:52:00 -44:00:00 HOR ERI",
+    "473:472 M+ 03:52:00 -44:00:00 03:52:00 -40:00:00 HOR ERI",
+    "472:171 P+ 03:52:00 -40:00:00 04:16:00 -40:00:00 HOR ERI",
+    "243:216 M+ 08:05:00 +00:00:00 08:05:00 +07:00:00 HYA CMI",
+    "216:215 P+ 08:05:00 +07:00:00 09:15:00 +07:00:00 HYA CNC",
+    "215:543 P+ 09:15:00 +07:00:00 09:35:00 +07:00:00 HYA LEO",
+    "545:377 P+ 09:35:00 -11:00:00 10:45:00 -11:00:00 HYA SEX",
+    "378:379 P+ 10:45:00 -19:00:00 10:50:00 -19:00:00 HYA CRT",
+    "380:372 P+ 10:50:00 -24:30:00 11:50:00 -24:30:00 HYA CRT",
+    "372:373 P+ 11:50:00 -24:30:00 12:35:00 -24:30:00 HYA CRV",
+    "373:374 M+ 12:35:00 -24:30:00 12:35:00 -22:00:00 HYA CRV",
+    "374:375 P+ 12:35:00 -22:00:00 12:50:00 -22:00:00 HYA CRV",
+    "375:546 P+ 12:50:00 -22:00:00 14:15:00 -22:00:00 HYA VIR",
+    "547:548 P+ 14:15:00 -24:30:00 14:55:00 -24:30:00 HYA LIB",
+    "043:044 M+ 10:50:00 -35:00:00 10:50:00 -31:10:00 HYA ANT",
+    "045:046 M+ 10:35:00 -31:10:00 10:35:00 -29:10:00 HYA ANT",
+    "047:048 M+ 10:15:00 -29:10:00 10:15:00 -26:30:00 HYA ANT",
+    "049:050 M+ 09:45:00 -26:30:00 09:45:00 -24:00:00 HYA ANT",
+    "549:550 M+ 09:05:00 -24:00:00 09:05:00 -19:00:00 HYA PYX",
+    "551:552 M+ 08:35:00 -19:00:00 08:35:00 -17:00:00 HYA PYX",
+    "553:554 M+ 08:22:00 -17:00:00 08:22:00 -11:00:00 HYA PUP",
+    "555:243 M+ 08:05:00 -11:00:00 08:05:00 +00:00:00 HYA MON",
+    "559:560 M+ 00:00:00 -82:30:00 00:00:00 -75:00:00 HYI OCT",
+    "560:561 P+ 00:00:00 -75:00:00 00:45:00 -75:00:00 HYI TUC",
+    "562:563 P+ 00:45:00 -76:00:00 01:20:00 -76:00:00 HYI TUC",
+    "563:484 M+ 01:20:00 -76:00:00 01:20:00 -58:30:00 HYI TUC",
+    "484:483 P+ 01:20:00 -58:30:00 02:10:00 -58:30:00 HYI ERI",
+    "542:541 P+ 02:10:00 -67:30:00 03:12:00 -67:30:00 HYI HOR",
+    "541:424 P+ 03:12:00 -67:30:00 04:35:00 -67:30:00 HYI RET",
+    "564:571 M+ 21:20:00 -75:00:00 21:20:00 -60:00:00 IND PAV",
+    "570:569 M+ 20:20:00 -60:00:00 20:20:00 -57:00:00 IND PAV",
+    "569:568 M+ 20:20:00 -57:00:00 20:20:00 -45:30:00 IND TEL",
+    "568:511 P+ 20:20:00 -45:30:00 21:20:00 -45:30:00 IND MIC",
+    "512:513 P+ 21:20:00 -50:00:00 22:00:00 -50:00:00 IND GRU",
+    "567:566 P+ 22:00:00 -67:30:00 23:20:00 -67:30:00 IND TUC",
+    "401:400 M+ 21:52:30 +36:00:00 21:52:30 +43:45:00 LAC CYG",
+    "400:399 P+ 21:52:30 +43:45:00 21:54:30 +43:45:00 LAC CYG",
+    "399:398 M+ 21:54:30 +43:45:00 21:54:30 +44:00:00 LAC CYG",
+    "398:397 P+ 21:54:30 +44:00:00 21:58:00 +44:00:00 LAC CYG",
+    "397:326 M+ 21:58:00 +44:00:00 21:58:00 +52:45:00 LAC CYG",
+    "326:325 P+ 21:58:00 +52:45:00 22:08:00 +52:45:00 LAC CEP",
+    "325:324 M+ 22:08:00 +52:45:00 22:08:00 +55:00:00 LAC CEP",
+    "324:323 P+ 22:08:00 +55:00:00 22:19:00 +55:00:00 LAC CEP",
+    "323:322 M+ 22:19:00 +55:00:00 22:19:00 +56:15:00 LAC CEP",
+    "322:278 P+ 22:19:00 +56:15:00 22:52:00 +56:15:00 LAC CEP",
+    "572:573 M+ 22:49:00 +34:30:00 22:49:00 +35:00:00 LAC PEG",
+    "574:575 M+ 22:00:00 +35:00:00 22:00:00 +36:00:00 LAC PEG",
+    "576:577 M+ 10:45:00 +00:00:00 10:45:00 +07:00:00 LEO SEX",
+    "215:226 M+ 09:15:00 +07:00:00 09:15:00 +33:30:00 LEO CNC",
+    "226:578 P+ 09:15:00 +33:30:00 09:53:00 +33:30:00 LEO LMI",
+    "579:580 P+ 09:53:00 +28:30:00 10:30:00 +28:30:00 LEO LMI",
+    "581:582 P+ 10:30:00 +23:30:00 10:45:00 +23:30:00 LEO LMI",
+    "582:583 M+ 10:45:00 +23:30:00 10:45:00 +25:30:00 LEO LMI",
+    "583:584 P+ 10:45:00 +25:30:00 11:00:00 +25:30:00 LEO LMI",
+    "584:585 M+ 11:00:00 +25:30:00 11:00:00 +29:00:00 LEO LMI",
+    "585:358 P+ 11:00:00 +29:00:00 11:52:00 +29:00:00 LEO UMA",
+    "376:576 M+ 10:45:00 -06:00:00 10:45:00 +00:00:00 LEO SEX",
+    "226:589 M+ 09:15:00 +33:30:00 09:15:00 +39:45:00 LMI LYN",
+    "589:590 P+ 09:15:00 +39:45:00 09:35:00 +39:45:00 LMI LYN",
+    "590:591 M+ 09:35:00 +39:45:00 09:35:00 +42:00:00 LMI LYN",
+    "591:592 P+ 09:35:00 +42:00:00 10:10:00 +42:00:00 LMI UMA",
+    "593:594 P+ 10:10:00 +40:00:00 10:47:00 +40:00:00 LMI UMA",
+    "595:596 P+ 10:47:00 +34:00:00 11:00:00 +34:00:00 LMI UMA",
+    "581:580 M+ 10:30:00 +23:30:00 10:30:00 +28:30:00 LMI LEO",
+    "579:578 M+ 09:53:00 +28:30:00 09:53:00 +33:30:00 LMI LEO",
+    "179:471 M+ 04:50:00 -27:15:00 04:50:00 -14:30:00 LEP ERI",
+    "471:470 P+ 04:50:00 -14:30:00 04:55:00 -14:30:00 LEP ERI",
+    "470:469 M+ 04:55:00 -14:30:00 04:55:00 -11:00:00 LEP ERI",
+    "469:468 P+ 04:55:00 -11:00:00 05:05:00 -11:00:00 LEP ERI",
+    "468:597 P+ 05:05:00 -11:00:00 05:50:00 -11:00:00 LEP ORI",
+    "597:237 P+ 05:50:00 -11:00:00 06:07:00 -11:00:00 LEP MON",
+    "607:606 P+ 15:05:00 -03:15:00 15:55:00 -03:15:00 LIB SER1",
+    "303:548 M+ 14:55:00 -29:30:00 14:55:00 -24:30:00 LIB HYA",
+    "547:546 M+ 14:15:00 -24:30:00 14:15:00 -22:00:00 LIB HYA",
+    "546:601 M+ 14:15:00 -22:00:00 14:15:00 -08:00:00 LIB VIR",
+    "601:600 P+ 14:15:00 -08:00:00 14:40:00 -08:00:00 LIB VIR",
+    "600:599 M+ 14:40:00 -08:00:00 14:40:00 +00:00:00 LIB VIR",
+    "599:598 P+ 14:40:00 +00:00:00 15:05:00 +00:00:00 LIB VIR",
+    "300:301 M+ 14:10:00 -55:00:00 14:10:00 -42:00:00 LUP CEN",
+    "301:302 P+ 14:10:00 -42:00:00 14:55:00 -42:00:00 LUP CEN",
+    "302:303 M+ 14:55:00 -42:00:00 14:55:00 -29:30:00 LUP CEN",
+    "303:602 P+ 14:55:00 -29:30:00 15:40:00 -29:30:00 LUP LIB",
+    "602:614 P+ 15:40:00 -29:30:00 16:00:00 -29:30:00 LUP SCO",
+    "143:142 M+ 07:22:00 +35:30:00 07:22:00 +44:30:00 LYN AUR",
+    "141:140 M+ 06:48:00 +44:30:00 06:48:00 +50:00:00 LYN AUR",
+    "139:138 M+ 06:30:00 +50:00:00 06:30:00 +54:00:00 LYN AUR",
+    "137:136 M+ 06:06:00 +54:00:00 06:06:00 +56:00:00 LYN AUR",
+    "136:214 M+ 06:06:00 +56:00:00 06:06:00 +62:00:00 LYN CAM",
+    "214:213 P+ 06:06:00 +62:00:00 07:00:00 +62:00:00 LYN CAM",
+    "212:211 P+ 07:00:00 +60:00:00 07:58:00 +60:00:00 LYN CAM",
+    "211:615 P+ 07:58:00 +60:00:00 08:25:00 +60:00:00 LYN UMA",
+    "616:617 P+ 08:25:00 +47:00:00 09:10:00 +47:00:00 LYN UMA",
+    "618:591 P+ 09:10:00 +42:00:00 09:35:00 +42:00:00 LYN UMA",
+    "507:506 M+ 07:45:00 +33:30:00 07:45:00 +35:30:00 LYN GEM",
+    "530:529 M+ 18:52:00 +25:30:00 18:52:00 +26:00:00 LYR HER",
+    "528:527 M+ 18:22:00 +26:00:00 18:22:00 +30:00:00 LYR HER",
+    "526:525 M+ 18:10:30 +30:00:00 18:10:30 +47:30:00 LYR HER",
+    "525:449 P+ 18:10:30 +47:30:00 18:14:00 +47:30:00 LYR HER",
+    "449:391 P+ 18:14:00 +47:30:00 19:05:00 +47:30:00 LYR DRA",
+    "391:390 P+ 19:05:00 +47:30:00 19:10:00 +47:30:00 LYR CYG",
+    "389:388 P+ 19:10:00 +43:30:00 19:24:00 +43:30:00 LYR CYG",
+    "621:558 M+ 03:30:00 -85:00:00 03:30:00 -82:30:00 MEN OCT",
+    "558:557 M+ 03:30:00 -82:30:00 03:30:00 -75:00:00 MEN HYI",
+    "557:556 P+ 03:30:00 -75:00:00 04:35:00 -75:00:00 MEN HYI",
+    "556:425 M+ 04:35:00 -75:00:00 04:35:00 -70:00:00 MEN HYI",
+    "425:426 P+ 04:35:00 -70:00:00 06:35:00 -70:00:00 MEN DOR",
+    "622:343 P+ 06:35:00 -75:00:00 07:40:00 -75:00:00 MEN VOL",
+    "254:255 P+ 20:20:00 -28:00:00 21:20:00 -28:00:00 MIC CAP",
+    "568:254 M+ 20:20:00 -45:30:00 20:20:00 -28:00:00 MIC SGR",
+    "623:624 M+ 06:14:30 +00:00:00 06:14:30 +10:00:00 MON ORI",
+    "624:625 P+ 06:14:30 +10:00:00 06:18:30 +10:00:00 MON ORI",
+    "625:500 M+ 06:18:30 +10:00:00 06:18:30 +12:00:00 MON ORI",
+    "500:509 P+ 06:18:30 +12:00:00 06:56:00 +12:00:00 MON GEM",
+    "508:249 P+ 06:56:00 +10:00:00 07:00:00 +10:00:00 MON GEM",
+    "248:247 P+ 07:00:00 +05:30:00 07:01:00 +05:30:00 MON CMI",
+    "246:245 P+ 07:01:00 +01:30:00 07:12:00 +01:30:00 MON CMI",
+    "244:243 P+ 07:12:00 +00:00:00 08:05:00 +00:00:00 MON CMI",
+    "597:626 M+ 05:50:00 -11:00:00 05:50:00 -04:00:00 MON ORI",
+    "626:627 P+ 05:50:00 -04:00:00 06:14:30 -04:00:00 MON ORI",
+    "627:623 M+ 06:14:30 -04:00:00 06:14:30 +00:00:00 MON ORI",
+    "277:293 P+ 11:15:00 -64:00:00 11:50:00 -64:00:00 MUS CEN",
+    "293:296 P+ 11:50:00 -64:00:00 12:50:00 -64:00:00 MUS CRU",
+    "296:297 P+ 12:50:00 -64:00:00 13:30:00 -64:00:00 MUS CEN",
+    "344:345 P+ 13:30:00 -65:00:00 13:40:00 -65:00:00 MUS CIR",
+    "276:277 M+ 11:15:00 -75:00:00 11:15:00 -64:00:00 MUS CAR",
+    "352:353 M+ 15:20:00 -60:00:00 15:20:00 -55:00:00 NOR CIR",
+    "354:608 M+ 15:03:00 -55:00:00 15:03:00 -54:00:00 NOR LUP",
+    "608:609 P+ 15:03:00 -54:00:00 15:20:00 -54:00:00 NOR LUP",
+    "609:610 M+ 15:20:00 -54:00:00 15:20:00 -48:00:00 NOR LUP",
+    "610:611 P+ 15:20:00 -48:00:00 15:40:00 -48:00:00 NOR LUP",
+    "611:612 M+ 15:40:00 -48:00:00 15:40:00 -42:00:00 NOR LUP",
+    "612:613 P+ 15:40:00 -42:00:00 16:00:00 -42:00:00 NOR LUP",
+    "613:628 P+ 16:00:00 -42:00:00 16:25:15 -42:00:00 NOR SCO",
+    "559:558 P+ 00:00:00 -82:30:00 03:30:00 -82:30:00 OCT HYI",
+    "621:620 P+ 03:30:00 -85:00:00 07:40:00 -85:00:00 OCT MEN",
+    "620:342 M+ 07:40:00 -85:00:00 07:40:00 -82:30:00 OCT MEN",
+    "342:051 P+ 07:40:00 -82:30:00 13:40:00 -82:30:00 OCT CHA",
+    "051:052 P+ 13:40:00 -82:30:00 18:00:00 -82:30:00 OCT APS",
+    "052:053 M+ 18:00:00 -82:30:00 18:00:00 -75:00:00 OCT APS",
+    "053:564 P+ 18:00:00 -75:00:00 21:20:00 -75:00:00 OCT PAV",
+    "564:565 P+ 21:20:00 -75:00:00 23:20:00 -75:00:00 OCT IND",
+    "565:560 P+ 23:20:00 -75:00:00 00:00:00 -75:00:00 OCT TUC",
+    "629:519 M+ 16:16:00 +00:00:00 16:16:00 +04:00:00 OPH SER1",
+    "519:537 P+ 16:16:00 +04:00:00 16:45:00 +04:00:00 OPH HER",
+    "537:536 M+ 16:45:00 +04:00:00 16:45:00 +12:50:00 OPH HER",
+    "536:535 P+ 16:45:00 +12:50:00 17:15:00 +12:50:00 OPH HER",
+    "535:534 M+ 17:15:00 +12:50:00 17:15:00 +14:20:00 OPH HER",
+    "534:533 P+ 17:15:00 +14:20:00 18:15:00 +14:20:00 OPH HER",
+    "532:089 P+ 18:15:00 +12:00:00 18:39:44 +12:00:00 OPH HER",
+    "631:632 P+ 18:15:00 +04:30:00 18:25:30 +04:30:00 OPH SER2",
+    "637:638 P+ 17:50:00 -04:00:00 17:58:00 -04:00:00 OPH SER2",
+    "642:643 M+ 17:35:00 -11:40:00 17:35:00 -10:00:00 OPH SER2",
+    "645:646 P+ 17:10:00 -16:00:00 17:36:00 -16:00:00 OPH SER2",
+    "648:649 M+ 16:45:00 -30:00:00 16:45:00 -24:35:00 OPH SCO",
+    "650:651 M+ 16:16:00 -24:35:00 16:16:00 -19:15:00 OPH SCO",
+    "651:652 P+ 16:16:00 -19:15:00 16:22:30 -19:15:00 OPH SCO",
+    "652:653 M+ 16:22:30 -19:15:00 16:22:30 -18:15:00 OPH SCO",
+    "654:655 M+ 16:16:00 -18:15:00 16:16:00 -08:00:00 OPH SCO",
+    "605:606 M+ 15:55:00 -08:00:00 15:55:00 -03:15:00 OPH LIB",
+    "606:656 P+ 15:55:00 -03:15:00 16:16:00 -03:15:00 OPH SER1",
+    "656:629 M+ 16:16:00 -03:15:00 16:16:00 +00:00:00 OPH SER1",
+    "464:657 M+ 04:37:00 +00:00:00 04:37:00 +15:30:00 ORI TAU",
+    "657:658 P+ 04:37:00 +15:30:00 04:58:00 +15:30:00 ORI TAU",
+    "658:659 M+ 04:58:00 +15:30:00 04:58:00 +16:00:00 ORI TAU",
+    "659:660 P+ 04:58:00 +16:00:00 05:20:00 +16:00:00 ORI TAU",
+    "661:662 P+ 05:20:00 +15:30:00 05:36:00 +15:30:00 ORI TAU",
+    "663:664 P+ 05:36:00 +12:30:00 05:46:00 +12:30:00 ORI TAU",
+    "664:665 M+ 05:46:00 +12:30:00 05:46:00 +18:00:00 ORI TAU",
+    "666:667 M+ 05:42:00 +18:00:00 05:42:00 +22:50:00 ORI TAU",
+    "667:505 P+ 05:42:00 +22:50:00 05:53:00 +22:50:00 ORI TAU",
+    "504:503 P+ 05:53:00 +21:30:00 06:13:00 +21:30:00 ORI GEM",
+    "502:501 P+ 06:13:00 +17:30:00 06:18:30 +17:30:00 ORI GEM",
+    "468:467 M+ 05:05:00 -11:00:00 05:05:00 -04:00:00 ORI ERI",
+    "466:465 M+ 04:40:00 -04:00:00 04:40:00 +00:00:00 ORI ERI",
+    "053:054 M+ 18:00:00 -75:00:00 18:00:00 -67:30:00 PAV APS",
+    "055:110 M+ 17:30:00 -67:30:00 17:30:00 -57:00:00 PAV ARA",
+    "110:109 P+ 17:30:00 -57:00:00 18:00:00 -57:00:00 PAV ARA",
+    "109:569 P+ 18:00:00 -57:00:00 20:20:00 -57:00:00 PAV TEL",
+    "570:571 P+ 20:20:00 -60:00:00 21:20:00 -60:00:00 PAV IND",
+    "064:462 M+ 21:20:00 +02:00:00 21:20:00 +12:30:00 PEG EQU",
+    "414:413 M+ 21:03:00 +11:50:00 21:03:00 +19:30:00 PEG DEL",
+    "413:668 P+ 21:03:00 +19:30:00 21:15:00 +19:30:00 PEG VUL",
+    "668:669 M+ 21:15:00 +19:30:00 21:15:00 +23:30:00 PEG VUL",
+    "669:670 P+ 21:15:00 +23:30:00 21:25:00 +23:30:00 PEG VUL",
+    "670:404 M+ 21:25:00 +23:30:00 21:25:00 +28:00:00 PEG VUL",
+    "404:403 P+ 21:25:00 +28:00:00 21:44:00 +28:00:00 PEG CYG",
+    "403:402 M+ 21:44:00 +28:00:00 21:44:00 +36:00:00 PEG CYG",
+    "402:401 P+ 21:44:00 +36:00:00 21:52:30 +36:00:00 PEG CYG",
+    "401:575 P+ 21:52:30 +36:00:00 22:00:00 +36:00:00 PEG LAC",
+    "574:573 P+ 22:00:00 +35:00:00 22:49:00 +35:00:00 PEG LAC",
+    "572:001 P+ 22:49:00 +34:30:00 22:52:00 +34:30:00 PEG LAC",
+    "001:037 P+ 22:52:00 +34:30:00 23:30:00 +34:30:00 PEG AND",
+    "036:035 P+ 23:30:00 +32:05:00 23:45:00 +32:05:00 PEG AND",
+    "034:033 P+ 23:45:00 +31:20:00 00:00:00 +31:20:00 PEG AND",
+    "032:031 P+ 00:00:00 +28:00:00 00:04:00 +28:00:00 PEG AND",
+    "030:029 P+ 00:04:00 +22:00:00 00:08:30 +22:00:00 PEG AND",
+    "068:067 M+ 21:40:00 +01:45:00 21:40:00 +02:45:00 PEG AQR",
+    "125:677 M+ 02:43:00 +30:40:00 02:43:00 +34:00:00 PER TRI",
+    "678:679 M+ 02:34:00 +34:00:00 02:34:00 +36:45:00 PER TRI",
+    "019:018 M+ 02:31:00 +36:45:00 02:31:00 +50:30:00 PER AND",
+    "015:014 M+ 01:40:00 +47:00:00 01:40:00 +50:00:00 PER AND",
+    "013:292 M+ 01:22:00 +50:00:00 01:22:00 +54:00:00 PER CAS",
+    "292:291 P+ 01:22:00 +54:00:00 01:42:00 +54:00:00 PER CAS",
+    "291:290 M+ 01:42:00 +54:00:00 01:42:00 +57:30:00 PER CAS",
+    "290:289 P+ 01:42:00 +57:30:00 01:54:30 +57:30:00 PER CAS",
+    "289:288 M+ 01:54:30 +57:30:00 01:54:30 +58:30:00 PER CAS",
+    "288:287 P+ 01:54:30 +58:30:00 02:26:00 +58:30:00 PER CAS",
+    "286:189 P+ 02:26:00 +57:00:00 03:06:00 +57:00:00 PER CAS",
+    "189:188 P+ 03:06:00 +57:00:00 03:10:00 +57:00:00 PER CAM",
+    "187:186 P+ 03:10:00 +55:00:00 03:20:00 +55:00:00 PER CAM",
+    "185:133 P+ 03:20:00 +52:30:00 04:41:30 +52:30:00 PER CAM",
+    "516:499 P+ 23:20:00 -40:00:00 01:40:00 -40:00:00 PHE SCL",
+    "499:491 P+ 01:40:00 -40:00:00 02:20:00 -40:00:00 PHE FOR",
+    "680:515 M+ 23:20:00 -58:30:00 23:20:00 -57:00:00 PHE TUC",
+    "515:516 M+ 23:20:00 -57:00:00 23:20:00 -40:00:00 PHE GRU",
+    "267:268 P+ 06:00:00 -52:30:00 06:10:00 -52:30:00 PIC CAR",
+    "269:270 P+ 06:10:00 -55:00:00 06:30:00 -55:00:00 PIC CAR",
+    "271:272 P+ 06:30:00 -58:00:00 06:50:00 -58:00:00 PIC CAR",
+    "428:429 M+ 06:00:00 -64:00:00 06:00:00 -61:00:00 PIC DOR",
+    "430:431 M+ 05:30:00 -61:00:00 05:30:00 -57:30:00 PIC DOR",
+    "432:433 M+ 05:00:00 -57:30:00 05:00:00 -54:00:00 PIC DOR",
+    "434:173 M+ 04:30:00 -54:00:00 04:30:00 -49:00:00 PIC DOR",
+    "173:174 M+ 04:30:00 -49:00:00 04:30:00 -46:30:00 PIC CAE",
+    "174:175 P+ 04:30:00 -46:30:00 04:50:00 -46:30:00 PIC CAE",
+    "175:176 M+ 04:50:00 -46:30:00 04:50:00 -43:00:00 PIC CAE",
+    "176:177 P+ 04:50:00 -43:00:00 05:00:00 -43:00:00 PIC CAE",
+    "177:356 P+ 05:00:00 -43:00:00 06:00:00 -43:00:00 PIC COL",
+    "072:071 M+ 22:45:00 +00:00:00 22:45:00 +02:00:00 PSC AQR",
+    "071:676 M+ 22:45:00 +02:00:00 22:45:00 +07:30:00 PSC PEG",
+    "676:675 P+ 22:45:00 +07:30:00 23:50:00 +07:30:00 PSC PEG",
+    "675:674 M+ 23:50:00 +07:30:00 23:50:00 +10:00:00 PSC PEG",
+    "674:673 P+ 23:50:00 +10:00:00 00:00:00 +10:00:00 PSC PEG",
+    "673:672 M+ 00:00:00 +10:00:00 00:00:00 +12:30:00 PSC PEG",
+    "672:671 P+ 00:00:00 +12:30:00 00:08:30 +12:30:00 PSC PEG",
+    "671:028 M+ 00:08:30 +12:30:00 00:08:30 +21:00:00 PSC PEG",
+    "028:027 P+ 00:08:30 +21:00:00 00:51:00 +21:00:00 PSC AND",
+    "027:026 M+ 00:51:00 +21:00:00 00:51:00 +23:45:00 PSC AND",
+    "025:024 M+ 00:43:00 +23:45:00 00:43:00 +33:00:00 PSC AND",
+    "024:023 P+ 00:43:00 +33:00:00 01:24:30 +33:00:00 PSC AND",
+    "681:682 P+ 01:24:30 +28:00:00 01:40:00 +28:00:00 PSC TRI",
+    "119:118 P+ 01:40:00 +09:55:00 02:00:00 +09:55:00 PSC ARI",
+    "075:074 M+ 23:50:00 -07:00:00 23:50:00 -04:00:00 PSC AQR",
+    "073:072 M+ 22:45:00 -04:00:00 22:45:00 +00:00:00 PSC AQR",
+    "510:255 M+ 21:20:00 -37:00:00 21:20:00 -28:00:00 PSA MIC",
+    "255:256 M+ 21:20:00 -28:00:00 21:20:00 -25:30:00 PSA CAP",
+    "256:078 P+ 21:20:00 -25:30:00 21:52:00 -25:30:00 PSA CAP",
+    "078:077 P+ 21:52:00 -25:30:00 23:00:00 -25:30:00 PSA AQR",
+    "238:555 P+ 07:22:00 -11:00:00 08:05:00 -11:00:00 PUP MON",
+    "555:554 P+ 08:05:00 -11:00:00 08:22:00 -11:00:00 PUP HYA",
+    "266:356 M+ 06:00:00 -50:45:00 06:00:00 -43:00:00 PUP PIC",
+    "356:355 P+ 06:00:00 -43:00:00 06:35:00 -43:00:00 PUP COL",
+    "355:240 M+ 06:35:00 -43:00:00 06:35:00 -33:00:00 PUP COL",
+    "240:239 P+ 06:35:00 -33:00:00 07:22:00 -33:00:00 PUP CMA",
+    "239:238 M+ 07:22:00 -33:00:00 07:22:00 -11:00:00 PUP CMA",
+    "553:552 P+ 08:22:00 -17:00:00 08:35:00 -17:00:00 PYX HYA",
+    "551:550 P+ 08:35:00 -19:00:00 09:05:00 -19:00:00 PYX HYA",
+    "549:038 P+ 09:05:00 -24:00:00 09:22:00 -24:00:00 PYX HYA",
+    "685:553 M+ 08:22:00 -36:45:00 08:22:00 -17:00:00 PYX PUP",
+    "541:540 M+ 03:12:00 -67:30:00 03:12:00 -57:30:00 RET HOR",
+    "540:539 P+ 03:12:00 -57:30:00 03:30:00 -57:30:00 RET HOR",
+    "539:538 M+ 03:30:00 -57:30:00 03:30:00 -53:10:00 RET HOR",
+    "538:418 P+ 03:30:00 -53:10:00 03:50:00 -53:10:00 RET HOR",
+    "418:419 P+ 03:50:00 -53:10:00 04:00:00 -53:10:00 RET DOR",
+    "420:421 P+ 04:00:00 -56:30:00 04:20:00 -56:30:00 RET DOR",
+    "422:423 P+ 04:20:00 -59:00:00 04:35:00 -59:00:00 RET DOR",
+    "091:531 M+ 18:52:00 +18:30:00 18:52:00 +21:05:00 SGE HER",
+    "531:686 P+ 18:52:00 +21:05:00 19:15:00 +21:05:00 SGE VUL",
+    "687:688 P+ 19:15:00 +19:10:00 19:50:00 +19:10:00 SGE VUL",
+    "688:689 M+ 19:50:00 +19:10:00 19:50:00 +21:15:00 SGE VUL",
+    "689:690 P+ 19:50:00 +21:15:00 20:15:00 +21:15:00 SGE VUL",
+    "095:094 M+ 19:50:00 +15:45:00 19:50:00 +16:10:00 SGE AQL",
+    "093:092 M+ 19:00:00 +16:10:00 19:00:00 +18:30:00 SGE AQL",
+    "102:101 P+ 18:52:00 -12:02:00 20:00:00 -12:02:00 SGR AQL",
+    "253:254 P+ 20:00:00 -28:00:00 20:20:00 -28:00:00 SGR CAP",
+    "364:363 M+ 19:10:00 -45:30:00 19:10:00 -37:00:00 SGR CRA",
+    "362:693 M+ 17:50:00 -37:00:00 17:50:00 -30:00:00 SGR SCO",
+    "647:646 M+ 17:36:00 -30:00:00 17:36:00 -16:00:00 SGR OPH",
+    "646:692 P+ 17:36:00 -16:00:00 18:15:00 -16:00:00 SGR SER2",
+    "692:691 P+ 18:15:00 -16:00:00 18:52:00 -16:00:00 SGR SCT",
+    "691:102 M+ 18:52:00 -16:00:00 18:52:00 -12:02:00 SGR SCT",
+    "605:655 P+ 15:55:00 -08:00:00 16:16:00 -08:00:00 SCO OPH",
+    "654:653 P+ 16:16:00 -18:15:00 16:22:30 -18:15:00 SCO OPH",
+    "650:649 P+ 16:16:00 -24:35:00 16:45:00 -24:35:00 SCO OPH",
+    "648:647 P+ 16:45:00 -30:00:00 17:36:00 -30:00:00 SCO OPH",
+    "647:693 P+ 17:36:00 -30:00:00 17:50:00 -30:00:00 SCO SGR",
+    "106:628 M+ 16:25:15 -45:30:00 16:25:15 -42:00:00 SCO NOR",
+    "613:614 M+ 16:00:00 -42:00:00 16:00:00 -29:30:00 SCO LUP",
+    "602:603 M+ 15:40:00 -29:30:00 15:40:00 -20:00:00 SCO LIB",
+    "603:604 P+ 15:40:00 -20:00:00 15:55:00 -20:00:00 SCO LIB",
+    "604:605 M+ 15:55:00 -20:00:00 15:55:00 -08:00:00 SCO LIB",
+    "077:076 P+ 23:00:00 -25:30:00 23:50:00 -25:30:00 SCL AQR",
+    "076:340 P+ 23:50:00 -25:30:00 01:40:00 -25:30:00 SCL CET",
+    "516:517 M+ 23:20:00 -40:00:00 23:20:00 -37:00:00 SCL GRU",
+    "518:077 M+ 23:00:00 -37:00:00 23:00:00 -25:30:00 SCL PSA",
+    "692:694 M+ 18:15:00 -16:00:00 18:15:00 -04:00:00 SCT SER2",
+    "694:104 P+ 18:15:00 -04:00:00 18:35:00 -04:00:00 SCT SER2",
+    "104:103 P+ 18:35:00 -04:00:00 18:52:00 -04:00:00 SCT AQL",
+    "598:151 M+ 15:05:00 +00:00:00 15:05:00 +08:00:00 SER1 VIR",
+    "151:170 M+ 15:05:00 +08:00:00 15:05:00 +26:00:00 SER1 BOO",
+    "170:169 P+ 15:05:00 +26:00:00 15:11:00 +26:00:00 SER1 BOO",
+    "169:369 P+ 15:11:00 +26:00:00 16:02:00 +26:00:00 SER1 CRB",
+    "522:521 P+ 15:55:00 +16:00:00 16:05:00 +16:00:00 SER1 HER",
+    "520:519 P+ 16:05:00 +04:00:00 16:16:00 +04:00:00 SER1 HER",
+    "607:598 M+ 15:05:00 -03:15:00 15:05:00 +00:00:00 SER1 LIB",
+    "635:634 M+ 18:15:00 +00:00:00 18:15:00 +03:00:00 SER2 OPH",
+    "634:633 P+ 18:15:00 +03:00:00 18:25:30 +03:00:00 SER2 OPH",
+    "633:632 M+ 18:25:30 +03:00:00 18:25:30 +04:30:00 SER2 OPH",
+    "631:630 M+ 18:15:00 +04:30:00 18:15:00 +06:15:00 SER2 OPH",
+    "630:088 P+ 18:15:00 +06:15:00 18:39:44 +06:15:00 SER2 OPH",
+    "088:087 P+ 18:39:44 +06:15:00 18:52:00 +06:15:00 SER2 AQL",
+    "645:644 M+ 17:10:00 -16:00:00 17:10:00 -10:00:00 SER2 OPH",
+    "644:643 P+ 17:10:00 -10:00:00 17:35:00 -10:00:00 SER2 OPH",
+    "642:641 P+ 17:35:00 -11:40:00 17:40:00 -11:40:00 SER2 OPH",
+    "641:640 M+ 17:40:00 -11:40:00 17:40:00 -10:00:00 SER2 OPH",
+    "640:639 P+ 17:40:00 -10:00:00 17:58:00 -10:00:00 SER2 OPH",
+    "639:638 M+ 17:58:00 -10:00:00 17:58:00 -04:00:00 SER2 OPH",
+    "637:636 M+ 17:50:00 -04:00:00 17:50:00 +00:00:00 SER2 OPH",
+    "636:635 P+ 17:50:00 +00:00:00 18:15:00 +00:00:00 SER2 OPH",
+    "544:543 M+ 09:35:00 +00:00:00 09:35:00 +07:00:00 SEX HYA",
+    "543:577 P+ 09:35:00 +07:00:00 10:45:00 +07:00:00 SEX LEO",
+    "545:544 M+ 09:35:00 -11:00:00 09:35:00 +00:00:00 SEX HYA",
+    "336:335 M+ 03:17:00 -01:45:00 03:17:00 +00:00:00 TAU CET",
+    "335:129 M+ 03:17:00 +00:00:00 03:17:00 +09:55:00 TAU CET",
+    "129:128 M+ 03:17:00 +09:55:00 03:17:00 +19:00:00 TAU ARI",
+    "128:127 P+ 03:17:00 +19:00:00 03:22:00 +19:00:00 TAU ARI",
+    "127:126 M+ 03:22:00 +19:00:00 03:22:00 +30:40:00 TAU ARI",
+    "126:130 P+ 03:22:00 +30:40:00 04:30:00 +30:40:00 TAU PER",
+    "150:149 P+ 04:30:00 +30:00:00 04:45:00 +30:00:00 TAU AUR",
+    "148:147 P+ 04:45:00 +28:30:00 05:53:00 +28:30:00 TAU AUR",
+    "666:665 P+ 05:42:00 +18:00:00 05:46:00 +18:00:00 TAU ORI",
+    "663:662 M+ 05:36:00 +12:30:00 05:36:00 +15:30:00 TAU ORI",
+    "661:660 M+ 05:20:00 +15:30:00 05:20:00 +16:00:00 TAU ORI",
+    "109:108 M+ 18:00:00 -57:00:00 18:00:00 -45:30:00 TEL ARA",
+    "108:364 P+ 18:00:00 -45:30:00 19:10:00 -45:30:00 TEL CRA",
+    "364:568 P+ 19:10:00 -45:30:00 20:20:00 -45:30:00 TEL SGR",
+    "120:682 M+ 01:40:00 +25:00:00 01:40:00 +28:00:00 TRI PSC",
+    "681:023 M+ 01:24:30 +28:00:00 01:24:30 +33:00:00 TRI PSC",
+    "023:022 M+ 01:24:30 +33:00:00 01:24:30 +35:00:00 TRI AND",
+    "022:021 P+ 01:24:30 +35:00:00 02:00:00 +35:00:00 TRI AND",
+    "021:020 M+ 02:00:00 +35:00:00 02:00:00 +36:45:00 TRI AND",
+    "020:019 P+ 02:00:00 +36:45:00 02:31:00 +36:45:00 TRI AND",
+    "019:679 P+ 02:31:00 +36:45:00 02:34:00 +36:45:00 TRI PER",
+    "678:677 P+ 02:34:00 +34:00:00 02:43:00 +34:00:00 TRI PER",
+    "058:346 M+ 14:45:00 -70:00:00 14:45:00 -67:30:00 TRA CIR",
+    "346:347 P+ 14:45:00 -67:30:00 14:55:00 -67:30:00 TRA CIR",
+    "347:348 M+ 14:55:00 -67:30:00 14:55:00 -63:35:00 TRA CIR",
+    "348:349 P+ 14:55:00 -63:35:00 15:10:00 -63:35:00 TRA CIR",
+    "349:350 M+ 15:10:00 -63:35:00 15:10:00 -61:00:00 TRA CIR",
+    "350:351 P+ 15:10:00 -61:00:00 15:20:00 -61:00:00 TRA CIR",
+    "351:352 M+ 15:20:00 -61:00:00 15:20:00 -60:00:00 TRA CIR",
+    "352:105 P+ 15:20:00 -60:00:00 16:25:15 -60:00:00 TRA NOR",
+    "117:116 P+ 16:25:15 -61:00:00 16:35:00 -61:00:00 TRA ARA",
+    "115:114 P+ 16:35:00 -63:35:00 16:45:00 -63:35:00 TRA ARA",
+    "113:112 P+ 16:45:00 -65:00:00 16:50:00 -65:00:00 TRA ARA",
+    "111:056 P+ 16:50:00 -67:30:00 17:00:00 -67:30:00 TRA ARA",
+    "565:566 M+ 23:20:00 -75:00:00 23:20:00 -67:30:00 TUC IND",
+    "567:514 M+ 22:00:00 -67:30:00 22:00:00 -57:00:00 TUC IND",
+    "514:515 P+ 22:00:00 -57:00:00 23:20:00 -57:00:00 TUC GRU",
+    "680:484 P+ 23:20:00 -58:30:00 01:20:00 -58:30:00 TUC PHE",
+    "562:561 M+ 00:45:00 -76:00:00 00:45:00 -75:00:00 TUC HYI",
+    "618:617 M+ 09:10:00 +42:00:00 09:10:00 +47:00:00 UMA LYN",
+    "616:615 M+ 08:25:00 +47:00:00 08:25:00 +60:00:00 UMA LYN",
+    "211:210 M+ 07:58:00 +60:00:00 07:58:00 +73:30:00 UMA CAM",
+    "210:209 P+ 07:58:00 +73:30:00 09:10:00 +73:30:00 UMA CAM",
+    "209:459 P+ 09:10:00 +73:30:00 11:20:00 +73:30:00 UMA DRA",
+    "458:457 P+ 11:20:00 +66:30:00 12:00:00 +66:30:00 UMA DRA",
+    "456:455 P+ 12:00:00 +64:00:00 13:30:00 +64:00:00 UMA DRA",
+    "454:453 P+ 13:30:00 +63:00:00 14:25:00 +63:00:00 UMA DRA",
+    "232:231 M+ 13:30:00 +48:30:00 13:30:00 +53:00:00 UMA CVN",
+    "585:596 M+ 11:00:00 +29:00:00 11:00:00 +34:00:00 UMA LMI",
+    "595:594 M+ 10:47:00 +34:00:00 10:47:00 +40:00:00 UMA LMI",
+    "593:592 M+ 10:10:00 +40:00:00 10:10:00 +42:00:00 UMA LMI",
+    "203:202 P+ 13:00:00 +77:00:00 13:35:00 +77:00:00 UMI CAM",
+    "202:201 M+ 13:35:00 +77:00:00 13:35:00 +80:00:00 UMI CAM",
+    "201:200 P+ 13:35:00 +80:00:00 14:30:00 +80:00:00 UMI CAM",
+    "200:199 M+ 14:30:00 +80:00:00 14:30:00 +86:30:00 UMI CAM",
+    "198:321 M+ 08:00:00 +86:30:00 08:00:00 +88:00:00 UMI CEP",
+    "440:439 M+ 14:00:00 +66:00:00 14:00:00 +70:00:00 UMI DRA",
+    "438:203 M+ 13:00:00 +70:00:00 13:00:00 +77:00:00 UMI DRA",
+    "259:260 M+ 08:50:00 -56:30:00 08:50:00 -54:30:00 VEL CAR",
+    "261:262 M+ 08:27:00 -54:30:00 08:27:00 -53:00:00 VEL CAR",
+    "263:264 M+ 08:10:00 -53:00:00 08:10:00 -50:45:00 VEL CAR",
+    "265:683 M+ 08:00:00 -50:45:00 08:00:00 -43:00:00 VEL PUP",
+    "683:684 P+ 08:00:00 -43:00:00 08:22:00 -43:00:00 VEL PUP",
+    "684:685 M+ 08:22:00 -43:00:00 08:22:00 -36:45:00 VEL PUP",
+    "685:039 P+ 08:22:00 -36:45:00 09:22:00 -36:45:00 VEL PYX",
+    "040:041 P+ 09:22:00 -39:45:00 11:00:00 -39:45:00 VEL ANT",
+    "588:587 M+ 11:31:00 +00:00:00 11:31:00 +11:00:00 VIR LEO",
+    "587:586 P+ 11:31:00 +11:00:00 11:52:00 +11:00:00 VIR LEO",
+    "586:357 M+ 11:52:00 +11:00:00 11:52:00 +14:00:00 VIR LEO",
+    "357:361 P+ 11:52:00 +14:00:00 12:50:00 +14:00:00 VIR COM",
+    "361:360 M+ 12:50:00 +14:00:00 12:50:00 +15:00:00 VIR COM",
+    "360:153 P+ 12:50:00 +15:00:00 13:30:00 +15:00:00 VIR COM",
+    "152:151 P+ 13:30:00 +08:00:00 15:05:00 +08:00:00 VIR BOO",
+    "375:370 M+ 12:50:00 -22:00:00 12:50:00 -11:00:00 VIR CRV",
+    "371:381 M+ 11:50:00 -11:00:00 11:50:00 -06:00:00 VIR CRT",
+    "382:588 M+ 11:31:00 -06:00:00 11:31:00 +00:00:00 VIR LEO",
+    "427:273 P+ 06:35:00 -64:00:00 06:50:00 -64:00:00 VOL PIC",
+    "273:274 P+ 06:50:00 -64:00:00 09:02:00 -64:00:00 VOL CAR",
+    "622:426 M+ 06:35:00 -75:00:00 06:35:00 -70:00:00 VOL MEN",
+    "426:427 M+ 06:35:00 -70:00:00 06:35:00 -64:00:00 VOL DOR",
+    "531:530 M+ 18:52:00 +21:05:00 18:52:00 +25:30:00 VUL HER",
+    "530:619 P+ 18:52:00 +25:30:00 19:15:30 +25:30:00 VUL LYR",
+    "619:383 M+ 19:15:30 +25:30:00 19:15:30 +27:30:00 VUL LYR",
+    "383:408 P+ 19:15:30 +27:30:00 19:40:00 +27:30:00 VUL CYG",
+    "408:407 M+ 19:40:00 +27:30:00 19:40:00 +29:00:00 VUL CYG",
+    "407:406 P+ 19:40:00 +29:00:00 20:55:00 +29:00:00 VUL CYG",
+    "405:404 P+ 20:55:00 +28:00:00 21:25:00 +28:00:00 VUL CYG",
+    "412:411 M+ 20:34:00 +19:30:00 20:34:00 +20:30:00 VUL DEL",
+    "410:690 M+ 20:15:00 +20:30:00 20:15:00 +21:15:00 VUL SGE",
+    "687:686 M+ 19:15:00 +19:10:00 19:15:00 +21:05:00 VUL SGE"
+  ]
+}

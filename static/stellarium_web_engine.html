@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stellarium Web Engine 完整版</title>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+    <style>
+        .semi-transparent {
+            opacity: 0.5;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .h-100 {
+            height: 100%;
+        }
+
+        .time-btn {
+            margin: 2px !important;
+            font-size: 10px !important;
+        }
+
+        .debug-panel {
+            position: absolute;
+            top: 64px;
+            right: 20px;
+            width: 400px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            font-size: 11px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-app-bar class="xsemi-transparent">
+                <v-toolbar-title>Stellarium Web Engine 完整版</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <div style="color: #00ff00; font-size: 12px;">{{ apiStatus }}</div>
+            </v-app-bar>
+
+            <!-- 🐛 调试面板 -->
+            <div class="debug-panel" v-show="false">
+                <h4>🐛 Stellarium API 调试</h4>
+                <div id="debugOutput">等待调试信息...</div>
+                <button @click="clearDebug"
+                    style="margin-top: 10px; padding: 5px; background: #333; color: white; border: none; border-radius: 3px;">清空调试</button>
+            </div>
+
+            <v-footer app fixed class="transparent" style="height:auto;">
+                <v-spacer></v-spacer>
+                <stel-button label="Constellations" img="static/imgs/symbols/btn-cst-lines.svg"
+                    :obj="stel && stel.core.constellations" attr="lines_visible"></stel-button>
+                <stel-button label="Atmosphere" img="static/imgs/symbols/btn-atmosphere.svg"
+                    :obj="stel && stel.core.atmosphere" attr="visible"></stel-button>
+                <!-- <stel-button label="Landscape" img="static/imgs/symbols/btn-landscape.svg" :obj="stel && stel.core.landscapes" attr="visible"></stel-button> -->
+                <v-spacer></v-spacer>
+            </v-footer>
+
+            <div id="stel" class="w-100 h-100" style="position: relative;">
+                <canvas id="stel-canvas" style="position:absolute;" class="w-100 h-100"></canvas>
+            </div>
+        </v-app>
+    </div>
+
+    <script src="static/js/vue.js"></script>
+    <script src="static/js/vuetify.js"></script>
+    <script src="static/js/i18next.min.js"></script>
+    <script src="static/js/i18next-xhr-backend.min.js"></script>
+    <script src="static/js/stellarium-web-engine.js"></script>
+
+    <script type="text/x-template" id="stel-button-template">
+        <div class="stel-button shrink" :class="{'semi-transparent': !value}" style="width:5rem; height:5rem;">
+            <a v-on:click='clicked'><img :src="img" class="w-100 h-100"/></a>
+        </div>
+    </script>
+
+    <script>
+        Vue.component('stel-button', {
+            template: '#stel-button-template',
+            props: ['label', 'img', 'obj', 'attr'],
+            computed: { value: function () { return this.obj && this.obj[this.attr] } },
+            methods: { clicked: function () { if (this.obj) this.obj[this.attr] = !this.obj[this.attr]; } }
+        })
+
+        i18next.use(i18nextXHRBackend).init({
+            lng: 'zh', ns: ['gui', 'skyculture'], debug: false,
+            backend: { loadPath: './static/i18n/{{ns}}/{{lng}}.json' }
+        });
+
+        function getBaseUrl() {
+            let url = document.location.href.split('/');
+            url.pop();
+            return url.join('/') + '/';
+        }
+
+        // 🐛 调试输出函数
+        function debugLog(message) {
+            const debugOutput = document.getElementById('debugOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            debugOutput.innerHTML += `<div style="margin: 2px 0; padding: 2px; background: rgba(255,255,255,0.1);">${timestamp} - ${message}</div>`;
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log('[DEBUG]', message);
+        }
+
+        function clearDebug() {
+            document.getElementById('debugOutput').innerHTML = '调试日志已清空...';
+        }
+
+        new Vue({
+            vuetify: new Vuetify({ theme: { dark: true } }),
+            el: '#app',
+            data: {
+                stel: null,
+                apiStatus: '初始化中...'
+            },
+            mounted: function () {
+                var that = this;
+                debugLog('开始初始化Stellarium Web Engine...');
+
+                StelWebEngine({
+                    wasmFile: 'static/js/stellarium-web-engine.wasm',
+                    canvas: document.getElementById('stel-canvas'),
+                    // translateFn: function(domain, str) { return i18next.t(str, {ns: domain}); },
+                    translateFn: function (domain, str) {
+                        // 命名空间映射
+                        if (domain === 'sky') {
+                            var result = i18next.t(str, { ns: 'skyculture' }) || str;
+                            if (result !== str) {
+                                // console.log('✅ sky翻译成功:', str, '->', result);
+                            }
+                            return result;
+                        } else if (domain === 'gui') {
+                            var result = i18next.t(str, { ns: 'gui' }) || str;
+                            if (result !== str) {
+                                // console.log('✅ gui翻译成功:', str, '->', result);
+                            }
+                            return result;
+                        } else {
+                            var result = i18next.t(str, { ns: domain }) || str;
+                            if (result !== str) {
+                                // console.log('✅ 其他翻译成功:', str, '->', result);
+                            }
+                            return result;
+                        }
+                    },
+
+
+                    onReady: function (stel) {
+                        that.stel = stel;
+                        that.apiStatus = '✅ 星图加载完成 - 可以探索星宿';
+                        debugLog('✅ Stellarium Web Engine 初始化完成');
+
+                        var baseUrl = getBaseUrl() + 'static/test-skydata/';
+                        let core = stel.core;
+
+
+                        // 🚀 优化：只加载核心必需的3个数据源
+                        core.stars.addDataSource({ url: baseUrl + 'stars' })
+                        core.skycultures.addDataSource({ url: baseUrl + 'skycultures/western', key: 'western' })
+                        core.planets.addDataSource({ url: baseUrl + 'surveys/sso/sun', key: 'sun' })
+
+                        // 🎯 5秒后再加载其他数据源（不阻塞初始加载）
+                        setTimeout(() => {
+                            debugLog('开始加载额外数据源...');
+                            try {
+                                core.dsos.addDataSource({ url: baseUrl + 'dso' });
+                                core.milkyway.addDataSource({ url: baseUrl + 'surveys/milkyway' });
+                                core.planets.addDataSource({ url: baseUrl + 'surveys/sso/moon', key: 'moon' });
+                                core.minor_planets.addDataSource({ url: baseUrl + 'mpcorb.dat', key: 'mpc_asteroids' });
+                                core.comets.addDataSource({ url: baseUrl + 'CometEls.txt', key: 'mpc_comets' });
+                                core.satellites.addDataSource({ url: baseUrl + 'tle_satellite.jsonl.gz', key: 'jsonl/sat' });
+                                debugLog('✅ 额外数据源加载完成');
+                            } catch (error) {
+                                debugLog('⚠️ 额外数据源加载失败: ' + error.message);
+                            }
+                        }, 1000);
+
+
+
+                        // 🔑 新增：设置初始显示状态
+                        setTimeout(() => {
+                            debugLog('🎨 开始设置初始显示状态...');
+
+                            // 第一个按钮：启用星座连线 ✅
+                            core.constellations.lines_visible = true;
+                            debugLog('✅ 星座连线已启用');
+
+                            // 第二个按钮：禁用大气层（避免白天效果）❌
+                            core.atmosphere.visible = false;
+                            debugLog('❌ 大气层已禁用');
+
+                            // 第三个按钮：禁用地面景观 ❌
+                            core.landscapes.visible = false;
+                            debugLog('❌ 地面景观已禁用');
+
+                            // 可选：启用星座标签
+                            core.constellations.labels_visible = true;
+                            debugLog('✅ 星座标签已启用');
+
+                        }, 500); // 延迟1秒确保数据加载完成
+
+
+                        stel.change(function (obj, attr) {
+                            if (attr !== "hovered") {
+                                that.stel = Object.assign(Object.create(stel), {}, stel)
+                            }
+                        });
+
+                        setTimeout(() => {
+                            try {
+                                stel.setFont('regular', 'static/fonts/wqy-microhei.ttc', 1.38);
+                                stel.setFont('bold', 'static/fonts/wqy-microhei.ttc', 1.38);
+                                debugLog('✅ 中文字体加载完成');
+                            } catch (error) {
+                                debugLog('⚠️ 中文字体加载失败，使用英文字体');
+                                // 备用：使用更小的英文字体
+                                try {
+                                    stel.setFont('regular', 'static/fonts/NotoSansCJK-Regular.ttc', 1.38);
+                                    stel.setFont('bold', 'static/fonts/NotoSansCJK-Regular.ttc', 1.38);
+                                } catch (fallbackError) {
+                                    debugLog('⚠️ 备用字体也失败，使用系统字体');
+                                }
+                            }
+                        }, 10); // 1秒后再加载字体
+
+                        debugLog('数据源已添加完成');
+
+                        // 🎯 消息监听器 - 修复版本
+                        window.addEventListener('message', function (event) {
+                            if (!event.data || !event.data.type) return;
+
+                            debugLog(`收到消息: ${JSON.stringify(event.data)}`);
+
+                            try {
+                                switch (event.data.type) {
+                                    case 'setLocation':
+                                        if (event.data.latitude && event.data.longitude) {
+                                            debugLog(`🌍 设置位置: ${event.data.latitude}, ${event.data.longitude}`);
+
+                                            // 🔑 修复：正确设置位置并转换为弧度
+                                            that.stel.core.observer.latitude = event.data.latitude * Math.PI / 180;
+                                            that.stel.core.observer.longitude = event.data.longitude * Math.PI / 180;
+                                            that.stel.core.observer.elevation = 100;
+
+                                            // 🔑 关键：强制更新多次
+                                            for (let i = 0; i < 10; i++) {
+                                                setTimeout(() => {
+                                                    that.stel.core.update();
+                                                }, i * 100);
+                                            }
+
+                                            that.apiStatus = `📍 位置已设置: ${event.data.name}`;
+                                            debugLog(`✅ 位置设置完成`);
+                                        }
+                                        break;
+
+                                    case 'setTime':
+                                        if (event.data.time) {
+                                            debugLog(`🕐 设置时间: ${event.data.time}`);
+
+                                            // 🔑 修复：设置时间并停止时间流逝
+                                            that.stel.core.observer.utc = event.data.time;
+                                            that.stel.core.observer.tt = 0; // 停止时间流逝
+
+                                            // 🔑 关键：强制更新多次
+                                            for (let i = 0; i < 10; i++) {
+                                                setTimeout(() => {
+                                                    that.stel.core.update();
+                                                }, i * 100);
+                                            }
+
+                                            that.apiStatus = `🕐 时间已设置: ${new Date(event.data.time).toLocaleString()}`;
+                                            debugLog(`✅ 时间设置完成`);
+                                        }
+                                        break;
+
+                                    case 'setLocationAndTime':
+                                        // 🆕 新增：同时设置位置和时间
+                                        debugLog(`🌍🕐 同时设置位置和时间`);
+                                        debugLog(`接收到的数据: 纬度${event.data.latitude}°, 经度${event.data.longitude}°`);
+                                        debugLog(`接收到的时间: ${event.data.time}`);
+
+                                        if (event.data.latitude && event.data.longitude && event.data.time) {
+                                            // 🔑 关键步骤1：设置位置（转换为弧度）
+                                            debugLog(`转换前 - 纬度: ${event.data.latitude}°, 经度: ${event.data.longitude}°`);
+                                            that.stel.core.observer.latitude = event.data.latitude * Math.PI / 180;
+                                            that.stel.core.observer.longitude = event.data.longitude * Math.PI / 180;
+                                            that.stel.core.observer.elevation = 100;
+                                            debugLog(`转换后 - 纬度: ${that.stel.core.observer.latitude} 弧度, 经度: ${that.stel.core.observer.longitude} 弧度`);
+
+                                            // 🔑 关键步骤2：设置时间并停止时间流逝
+                                            debugLog(`设置时间: ${event.data.time}`);
+                                            that.stel.core.observer.utc = event.data.time;
+                                            that.stel.core.observer.tt = 0; // 停止时间流逝
+                                            debugLog(`时间流逝速度设置为: ${that.stel.core.observer.tt}`);
+
+                                            // 🔑 关键步骤3：验证设置是否生效
+                                            setTimeout(() => {
+                                                debugLog(`=== 验证设置结果 ===`);
+                                                debugLog(`当前观测者纬度: ${that.stel.core.observer.latitude * 180 / Math.PI}°`);
+                                                debugLog(`当前观测者经度: ${that.stel.core.observer.longitude * 180 / Math.PI}°`);
+                                                debugLog(`当前时间: ${that.stel.core.observer.utc}`);
+                                                debugLog(`时间流逝: ${that.stel.core.observer.tt}`);
+                                            }, 500);
+
+                                            // 🔑 关键步骤4：强制更新多次确保生效
+                                            debugLog(`开始强制更新星图...`);
+                                            for (let i = 0; i < 20; i++) {
+                                                setTimeout(() => {
+                                                    that.stel.core.update();
+                                                    if (i % 5 === 0) {
+                                                        debugLog(`强制更新第 ${i + 1}/20 次`);
+                                                    }
+                                                }, i * 100);
+                                            }
+
+                                            // 🔑 关键步骤5：验证星空是否改变
+                                            setTimeout(() => {
+                                                try {
+                                                    // 尝试获取一些天体信息来验证设置
+                                                    const sun = that.stel.getObj('Sun');
+                                                    if (sun) {
+                                                        debugLog(`✅ 太阳天体对象获取成功`);
+                                                    } else {
+                                                        debugLog(`⚠️ 无法获取太阳天体对象`);
+                                                    }
+                                                } catch (error) {
+                                                    debugLog(`❌ 获取天体信息失败: ${error.message}`);
+                                                }
+                                            }, 3000);
+
+                                            that.apiStatus = `✅ 位置和时间已设置: ${event.data.name} @ ${new Date(event.data.time).toLocaleString()}`;
+                                            debugLog(`✅ 位置和时间设置完成`);
+                                        } else {
+                                            debugLog(`❌ 缺少必要参数: 纬度=${event.data.latitude}, 经度=${event.data.longitude}, 时间=${event.data.time}`);
+                                        }
+                                        break;
+
+                                    // 在现有的switch语句中添加这个新的case
+                                    case 'testNavigation':
+                                        debugLog(`🧪 收到导航测试请求`);
+                                        debugLog(`星次: ${event.data.starCi}`);
+                                        debugLog(`星宿: ${JSON.stringify(event.data.mansions)}`);
+                                        debugLog(`太阳黄经: ${event.data.solarLongitude}°`);
+                                        debugLog(`时间: ${event.data.time}`);
+                                        debugLog(`位置: ${JSON.stringify(event.data.location)}`);
+
+                                        that.apiStatus = '🧪 开始测试导航...';
+
+                                        try {
+                                            // 步骤1：设置时间位置
+                                            if (event.data.location && event.data.time) {
+                                                debugLog(`🌍 设置位置: ${event.data.location.name}`);
+                                                that.stel.core.observer.latitude = event.data.location.latitude * Math.PI / 180;
+                                                that.stel.core.observer.longitude = event.data.location.longitude * Math.PI / 180;
+                                                that.stel.core.observer.elevation = 100;
+
+                                                debugLog(`🕐 设置时间: ${event.data.time}`);
+                                                that.stel.core.observer.utc = event.data.time;
+                                                that.stel.core.observer.tt = 0; // 停止时间流逝
+
+                                                // 强制更新
+                                                for (let i = 0; i < 10; i++) {
+                                                    setTimeout(() => {
+                                                        that.stel.core.update();
+                                                    }, i * 100);
+                                                }
+                                            }
+
+                                            const starCiMapping = {
+                                                "星纪": "Sagittarius",   // 人马宫 ✅（斗宿+牛宿，主要在人马座）
+                                                "玄枵": "Aquarius",      // 宝瓶宫 ✅（危宿+室宿+壁宿）
+                                                "娵訾": "Aries",         // 白羊宫 ✅（奎宿+娄宿+胃宿，主要在白羊座）
+                                                "降娄": "Taurus",        // 金牛宫 ✅（昴宿+毕宿）
+                                                "大梁": "Orion",         // 猎户宫 ✅（觜宿+参宿，非黄道星座但重要）
+                                                "实沈": "Gemini",        // 双子宫 ✅（井宿+鬼宿）
+                                                "鹑首": "Hydra",         // 长蛇宫 ✅（柳宿+星宿，主要在长蛇座）
+                                                "鹑火": "Hydra",         // 长蛇宫 ✅（张宿+翼宿，延续长蛇座）
+                                                "鹑尾": "Corvus",        // 乌鸦宫 ✅（轸宿）
+                                                "寿星": "Virgo",         // 室女宫 ✅（角宿+亢宿）
+                                                "大火": "Scorpius",      // 天蝎宫 ✅（氐宿+房宿+心宿）
+                                                "析木": "Scorpius"       // 天蝎宫 ✅（尾宿+箕宿）
+                                            };
+
+                                            const targetConstellation = starCiMapping[event.data.starCi];
+
+                                            if (targetConstellation) {
+                                                debugLog(`🎯 ${event.data.starCi} → ${targetConstellation}`);
+
+                                                // 步骤3：延迟导航到目标星座
+                                                setTimeout(() => {
+                                                    debugLog(`🚀 开始导航到 ${targetConstellation}`);
+                                                    that.focusConstellation(targetConstellation);
+
+                                                    // 显示星座线
+                                                    that.stel.core.constellations.lines_visible = true;
+                                                    that.stel.core.constellations.labels_visible = true;
+
+                                                    that.apiStatus = `✅ 已导航到 ${event.data.starCi} → ${targetConstellation}`;
+                                                    debugLog(`✅ 导航完成: ${targetConstellation}`);
+
+                                                    // 通知父窗口成功
+                                                    if (window.parent !== window) {
+                                                        window.parent.postMessage({
+                                                            type: 'stellariumResponse',
+                                                            success: true,
+                                                            message: `已导航到 ${event.data.starCi} 对应的 ${targetConstellation}`
+                                                        }, '*');
+                                                    }
+
+                                                }, 2000); // 等待2秒让时间位置设置生效
+
+                                            } else {
+                                                debugLog(`❌ 未找到 ${event.data.starCi} 的星座映射`);
+                                                that.apiStatus = `❌ 未找到 ${event.data.starCi} 的映射`;
+                                            }
+
+                                        } catch (error) {
+                                            debugLog(`❌ 导航测试失败: ${error.message}`);
+                                            that.apiStatus = `❌ 导航失败: ${error.message}`;
+
+                                            if (window.parent !== window) {
+                                                window.parent.postMessage({
+                                                    type: 'stellariumResponse',
+                                                    success: false,
+                                                    error: error.message
+                                                }, '*');
+                                            }
+                                        }
+                                        break;
+
+
+                                    case 'setTimeNow':
+                                        that.setTimeNow();
+                                        break;
+
+                                    case 'pauseTime':
+                                        that.pauseTime();
+                                        break;
+
+                                    case 'focus':
+                                        debugLog(`尝试聚焦天体: ${event.data.target}`);
+                                        if (event.data.target === 'Moon') {
+                                            that.focusMoon();
+                                        } else if (event.data.target === 'Sun') {
+                                            that.focusSun();
+                                        }
+                                        break;
+
+                                    case 'toggle':
+                                        debugLog(`切换显示: ${event.data.feature}`);
+                                        if (event.data.feature === 'atmosphere') {
+                                            that.stel.core.atmosphere.visible = !that.stel.core.atmosphere.visible;
+                                            that.apiStatus = '🌫️ 大气层已切换';
+                                        } else if (event.data.feature === 'landscape') {
+                                            that.stel.core.landscapes.visible = !that.stel.core.landscapes.visible;
+                                            that.apiStatus = '🌍 地景已切换';
+                                        } else if (event.data.feature === 'constellations') {
+                                            that.stel.core.constellations.lines_visible = !that.stel.core.constellations.lines_visible;
+                                            that.apiStatus = '⭐ 星座线已切换';
+                                        }
+                                        break;
+                                }
+
+                                // 通知父窗口操作完成
+                                if (window.parent !== window) {
+                                    window.parent.postMessage({
+                                        type: 'stellariumResponse',
+                                        success: true,
+                                        message: that.apiStatus,
+                                        processed_message_type: event.data.type
+                                    }, '*');
+                                }
+
+                            } catch (error) {
+                                debugLog(`处理消息失败: ${error.message}`);
+                                that.apiStatus = '❌ 操作失败: ' + error.message;
+
+                                // 通知父窗口错误
+                                if (window.parent !== window) {
+                                    window.parent.postMessage({
+                                        type: 'stellariumResponse',
+                                        success: false,
+                                        error: error.message
+                                    }, '*');
+                                }
+                            }
+                        });
+
+                        // 通知父窗口已准备就绪
+                        if (window.parent !== window) {
+                            window.parent.postMessage({ type: 'stellariumReady' }, '*');
+                        }
+
+                        debugLog('消息监听器已设置完成');
+                    }
+                })
+            },
+
+            methods: {
+                // 🐛 调试方法
+                debugAPI: function () {
+                    if (!this.stel) return;
+
+                    debugLog('=== 开始API调试 ===');
+                    try {
+                        debugLog(`stel.lookAt: ${typeof this.stel.lookAt}`);
+                        debugLog(`stel.core.planets: ${typeof this.stel.core.planets}`);
+                        debugLog(`stel.core.constellations: ${typeof this.stel.core.constellations}`);
+                        debugLog(`stel.core.stars: ${typeof this.stel.core.stars}`);
+                        debugLog('=== 调试完成 ===');
+                    } catch (error) {
+                        debugLog(`调试错误: ${error.message}`);
+                    }
+                },
+
+                // 🎯 时间控制
+                setTimeNow: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 设置当前时间...';
+                    debugLog('设置当前时间');
+                    try {
+                        this.stel.core.observer.utc = new Date().toISOString();
+                        this.apiStatus = '✅ 当前时间已设置';
+                        debugLog('✅ 当前时间设置成功');
+                    } catch (error) {
+                        this.apiStatus = '❌ 设置失败';
+                        debugLog(`❌ 时间设置失败: ${error.message}`);
+                    }
+                },
+
+                pauseTime: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 暂停时间...';
+                    debugLog('暂停时间');
+                    try {
+                        this.stel.core.observer.tt = 0;
+                        this.apiStatus = '✅ 时间已暂停';
+                        debugLog('✅ 时间暂停成功');
+                    } catch (error) {
+                        this.apiStatus = '❌ 暂停失败';
+                        debugLog(`❌ 时间暂停失败: ${error.message}`);
+                    }
+                },
+
+                setWinterSolstice: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 设置冬至夜空...';
+                    debugLog('设置冬至夜空');
+                    try {
+                        this.stel.core.observer.utc = '2024-12-21T23:00:00Z';
+                        this.apiStatus = '✅ 冬至夜空 2024-12-21 23:00';
+                        debugLog('✅ 冬至时间设置成功');
+                    } catch (error) {
+                        this.apiStatus = '❌ 设置失败';
+                        debugLog(`❌ 冬至时间设置失败: ${error.message}`);
+                    }
+                },
+
+                setSummerSolstice: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 设置夏至正午...';
+                    debugLog('设置夏至正午');
+                    try {
+                        this.stel.core.observer.utc = '2024-06-21T12:00:00Z';
+                        this.apiStatus = '✅ 夏至正午 2024-06-21 12:00';
+                        debugLog('✅ 夏至时间设置成功');
+                    } catch (error) {
+                        this.apiStatus = '❌ 设置失败';
+                        debugLog(`❌ 夏至时间设置失败: ${error.message}`);
+                    }
+                },
+
+                // 🎯 天体聚焦 - 使用正确的lookAt方法
+                // 🎯 修复后的聚焦方法
+                focusConstellation: function (constellationName) {
+                    if (!this.stel) return;
+
+                    this.apiStatus = `⏳ 聚焦${constellationName}...`;
+                    debugLog(`开始聚焦星座: ${constellationName}`);
+
+                    try {
+                        var starMap = {
+                            'Capricorn': null,           // 摩羯座 - 需要fallback
+                            'Aquarius': '危宿一',        // 宝瓶座 → Sadalmelik
+                            'Pisces': null,              // 双鱼座 - 需要fallback  
+                            'Aries': '娄宿三',           // 白羊座 → Hamal ✅ 已确认有效
+                            'Taurus': '毕宿五',          // 金牛座 → Aldebaran ✅ 已确认有效
+                            'Gemini': '井宿三',          // 双子座 → Alhena
+                            'Cancer': null,              // 巨蟹座 - 需要fallback
+                            'Leo': '轩辕十四',           // 狮子座 → Regulus ✅ 已确认有效
+                            'Virgo': '角宿一',           // 室女座 → Spica ✅ 已确认有效
+                            'Libra': '氐宿一',           // 天秤座 → Zubenelgenubi
+                            'Scorpius': '心宿二',        // 天蝎座 → Antares ✅ 已确认有效
+                            'Sagittarius': '斗宿四',     // 人马座 → Nunki ✅ 已确认有效
+                            'Orion': '参宿四',           // 猎户座 → Betelgeuse  
+                            'Hydra': '星宿一',           // 长蛇座 → Alphard
+                            'Corvus': '轸宿一'           // 乌鸦座 → Gienah
+                        };
+
+                        var mainStar = starMap[constellationName];
+                        if (mainStar) {
+                            debugLog(`初步尝试通过主星${mainStar}聚焦${constellationName}`);
+                            var star = this.stel.getObj(mainStar);
+                            if (star) {
+                                debugLog(`找到主星${star}，开始聚焦`);
+
+                                // 🎯 关键修复：使用正确的聚焦方法
+                                this.stel.core.selection = star;
+
+                                // 方法A：使用pointAndLock
+                                if (this.stel.pointAndLock) {
+                                    this.stel.pointAndLock(star);
+                                    debugLog('✅ 使用pointAndLock聚焦');
+                                }
+                                // 方法B：使用lookAt with更长时间
+                                else if (this.stel.lookAt) {
+                                    this.stel.lookAt(star, 3.0); // 3秒动画
+                                    debugLog('✅ 使用lookAt聚焦');
+                                }
+                                // 方法C：手动设置观测方向并触发更新
+                                else {
+                                    var starInfo = star.getInfo('radec');
+                                    if (starInfo) {
+                                        this.stel.core.observer.view_direction = starInfo;
+                                        this.stel.core.update(); // 强制更新
+                                        debugLog('✅ 手动设置视图方向');
+                                    }
+                                }
+
+                                // 显示星座线
+                                this.stel.core.constellations.lines_visible = true;
+                                this.apiStatus = `✅ 已聚焦${constellationName}(${mainStar})`;
+                                debugLog(`✅ 通过${mainStar}聚焦${constellationName}成功`);
+                                return;
+                            }
+                            else {
+                                debugLog(`❌ 未找到主星${mainStar}，无法聚焦${constellationName}`);
+                                return;
+                            }
+                        }
+
+                        this.apiStatus = `❌ 找不到${constellationName}`;
+
+                    } catch (error) {
+                        this.apiStatus = '❌ 聚焦失败';
+                        debugLog(`❌ ${constellationName}聚焦失败: ${error.message}`);
+                    }
+                },
+
+                // 🎯 修复太阳聚焦
+                focusSun: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 聚焦太阳...';
+                    debugLog('开始聚焦太阳');
+
+                    try {
+                        // 方法1：通过不同名称尝试
+                        var sunNames = ['Sun', 'Sol', 'sun'];
+                        var sun = null;
+
+                        for (var name of sunNames) {
+                            sun = this.stel.getObj(name);
+                            if (sun) {
+                                debugLog(`通过名称"${name}"找到太阳`);
+                                break;
+                            }
+                        }
+
+                        if (sun) {
+                            if (this.stel.pointAndLock) {
+                                this.stel.pointAndLock(sun);
+                            } else if (this.stel.lookAt) {
+                                this.stel.lookAt(sun, 2.0);
+                            }
+                            this.stel.core.selection = sun;
+                            this.apiStatus = '✅ 已聚焦太阳';
+                            debugLog('✅ 太阳聚焦成功');
+                            return;
+                        }
+
+                        // 方法2：使用太阳的大致坐标
+                        debugLog('尝试使用太阳坐标');
+                        var now = new Date();
+                        var dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+                        var sunRA = (dayOfYear * 0.9856 + 280) % 360; // 简化的太阳赤经
+
+                        var ra = sunRA * Math.PI / 180;
+                        var dec = 0; // 简化为0度赤纬
+
+                        var x = Math.cos(dec) * Math.cos(ra);
+                        var y = Math.cos(dec) * Math.sin(ra);
+                        var z = Math.sin(dec);
+
+                        if (this.stel.core.lookat) {
+                            this.stel.core.lookat([x, y, z], 2.0);
+                        } else {
+                            this.stel.core.observer.view_direction = [x, y, z];
+                            this.stel.core.update();
+                        }
+
+                        this.apiStatus = '✅ 已聚焦太阳方向';
+                        debugLog('✅ 通过坐标聚焦太阳');
+
+                    } catch (error) {
+                        this.apiStatus = '❌ 聚焦失败';
+                        debugLog(`❌ 太阳聚焦失败: ${error.message}`);
+                    }
+                },
+
+                // 🎯 修复月亮聚焦  
+                focusMoon: function () {
+                    if (!this.stel) return;
+
+                    this.apiStatus = '⏳ 聚焦月亮...';
+                    debugLog('开始聚焦月亮');
+
+                    try {
+                        var moonNames = ['Moon', 'Luna', 'moon'];
+                        var moon = null;
+
+                        for (var name of moonNames) {
+                            moon = this.stel.getObj(name);
+                            if (moon) {
+                                debugLog(`通过名称"${name}"找到月亮`);
+                                break;
+                            }
+                        }
+
+                        if (moon) {
+                            if (this.stel.pointAndLock) {
+                                this.stel.pointAndLock(moon);
+                            } else if (this.stel.lookAt) {
+                                this.stel.lookAt(moon, 2.0);
+                            }
+                            this.stel.core.selection = moon;
+                            this.apiStatus = '✅ 已聚焦月亮';
+                            debugLog('✅ 月亮聚焦成功');
+                            return;
+                        }
+
+                        // 方法2：使用月亮的大致方向（简化）
+                        debugLog('尝试使用月亮大致坐标');
+                        // 简化的月亮位置（实际应该计算）
+                        var moonRA = 6.0 * Math.PI / 12; // 6小时
+                        var moonDec = 20 * Math.PI / 180; // 20度
+
+                        var x = Math.cos(moonDec) * Math.cos(moonRA);
+                        var y = Math.cos(moonDec) * Math.sin(moonRA);
+                        var z = Math.sin(moonDec);
+
+                        if (this.stel.core.lookat) {
+                            this.stel.core.lookat([x, y, z], 2.0);
+                        } else {
+                            this.stel.core.observer.view_direction = [x, y, z];
+                            this.stel.core.update();
+                        }
+
+                        this.apiStatus = '✅ 已聚焦月亮方向';
+                        debugLog('✅ 通过坐标聚焦月亮');
+
+                    } catch (error) {
+                        this.apiStatus = '❌ 聚焦失败';
+                        debugLog(`❌ 月亮聚焦失败: ${error.message}`);
+                    }
+                },
+
+                // ⭐ 改进的恒星聚焦
+                focusStar: function (starName) {
+                    if (!this.stel) return;
+
+                    this.apiStatus = `⏳ 聚焦${starName}...`;
+                    debugLog(`开始聚焦恒星: ${starName}`);
+
+                    try {
+                        var star = this.stel.getObj(starName);
+                        if (star) {
+                            debugLog(`通过getObj找到${starName}`);
+                            this.stel.lookAt(star, 1.2);
+                            this.stel.core.selection = star;
+                            this.apiStatus = `✅ 已聚焦${starName}`;
+                            debugLog(`✅ ${starName}聚焦成功`);
+                            return;
+                        }
+
+                        // 使用预设坐标
+                        var starCoords = {
+                            'Sirius': [6.75, -16.7],    // 6h 45m, -16° 42'
+                            'Vega': [18.6, 38.8],       // 18h 36m, +38° 48'
+                            'Polaris': [2.5, 89.3]     // 2h 30m, +89° 18'
+                        };
+
+                        var coords = starCoords[starName];
+                        if (coords) {
+                            debugLog(`使用坐标聚焦${starName} [${coords[0]}h, ${coords[1]}°]`);
+
+                            var ra = coords[0] * Math.PI / 12;
+                            var dec = coords[1] * Math.PI / 180;
+
+                            var x = Math.cos(dec) * Math.cos(ra);
+                            var y = Math.cos(dec) * Math.sin(ra);
+                            var z = Math.sin(dec);
+
+                            this.stel.core.observer.view_direction = [x, y, z];
+                            this.apiStatus = `✅ 已聚焦${starName}`;
+                            debugLog(`✅ 通过坐标聚焦${starName}成功`);
+                            return;
+                        }
+
+                        this.apiStatus = `❌ 找不到${starName}`;
+                        debugLog(`❌ 无法聚焦${starName}`);
+
+                    } catch (error) {
+                        this.apiStatus = '❌ 聚焦失败';
+                        debugLog(`❌ ${starName}聚焦失败: ${error.message}`);
+                    }
+                },
+
+                clearDebug: function () {
+                    clearDebug();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

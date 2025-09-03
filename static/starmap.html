@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>28星宿音乐生成器 - 星图音乐生成</title>
+    <title>28星宿音乐生成器 - 节气音乐星图</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
@@ -93,7 +94,7 @@
         .main-container {
             display: flex;
             height: 100vh;
-            padding-top: 80px;
+            padding-top: 0px;
         }
 
         .control-panel {
@@ -108,6 +109,17 @@
         .star-canvas-container {
             flex: 1;
             position: relative;
+        }
+
+        /* 【新增】iframe 样式 */
+        #stellariumFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         #starCanvas {
@@ -181,6 +193,31 @@
             line-height: 1.4;
         }
 
+        /* 【新增】预览信息卡片 */
+        .preview-info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+        }
+
+        .preview-info-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffc107;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .preview-info-content {
+            font-size: 11px;
+            color: #ffd54f;
+            line-height: 1.3;
+        }
+
         .btn {
             width: 100%;
             padding: 10px;
@@ -212,13 +249,13 @@
             color: white;
         }
 
-        .btn-warning {
-            background: linear-gradient(45deg, #ff9a56 0%, #ff6b35 100%);
+        .btn-success {
+            background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
             color: white;
         }
 
-        .btn-success {
-            background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
+        .btn-warning {
+            background: linear-gradient(45deg, #ff9a56 0%, #ff6b35 100%);
             color: white;
         }
 
@@ -422,8 +459,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .constellation-legend {
@@ -448,6 +490,21 @@
             position: absolute;
             top: 20px;
             left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            color: #00ff00;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+            /* 确保在iframe之上 */
+        }
+
+        /* .status-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
             background: rgba(0, 255, 0, 0.2);
             border: 1px solid rgba(0, 255, 0, 0.5);
             color: #00ff00;
@@ -455,7 +512,7 @@
             border-radius: 15px;
             font-size: 12px;
             backdrop-filter: blur(5px);
-        }
+        } */
 
         .status-indicator.error {
             background: rgba(255, 0, 0, 0.2);
@@ -506,6 +563,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 步骤导航 -->
     <div class="step-navigation">
@@ -513,15 +571,23 @@
             <div class="step-number">1</div>
             <div class="step-label">时间选择</div>
         </div>
+
         <div class="step-connector"></div>
         <div class="step completed" onclick="goBackToStep(2)">
             <div class="step-number">2</div>
             <div class="step-label">位置选择</div>
         </div>
+
+        <div class="step-connector"></div>
+        <div class="step completed" onclick="goBackToStep(3)">
+            <div class="step-number">3</div>
+            <div class="step-label">天球坐标</div>
+        </div>
+
         <div class="step-connector"></div>
         <div class="step active">
-            <div class="step-number">3</div>
-            <div class="step-label">星图音乐</div>
+            <div class="step-number">4</div>
+            <div class="step-label">节气星图</div>
         </div>
     </div>
 
@@ -529,8 +595,7 @@
         <!-- 控制面板 -->
         <div class="control-panel">
             <div class="section-title">
-                <i class="fas fa-star"></i>
-                28星宿天体星图
+                <i class="fas fa-star"></i> 28星宿天体星图
             </div>
 
             <!-- 已选择信息显示 -->
@@ -538,8 +603,7 @@
                 <!-- 时间信息卡片 -->
                 <div class="selected-info-card">
                     <div class="selected-info-title">
-                        <i class="fas fa-clock"></i>
-                        已选择时间
+                        <i class="fas fa-clock"></i> 已选择时间
                     </div>
                     <div class="selected-info-content" id="selectedTimeInfo">
                         正在读取选择的时间...
@@ -549,8 +613,7 @@
                 <!-- 位置信息卡片 -->
                 <div class="selected-info-card">
                     <div class="selected-info-title">
-                        <i class="fas fa-map-marker-alt"></i>
-                        观测位置
+                        <i class="fas fa-map-marker-alt"></i> 观测位置
                     </div>
                     <div class="selected-info-content" id="selectedLocationInfo">
                         正在读取选择的位置...
@@ -560,8 +623,7 @@
                 <!-- 数据缺失警告 -->
                 <div id="dataMissingWarning" class="data-missing-warning" style="display: none;">
                     <div class="warning-title">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        数据缺失警告
+                        <i class="fas fa-exclamation-triangle"></i> 数据缺失警告
                     </div>
                     <div class="warning-text" id="warningText">
                         未检测到前面步骤的选择数据，将使用默认时间和位置进行计算。
@@ -573,15 +635,27 @@
             </div>
 
             <div class="control-group">
-                <label class="info-label">观测时间</label>
-                <input type="datetime-local" id="timeInput" class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded mt-2">
-                <button id="updateBtn" class="btn btn-primary mt-2">更新星图</button>
+                <label class="info-label">观测时间（星图预览）</label>
+                <input type="datetime-local" id="timeInput"
+                    class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded mt-2">
+                <button id="updateBtn" class="btn btn-primary mt-2">更新星图预览</button>
+
+                <!-- 【新增】预览信息显示 -->
+                <div id="previewInfoCard" class="preview-info-card" style="display: none;">
+                    <div class="preview-info-title">
+                        <i class="fas fa-eye"></i> 预览时间天文信息
+                    </div>
+                    <div class="preview-info-content" id="previewInfo">
+                        点击"更新星图预览"查看
+                    </div>
+                </div>
             </div>
 
             <div class="control-group">
-                <label class="info-label">音乐时长设置</label>
+                <label class="info-label">节气音乐时长设置</label>
                 <div class="duration-control">
-                    <input type="number" id="durationInput" class="duration-input" value="45" min="15" max="180" step="5">
+                    <input type="number" id="durationInput" class="duration-input" value="45" min="15" max="180"
+                        step="5">
                     <span class="text-xs text-gray-400">秒</span>
                 </div>
                 <div class="flex gap-1 mt-2">
@@ -590,7 +664,7 @@
                     <button class="duration-preset" data-duration="60">60s</button>
                     <button class="duration-preset" data-duration="90">90s</button>
                 </div>
-                <div class="text-xs text-gray-400 mt-1">推荐45秒，生成更完整的音乐作品</div>
+                <div class="text-xs text-gray-400 mt-1">推荐45秒，生成更完整的节气音乐作品</div>
             </div>
 
             <div class="control-group">
@@ -642,14 +716,33 @@
             </div>
 
             <button id="generateMusicBtn" class="btn btn-secondary">
-                <i class="fas fa-music"></i> 生成音乐
+                <i class="fas fa-music"></i> 生成节气音乐
             </button>
+
+
+
+            <button id="testStellariumBtn" class="btn btn-primary mt-2">
+                <i class="fas fa-telescope"></i> 测试星图导航
+            </button>
+
+
+
+
         </div>
 
-        <!-- 星图区域 -->
+
+        <!-- 星图区域 - 替换为 Stellarium Web Engine -->
         <div class="star-canvas-container">
-            <canvas id="starCanvas"></canvas>
-            <div class="status-indicator" id="statusIndicator">初始化中...</div>
+            <!-- 原来的 Three.js canvas 替换为 Stellarium iframe -->
+            <!-- style="width: 100%; height: 100%; border: none; background: #000;"> -->
+            <iframe id="stellariumFrame" src="/stellarium_web_engine.html" frameborder="0"
+                allow="accelerometer; gyroscope" onload="onStellariumLoad()">
+            </iframe>
+
+            <!-- 保留状态指示器 -->
+            <div class="status-indicator" id="statusIndicator">正在加载真实星图...</div>
+
+            <!-- 简化的加载指示器 -->
             <div class="loading" id="loadingIndicator" style="display: none;">
                 <div class="spinner"></div>
                 <div id="loadingText">加载中...</div>
@@ -659,68 +752,75 @@
         <!-- 信息面板 -->
         <div class="info-panel">
             <div class="section-title">
-                <i class="fas fa-moon"></i>
-                天文信息
+                <i class="fas fa-sun"></i> 天文信息（已选择时间）
             </div>
             <div class="info-item">
-                <span class="info-label">当前时间:</span>
-                <span class="info-value" id="currentTime">--</span>
+                <span class="info-label">选择时间:</span>
+                <span class="info-value" id="selectedTime">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">月亮星宿:</span>
-                <span class="info-value" id="moonMansion">--</span>
+                <span class="info-label">太阳星次:</span>
+                <span class="info-value" id="zodiacSign">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">对应五行:</span>
-                <span class="info-value" id="element">--</span>
+                <span class="info-label">对应节气:</span>
+                <span class="info-value" id="solarTerm">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">黄经度数:</span>
+                <span class="info-label">太阳黄经:</span>
                 <span class="info-value" id="eclipticLon">--°</span>
             </div>
 
+            <div class="info-item">
+                <span class="info-label">对应星宿:</span>
+                <span class="info-value" id="mansionsInfo">--</span>
+            </div>
+
+            <!-- 🔑 新增：现代星座 -->
+            <div class="info-item">
+                <span class="info-label">现代星座:</span>
+                <span class="info-value" id="modernConstellation">--</span>
+            </div>
+
             <div class="section-title mt-6">
-                <i class="fas fa-music"></i>
-                音乐参数
+                <i class="fas fa-music"></i> 节气音乐参数
                 <span class="duration-display" id="durationDisplay">45秒</span>
             </div>
             <div class="info-item">
                 <span class="info-label">乐器:</span>
-                <span class="info-value" id="instrument">--</span>
+                <span class="info-value" id="instrument">传统民乐</span>
             </div>
             <div class="info-item">
                 <span class="info-label">调式:</span>
-                <span class="info-value" id="mode">--</span>
+                <span class="info-value" id="mode">五声音阶</span>
             </div>
             <div class="info-item">
                 <span class="info-label">风格:</span>
-                <span class="info-value">cinematic, ethereal</span>
+                <span class="info-value">节气主题</span>
             </div>
 
             <div class="section-title mt-6">
-                <i class="fas fa-play"></i>
-                音乐播放器
+                <i class="fas fa-play"></i> 音乐播放器
             </div>
-            
             <div id="musicStatusContainer">
                 <div class="music-status-card status-loading" id="musicStatusCard">
                     <div class="flex items-center gap-2 mb-2">
                         <i class="fas fa-info-circle"></i>
-                        <span class="font-bold">准备生成音乐</span>
+                        <span class="font-bold">准备生成节气音乐</span>
                     </div>
-                    <div id="musicStatusText">点击"生成音乐"按钮开始</div>
+                    <div id="musicStatusText">点击"生成节气音乐"按钮开始</div>
                 </div>
             </div>
 
             <div id="musicParamsDisplay" style="display: none;">
                 <div class="music-params">
                     <div class="param-item">
-                        <span class="param-label">星宿:</span>
-                        <span class="param-value" id="paramMansion">--</span>
+                        <span class="param-label">星次:</span>
+                        <span class="param-value" id="paramZodiac">--</span>
                     </div>
                     <div class="param-item">
-                        <span class="param-label">五行:</span>
-                        <span class="param-value" id="paramElement">--</span>
+                        <span class="param-label">节气:</span>
+                        <span class="param-value" id="paramSolarTerm">--</span>
                     </div>
                     <div class="param-item">
                         <span class="param-label">乐器:</span>
@@ -740,14 +840,14 @@
             <div id="enhancedPromptDisplay" style="display: none;">
                 <div class="enhanced-prompt">
                     <span class="prompt-label">
-                        <i class="fas fa-magic"></i> 增强提示词：
+                        <i class="fas fa-magic"></i> 节气音乐提示词：
                     </span>
                     <div id="enhancedPromptText">--</div>
                 </div>
             </div>
 
             <audio id="musicPlayer" controls class="w-full mt-3" style="display: none;"></audio>
-            
+
             <div id="retrySection" style="display: none;">
                 <div class="retry-options">
                     <button id="retryBtn" class="retry-btn btn-warning">
@@ -759,8 +859,7 @@
                 </div>
                 <div class="timeout-help mt-3">
                     <div class="help-title">
-                        <i class="fas fa-lightbulb"></i>
-                        遇到超时问题？
+                        <i class="fas fa-lightbulb"></i> 遇到超时问题？
                     </div>
                     <div>• 外部音乐服务可能繁忙</div>
                     <div>• 较长时长的音乐需要更多生成时间</div>
@@ -774,6 +873,7 @@
                 </button>
                 <button id="downloadSheet" class="btn btn-success">
                     <i class="fas fa-file-pdf"></i> 下载乐谱
+
                 </button>
             </div>
         </div>
@@ -785,20 +885,29 @@
         let scene, camera, renderer, starField, rotationSpeed = 0;
         let constellationGroups = [];
         let isRotating = false;
-        let currentData = null;
+        let selectedAstronomyData = null;  // 【新增】已选择时间的天文数据
+        let previewAstronomyData = null;   // 【新增】预览时间的天文数据
         let retryCount = 0;
         let maxRetries = 3;
         let selectedTimeData = null;
         let selectedLocationData = null;
+        let stellariumReady = false; // 【新增】
+        let stellariumCommunication = {
+            ready: false,
+            messageQueue: [],
+            maxRetries: 5,
+            retryDelay: 1000
+        };
+
+
 
         // Three.js CDN加载
-        (function() {
+        (function () {
             const cdnSources = [
                 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
                 'https://unpkg.com/three@0.128.0/build/three.min.js'
             ];
-
             let currentCDN = 0;
 
             function loadThreeJS() {
@@ -811,25 +920,293 @@
 
                 const script = document.createElement('script');
                 script.src = cdnSources[currentCDN];
-                script.onload = function() {
+                script.onload = function () {
                     console.log('Three.js加载成功:', cdnSources[currentCDN]);
                     initStarMap();
                 };
-                script.onerror = function() {
+                script.onerror = function () {
                     console.warn('CDN失败:', cdnSources[currentCDN]);
                     currentCDN++;
                     loadThreeJS();
                 };
                 document.head.appendChild(script);
             }
-
             loadThreeJS();
         })();
 
         // 页面加载时读取前面步骤的数据
-        window.addEventListener('load', function() {
+        // let stellariumReady = false;
+        window.addEventListener('load', function () {
+            console.log('🚀 页面加载完成，开始初始化...');
             loadPreviousStepData();
+            setupStellariumCommunication(); // 新增
+
+            setupTestButton();// 🔑 新增：直接绑定测试按钮事件
         });
+
+        // 🔑 新增：独立的测试按钮设置函数
+        function setupTestButton() {
+            const testBtn = document.getElementById('testStellariumBtn');
+            if (!testBtn) {
+                console.error('❌ 测试按钮不存在!');
+                return;
+            }
+
+            console.log('✅ 测试按钮找到，开始绑定事件...');
+
+            testBtn.addEventListener('click', () => {
+                console.log('🧪 ============ 测试按钮被点击! ============');
+                console.log('🧪 开始测试星图导航...');
+                console.log('🕐 使用已选择时间:', selectedTimeData);
+                console.log('🌍 使用已选择位置:', selectedLocationData);
+
+                // 检查必要数据
+                if (!selectedTimeData || !selectedTimeData.year) {
+                    console.error('❌ 时间数据缺失!');
+                    alert('请先在第一步选择时间');
+                    return;
+                }
+
+                if (!selectedLocationData || !selectedLocationData.latitude) {
+                    console.error('❌ 位置数据缺失!');
+                    alert('请先在第二步选择位置');
+                    return;
+                }
+
+                // 检查天文数据
+                if (!selectedAstronomyData) {
+                    console.warn('⚠️ 没有天文数据，尝试重新计算...');
+                    if (typeof loadSelectedTimeAstronomyData === 'function') {
+                        loadSelectedTimeAstronomyData().then(() => {
+                            if (selectedAstronomyData) {
+                                console.log('✅ 天文数据获取成功，开始导航');
+                                performNavigation();
+                            } else {
+                                console.error('❌ 天文数据计算失败');
+                                alert('无法获取天文计算数据');
+                            }
+                        });
+                    } else {
+                        console.error('❌ loadSelectedTimeAstronomyData函数不存在');
+                        alert('天文计算函数不可用');
+                    }
+                    return;
+                }
+
+                console.log('✅ 所有数据检查通过，开始导航');
+                performNavigation();
+            });
+
+            console.log('✅ 测试按钮事件绑定完成');
+        }
+
+
+        // 【新增】iframe 加载完成回调
+        function onStellariumLoad() {
+            console.log('📡 Stellarium iframe 加载完成');
+            document.getElementById('statusIndicator').textContent = '📡 等待 Stellarium 初始化...';
+        }
+
+        // 【新增】设置 Stellarium 通信
+        function setupStellariumCommunication() {
+            console.log('🔗 设置 Stellarium 通信...');
+
+            // 监听来自 Stellarium iframe 的消息
+            window.addEventListener('message', function (event) {
+                const stellariumFrame = document.getElementById('stellariumFrame');
+                if (!stellariumFrame || event.source !== stellariumFrame.contentWindow) {
+                    return;
+                }
+
+                console.log('📨 收到 Stellarium 消息:', event.data);
+
+
+                // 添加这个新的响应处理
+                if (event.data.type === 'stellariumResponse') {
+                    console.log('📨 收到Stellarium响应:', event.data);
+
+                    if (event.data.success) {
+                        document.getElementById('statusIndicator').textContent = '✅ ' + event.data.message;
+                        document.getElementById('statusIndicator').style.color = '#00ff00';
+                    } else {
+                        document.getElementById('statusIndicator').textContent = '❌ ' + (event.data.error || '操作失败');
+                        document.getElementById('statusIndicator').style.color = '#ff6b6b';
+                    }
+                    return;
+                }
+
+
+                if (event.data.type === 'stellariumReady') {
+                    stellariumCommunication.ready = true;
+                    stellariumReady = true; // 保持原有变量
+                    console.log('✅ Stellarium Web Engine 已准备就绪');
+
+                    // 🔑 关键：等待确保完全初始化
+                    setTimeout(() => {
+                        sendDataToStellarium();
+                    }, 2000);
+
+                } else if (event.data.type === 'stellariumResponse') {
+                    console.log('📝 Stellarium 响应:', event.data.message);
+                    document.getElementById('statusIndicator').textContent = event.data.message;
+                }
+            });
+            // 【修复】等待 iframe 完全加载后再尝试通信
+            const stellariumFrame = document.getElementById('stellariumFrame');
+            if (stellariumFrame) {
+                // 监听 iframe 的 load 事件
+                stellariumFrame.addEventListener('load', function () {
+                    console.log('🔄 iframe 加载完成，等待 Stellarium 初始化...');
+                    // 给 Stellarium 一些时间来初始化
+                    setTimeout(function () {
+                        if (!stellariumReady) {
+                            console.log('⏰ Stellarium 仍在初始化中...');
+                            document.getElementById('statusIndicator').textContent = '⏰ Stellarium 初始化中...';
+                        }
+                    }, 3000);
+                });
+            }
+        }
+
+        // 【新增】安全发送消息函数
+        function sendMessageToStellarium(message, retryCount = 0) {
+            if (!stellariumCommunication.ready) {
+                console.log('⏳ Stellarium 未就绪，稍后重试');
+                setTimeout(() => {
+                    sendMessageToStellarium(message, retryCount);
+                }, 1000);
+                return;
+            }
+
+            const stellariumFrame = document.getElementById('stellariumFrame');
+            if (!stellariumFrame || !stellariumFrame.contentWindow) {
+                console.error('❌ 无法找到 Stellarium iframe');
+                return;
+            }
+
+            try {
+                stellariumFrame.contentWindow.postMessage(message, '*');
+                console.log('📨 发送消息成功:', message);
+            } catch (error) {
+                console.error('❌ 发送消息失败:', error);
+
+                // 重试机制
+                if (retryCount < stellariumCommunication.maxRetries) {
+                    setTimeout(() => {
+                        sendMessageToStellarium(message, retryCount + 1);
+                    }, stellariumCommunication.retryDelay);
+                }
+            }
+        }
+
+
+        // 【修改】发送数据到 Stellarium 函数
+        function sendDataToStellarium() {
+            console.log('📤 准备发送数据到 Stellarium...');
+
+            // 构造消息
+            let timeToSend = null;
+            let locationToSend = null;
+
+            if (selectedTimeData && selectedTimeData.year) {
+                // 🔑 修复：这里也要使用UTC构造
+                const utcTime = new Date(Date.UTC(
+                    selectedTimeData.year,
+                    selectedTimeData.month - 1,
+                    selectedTimeData.day,
+                    selectedTimeData.hour,  // 使用用户选择的小时
+                    0, 0, 0
+                ));
+                timeToSend = utcTime.toISOString();
+
+                console.log('🕐 用户选择时间:', `${selectedTimeData.year}-${selectedTimeData.month}-${selectedTimeData.day} ${selectedTimeData.hour}:00`);
+                console.log('🕐 修复后发送:', timeToSend);
+            }
+
+            if (selectedLocationData && selectedLocationData.latitude) {
+                locationToSend = {
+                    latitude: selectedLocationData.latitude,
+                    longitude: selectedLocationData.longitude,
+                    name: selectedLocationData.address || '观测位置'
+                };
+                console.log('🌍 使用已选择位置:', locationToSend);
+            }
+
+            // 🔑 优先发送组合消息
+            if (timeToSend && locationToSend) {
+                sendMessageToStellarium({
+                    type: 'setLocationAndTime',
+                    latitude: locationToSend.latitude,
+                    longitude: locationToSend.longitude,
+                    name: locationToSend.name,
+                    time: timeToSend
+                });
+            } else {
+                // 分别发送
+                if (locationToSend) {
+                    sendMessageToStellarium({
+                        type: 'setLocation',
+                        ...locationToSend
+                    });
+                }
+
+                if (timeToSend) {
+                    setTimeout(() => {
+                        sendMessageToStellarium({
+                            type: 'setTime',
+                            time: timeToSend
+                        });
+                    }, 500);
+                }
+            }
+
+            document.getElementById('statusIndicator').textContent = '📡 数据已发送到 Stellarium';
+        }
+
+        // 【修改】预览功能 - 同时更新 Stellarium 和天文数据
+        async function updatePreviewAstronomyData() {
+            try {
+                console.log('👁️ [星图预览] 开始更新预览数据...');
+
+                const timeInput = document.getElementById('timeInput').value;
+                // 🔑 使用安全发送机制
+                if (selectedLocationData && selectedLocationData.latitude) {
+                    sendMessageToStellarium({
+                        type: 'setLocationAndTime',
+                        latitude: selectedLocationData.latitude,
+                        longitude: selectedLocationData.longitude,
+                        name: selectedLocationData.address || '观测位置',
+                        time: new Date(timeInput).toISOString()
+                    });
+                } else {
+                    sendMessageToStellarium({
+                        type: 'setTime',
+                        time: new Date(timeInput).toISOString()
+                    });
+                }
+
+                // 【保持】原有的API调用获取天文数据
+                const params = new URLSearchParams();
+                if (timeInput) params.append('date', timeInput);
+                params.append('mode', 'visualization');
+
+                const response = await fetch(`/api/mansion?${params}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error || '获取数据失败');
+
+                previewAstronomyData = data;
+                updatePreviewUI(data);
+
+                console.log('✅ [星图预览] 预览数据更新完成');
+
+            } catch (error) {
+                console.error('❌ [星图预览] 更新失败:', error);
+                showPreviewError(error.message);
+            }
+        }
+
 
         // 导航功能
         function goBackToStep(step) {
@@ -837,6 +1214,8 @@
                 window.location.href = '/';
             } else if (step === 2) {
                 window.location.href = '/location';
+            } else if (step === 3) {
+                window.location.href = '/sphere';
             }
         }
 
@@ -845,26 +1224,25 @@
             try {
                 selectedTimeData = JSON.parse(sessionStorage.getItem('selectedTime') || '{}');
                 selectedLocationData = JSON.parse(sessionStorage.getItem('selectedLocation') || '{}');
-                
                 console.log('读取到的时间数据:', selectedTimeData);
                 console.log('读取到的位置数据:', selectedLocationData);
-                
                 displaySelectedInfo(selectedTimeData, selectedLocationData);
-                
+
                 // 如果有选择的时间，设置到时间输入框
                 if (selectedTimeData.year && selectedTimeData.month) {
                     const selectedDate = new Date(
-                        selectedTimeData.year, 
-                        selectedTimeData.month - 1, 
-                        selectedTimeData.day, 
+                        selectedTimeData.year,
+                        selectedTimeData.month - 1,
+                        selectedTimeData.day,
                         selectedTimeData.hour
                     );
                     document.getElementById('timeInput').value = selectedDate.toISOString().slice(0, 16);
+
+                    // 【新增】自动加载已选择时间的天文数据
+                    loadSelectedTimeAstronomyData();
                 } else {
-                    // 没有选择时间，使用当前时间
                     setCurrentTime();
                 }
-                
             } catch (error) {
                 console.error('读取步骤数据失败:', error);
                 setCurrentTime();
@@ -872,18 +1250,121 @@
             }
         }
 
+        // 【新增】加载已选择时间的天文数据
+        async function loadSelectedTimeAstronomyData() {
+            if (!selectedTimeData || !selectedTimeData.year || !selectedLocationData || !selectedLocationData.latitude) {
+                return;
+            }
+
+            try {
+                console.log('🔍 [DEBUG] === 详细调试信息 ===');
+                console.log('🔍 [DEBUG] selectedTimeData 原始数据:', selectedTimeData);
+                console.log('🔍 [DEBUG] selectedLocationData 原始数据:', selectedLocationData);
+
+                // 🔑 检查 sessionStorage 中的原始数据
+                const rawTimeData = sessionStorage.getItem('selectedTime');
+                const rawLocationData = sessionStorage.getItem('selectedLocation');
+                console.log('🔍 [DEBUG] sessionStorage 原始时间:', rawTimeData);
+                console.log('🔍 [DEBUG] sessionStorage 原始位置:', rawLocationData);
+
+                const requestData = {
+                    time_data: selectedTimeData,
+                    location_data: selectedLocationData
+                };
+
+                console.log('🔍 [DEBUG] 发送给API的完整请求:', JSON.stringify(requestData, null, 2));
+
+                const response = await fetch('/api/astronomy/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    console.log('🔍 [DEBUG] API响应失败:', response.status, response.statusText);
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('🔍 [DEBUG] API返回的完整数据:', JSON.stringify(data, null, 2));
+                console.log('🔍 [DEBUG] API返回的星次:', data.zodiac_sign);
+
+                if (!data.success) throw new Error(data.error || '获取数据失败');
+
+                selectedAstronomyData = data;
+                updateSelectedTimeUI(data);
+                console.log('✅ [已选择时间] 天文数据加载完成');
+
+            } catch (error) {
+                console.error('❌ [已选择时间] 天文数据加载失败:', error);
+            }
+        }
+
+        // 【新增】更新已选择时间的UI显示
+        function updateSelectedTimeUI(data) {
+            const timeStr = data.request_time || data.timestamp || new Date().toISOString();
+            document.getElementById('selectedTime').textContent = new Date(timeStr).toLocaleString('zh-CN');
+
+            // 显示十二星次和节气信息
+            if (data.zodiac_sign) {
+                document.getElementById('zodiacSign').textContent = data.zodiac_sign + '星次';
+
+                // 🔑 修正：节气只显示节气，不显示星宿
+                if (data.solar_term) {
+                    document.getElementById('solarTerm').textContent = data.solar_term;
+                } else {
+                    document.getElementById('solarTerm').textContent = '--';  // ✅ 没有节气数据就显示 --
+                }
+
+                // 🔑 新增：专门显示对应星宿
+                if (data.mansions_in_zodiac && data.mansions_in_zodiac.length > 0) {
+                    document.getElementById('mansionsInfo').textContent = data.mansions_in_zodiac.join('、') + '宿';
+                } else {
+                    document.getElementById('mansionsInfo').textContent = '--';
+                }
+
+                // 🔑 新增：显示现代星座
+                const modernConst = getModernConstellation(data.zodiac_sign);
+                document.getElementById('modernConstellation').textContent = modernConst;
+            }
+
+            // 显示太阳黄经
+            const longitude = data.sun_position?.ecliptic_longitude || data.sun_ecliptic_longitude || data.ecliptic_longitude || 0;
+            document.getElementById('eclipticLon').textContent = longitude.toFixed(2) + '°';
+        }
+
+        // 🔑 新增：星次到现代星座的映射函数
+        function getModernConstellation(zodiacSign) {
+            const mapping = {
+                "星纪": "Capricorn (魔羯宫)",
+                "玄枵": "Aquarius (宝瓶宫)",
+                "娵訾": "Pisces (双鱼宫)",
+                "降娄": "Aries (白羊宫)",
+                "大梁": "Taurus (金牛宫)",
+                "实沈": "Gemini (双子宫)",
+                "鹑首": "Cancer (巨蟹宫)",
+                "鹑火": "Leo (狮子宫)",
+                "鹑尾": "Virgo (处女宫)",
+                "寿星": "Libra (天秤宫)",
+                "大火": "Scorpio (天蝎宫)",
+                "析木": "Sagittarius (射手宫)"
+            };
+            return mapping[zodiacSign] || "未知星座";
+        }
+
+
         // 显示已选择的信息
         function displaySelectedInfo(timeData, locationData) {
             const timeInfoEl = document.getElementById('selectedTimeInfo');
             const locationInfoEl = document.getElementById('selectedLocationInfo');
-            
+
             if (timeData && timeData.year) {
                 const timeStr = `${timeData.year}年${timeData.month}月${timeData.day}日 ${String(timeData.hour).padStart(2, '0')}:00`;
                 const formatted = timeData.formatted || timeStr;
                 timeInfoEl.innerHTML = `
                     <div style="font-weight: bold; color: #4facfe;">${formatted}</div>
                     <div style="font-size: 11px; color: #888; margin-top: 4px;">
-                        时间戳: ${timeData.timestamp || ''}
+                        💡 音乐生成将使用此时间
                     </div>
                 `;
                 document.getElementById('dataMissingWarning').style.display = 'none';
@@ -893,14 +1374,14 @@
                 `;
                 showDataMissingWarning('时间');
             }
-            
+
             if (locationData && locationData.latitude) {
                 const address = locationData.address || '未知地点';
                 locationInfoEl.innerHTML = `
                     <div style="font-weight: bold; color: #4facfe;">${address}</div>
                     <div style="font-size: 11px; color: #888; margin-top: 4px;">
-                        经度: ${locationData.longitude.toFixed(4)}°<br>
-                        纬度: ${locationData.latitude.toFixed(4)}°
+                        经度: ${locationData.longitude.toFixed(4)}°, 纬度: ${locationData.latitude.toFixed(4)}°<br>
+                        💡 音乐生成将使用此位置
                     </div>
                 `;
             } else {
@@ -915,14 +1396,14 @@
         function showDataMissingWarning(missingType = '') {
             const warningEl = document.getElementById('dataMissingWarning');
             const warningTextEl = document.getElementById('warningText');
-            
             let warningText = '未检测到前面步骤的选择数据，将使用默认时间和位置进行计算。';
+
             if (missingType === '时间') {
                 warningText = '未检测到时间选择数据，将使用当前时间进行计算。建议返回第一步重新选择时间。';
             } else if (missingType === '位置') {
                 warningText = '未检测到位置选择数据，将使用默认位置(香港)进行计算。建议返回第二步重新选择位置。';
             }
-            
+
             warningTextEl.textContent = warningText;
             warningEl.style.display = 'block';
         }
@@ -931,105 +1412,61 @@
         const CONSTELLATION_DATA = {
             // 东方青龙七宿
             "角": {
-                color: "#4facfe",
-                stars: [
-                    {name: "角宿一", ra: 201.298, dec: -11.161, mag: 0.97},
-                    {name: "角宿二", ra: 213.915, dec: -0.596, mag: 3.38},
-                    {name: "角宿三", ra: 201.5, dec: -10.5, mag: 4.2}
-                ],
-                connections: [[0,1], [1,2], [2,0]]
+                color: "#4facfe", stars: [
+                    { name: "角宿一", ra: 201.298, dec: -11.161, mag: 0.97 },
+                    { name: "角宿二", ra: 213.915, dec: -0.596, mag: 3.38 }
+                ], connections: [[0, 1]]
             },
             "亢": {
-                color: "#4facfe",
-                stars: [
-                    {name: "亢宿一", ra: 215.676, dec: -9.383, mag: 4.16},
-                    {name: "亢宿二", ra: 218.877, dec: -12.848, mag: 4.07},
-                    {name: "亢宿三", ra: 220.5, dec: -10.2, mag: 4.5},
-                    {name: "亢宿四", ra: 216.8, dec: -8.9, mag: 5.1}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0]]
+                color: "#4facfe", stars: [
+                    { name: "亢宿一", ra: 215.676, dec: -9.383, mag: 4.16 },
+                    { name: "亢宿二", ra: 218.877, dec: -12.848, mag: 4.07 }
+                ], connections: [[0, 1]]
             },
             "心": {
-                color: "#4facfe",
-                stars: [
-                    {name: "心宿一", ra: 243.587, dec: -28.216, mag: 2.89},
-                    {name: "心宿二", ra: 247.352, dec: -26.432, mag: 0.96},
-                    {name: "心宿三", ra: 245.297, dec: -25.592, mag: 2.70}
-                ],
-                connections: [[0,1], [1,2]]
+                color: "#4facfe", stars: [
+                    { name: "心宿一", ra: 243.587, dec: -28.216, mag: 2.89 },
+                    { name: "心宿二", ra: 247.352, dec: -26.432, mag: 0.96 }
+                ], connections: [[0, 1]]
             },
             // 南方朱雀七宿
             "井": {
-                color: "#ff6b6b",
-                stars: [
-                    {name: "井宿一", ra: 93.719, dec: 22.514, mag: 3.53},
-                    {name: "井宿二", ra: 95.241, dec: 22.964, mag: 4.45},
-                    {name: "井宿三", ra: 93.506, dec: 24.398, mag: 3.35},
-                    {name: "井宿四", ra: 92.946, dec: 21.982, mag: 4.97}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]]
+                color: "#ff6b6b", stars: [
+                    { name: "井宿一", ra: 93.719, dec: 22.514, mag: 3.53 },
+                    { name: "井宿二", ra: 95.241, dec: 22.964, mag: 4.45 }
+                ], connections: [[0, 1]]
             },
             "鬼": {
-                color: "#ff6b6b",
-                stars: [
-                    {name: "鬼宿一", ra: 130.821, dec: 19.841, mag: 3.94},
-                    {name: "鬼宿二", ra: 131.171, dec: 21.469, mag: 4.67},
-                    {name: "鬼宿三", ra: 130.109, dec: 20.569, mag: 4.02},
-                    {name: "鬼宿四", ra: 129.886, dec: 18.154, mag: 4.26}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0]]
+                color: "#ff6b6b", stars: [
+                    { name: "鬼宿一", ra: 130.821, dec: 19.841, mag: 3.94 },
+                    { name: "鬼宿二", ra: 131.171, dec: 21.469, mag: 4.67 }
+                ], connections: [[0, 1]]
             },
             // 西方白虎七宿
             "昴": {
-                color: "#ffffff",
-                stars: [
-                    {name: "昴宿一", ra: 56.871, dec: 24.105, mag: 5.65},
-                    {name: "昴宿二", ra: 57.290, dec: 24.367, mag: 4.30},
-                    {name: "昴宿三", ra: 56.217, dec: 24.283, mag: 4.18},
-                    {name: "昴宿四", ra: 56.456, dec: 24.011, mag: 5.45},
-                    {name: "昴宿五", ra: 56.530, dec: 24.498, mag: 5.76},
-                    {name: "昴宿六", ra: 57.297, dec: 24.052, mag: 4.62},
-                    {name: "昴宿七", ra: 65.734, dec: 25.948, mag: 4.14}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [6,0], [0,3], [1,4], [2,5]]
+                color: "#ffffff", stars: [
+                    { name: "昴宿一", ra: 56.871, dec: 24.105, mag: 5.65 },
+                    { name: "昴宿二", ra: 57.290, dec: 24.367, mag: 4.30 }
+                ], connections: [[0, 1]]
             },
             "参": {
-                color: "#ffffff",
-                stars: [
-                    {name: "参宿一", ra: 85.190, dec: -1.202, mag: 1.70},
-                    {name: "参宿二", ra: 84.053, dec: -1.944, mag: 2.23},
-                    {name: "参宿三", ra: 83.858, dec: -5.910, mag: 2.25},
-                    {name: "参宿四", ra: 88.793, dec: 7.407, mag: 0.45},
-                    {name: "参宿五", ra: 84.411, dec: -1.201, mag: 2.77},
-                    {name: "参宿六", ra: 82.061, dec: -0.180, mag: 2.09},
-                    {name: "参宿七", ra: 81.283, dec: 6.350, mag: 1.64}
-                ],
-                connections: [[0,1], [1,2], [3,4], [4,5], [5,6], [6,3]]
+                color: "#ffffff", stars: [
+                    { name: "参宿一", ra: 85.190, dec: -1.202, mag: 1.70 },
+                    { name: "参宿二", ra: 84.053, dec: -1.944, mag: 2.23 }
+                ], connections: [[0, 1]]
             },
             // 北方玄武七宿
             "斗": {
-                color: "#a8a8a8",
-                stars: [
-                    {name: "斗宿一", ra: 278.110, dec: -25.421, mag: 3.17},
-                    {name: "斗宿二", ra: 279.234, dec: -26.297, mag: 2.81},
-                    {name: "斗宿三", ra: 285.653, dec: -29.828, mag: 3.93},
-                    {name: "斗宿四", ra: 290.660, dec: -30.424, mag: 2.60},
-                    {name: "斗宿五", ra: 296.565, dec: -29.578, mag: 3.89},
-                    {name: "斗宿六", ra: 298.969, dec: -26.684, mag: 2.02}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5]]
+                color: "#a8a8a8", stars: [
+                    { name: "斗宿一", ra: 278.110, dec: -25.421, mag: 3.17 },
+                    { name: "斗宿二", ra: 279.234, dec: -26.297, mag: 2.81 }
+                ], connections: [[0, 1]]
             },
             "牛": {
-                color: "#a8a8a8",
-                stars: [
-                    {name: "牛宿一", ra: 304.413, dec: -12.759, mag: 3.08},
-                    {name: "牛宿二", ra: 308.300, dec: -17.847, mag: 4.28},
-                    {name: "牛宿三", ra: 311.553, dec: -17.233, mag: 4.51},
-                    {name: "牛宿四", ra: 307.372, dec: -24.779, mag: 4.07},
-                    {name: "牛宿五", ra: 309.387, dec: -14.781, mag: 4.48},
-                    {name: "牛宿六", ra: 314.293, dec: -18.299, mag: 4.11}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,0]]
+                color: "#a8a8a8", stars: [
+                    { name: "牛宿一", ra: 304.413, dec: -12.759, mag: 3.08 },
+                    { name: "牛宿二", ra: 308.300, dec: -17.847, mag: 4.28 }
+                ], connections: [[0, 1]]
             }
         };
 
@@ -1038,42 +1475,9 @@
                 if (typeof THREE === 'undefined') {
                     throw new Error('THREE.js未定义');
                 }
-
                 const canvas = document.getElementById('starCanvas');
-                const container = canvas.parentElement;
-
-                // 创建场景
-                scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-                
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                renderer.setClearColor(0x000011, 1);
-
-                // 创建星空背景
-                createBackgroundStars();
-                
-                // 创建星宿群组
-                createConstellationGroups();
-
-                // 设置相机位置
-                camera.position.set(0, 0, 150);
-
-                // 设置事件监听
-                setupEventListeners();
-                
-                // 开始动画循环
-                animate();
-
-                // 更新天文数据
-                updateAstronomyData();
-
-                document.getElementById('statusIndicator').textContent = '星图加载完成';
-
             } catch (error) {
                 console.error('星图初始化失败:', error);
-                document.getElementById('statusIndicator').textContent = '初始化失败: ' + error.message;
-                document.getElementById('statusIndicator').className = 'status-indicator error';
             }
         }
 
@@ -1087,11 +1491,11 @@
                 const radius = 80;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
-                
+
                 positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
                 positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
                 positions[i * 3 + 2] = radius * Math.cos(phi);
-                
+
                 const brightness = Math.random() * 0.8 + 0.2;
                 colors[i * 3] = brightness;
                 colors[i * 3 + 1] = brightness;
@@ -1121,20 +1525,17 @@
                 const starMeshes = [];
                 data.stars.forEach((star, index) => {
                     const position = sphericalToCartesian(star.ra, star.dec, 90);
-                    
-                    // 根据星等设置大小
                     const size = Math.max(0.3, (6 - star.mag) * 0.3);
                     const starGeometry = new THREE.SphereGeometry(size, 8, 8);
-                    const starMaterial = new THREE.MeshBasicMaterial({ 
+                    const starMaterial = new THREE.MeshBasicMaterial({
                         color: new THREE.Color(data.color),
                         transparent: true,
                         opacity: 0.9
                     });
-                    
+
                     const starMesh = new THREE.Mesh(starGeometry, starMaterial);
                     starMesh.position.copy(position);
                     starMesh.userData = { name: star.name, magnitude: star.mag };
-                    
                     group.add(starMesh);
                     starMeshes.push(starMesh);
                 });
@@ -1143,23 +1544,21 @@
                 if (data.connections && data.connections.length > 0) {
                     const lineGeometry = new THREE.BufferGeometry();
                     const positions = [];
-                    
                     data.connections.forEach(connection => {
                         const start = starMeshes[connection[0]].position;
                         const end = starMeshes[connection[1]].position;
                         positions.push(start.x, start.y, start.z);
                         positions.push(end.x, end.y, end.z);
                     });
-                    
+
                     lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-                    
                     const lineMaterial = new THREE.LineBasicMaterial({
                         color: new THREE.Color(data.color),
                         transparent: true,
                         opacity: 0.6,
                         linewidth: 2
                     });
-                    
+
                     const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
                     group.add(lines);
                 }
@@ -1169,28 +1568,24 @@
                 labelCanvas.width = 128;
                 labelCanvas.height = 64;
                 const ctx = labelCanvas.getContext('2d');
-                
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                 ctx.fillRect(0, 0, 128, 64);
                 ctx.fillStyle = data.color;
                 ctx.font = 'bold 20px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText(name + '宿', 64, 35);
-                
+
                 const labelTexture = new THREE.CanvasTexture(labelCanvas);
-                const labelMaterial = new THREE.MeshBasicMaterial({ 
-                    map: labelTexture, 
-                    transparent: true 
-                });
+                const labelMaterial = new THREE.MeshBasicMaterial({ map: labelTexture, transparent: true });
                 const labelGeometry = new THREE.PlaneGeometry(8, 4);
                 const labelMesh = new THREE.Mesh(labelGeometry, labelMaterial);
-                
+
                 // 计算星宿中心位置
                 const centerPosition = new THREE.Vector3();
                 starMeshes.forEach(star => centerPosition.add(star.position));
                 centerPosition.divideScalar(starMeshes.length);
                 centerPosition.normalize().multiplyScalar(95);
-                
+
                 labelMesh.position.copy(centerPosition);
                 group.add(labelMesh);
 
@@ -1202,7 +1597,6 @@
         function sphericalToCartesian(ra, dec, radius) {
             const phi = (90 - dec) * Math.PI / 180;
             const theta = ra * Math.PI / 180;
-            
             return new THREE.Vector3(
                 radius * Math.sin(phi) * Math.cos(theta),
                 radius * Math.cos(phi),
@@ -1211,49 +1605,9 @@
         }
 
         function setupEventListeners() {
-            const canvas = document.getElementById('starCanvas');
-            let isDragging = false;
-            let previousMousePosition = { x: 0, y: 0 };
-
-            // 鼠标控制
-            canvas.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            });
-
-            canvas.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    const deltaMove = {
-                        x: e.clientX - previousMousePosition.x,
-                        y: e.clientY - previousMousePosition.y
-                    };
-
-                    scene.rotation.y += deltaMove.x * 0.01;
-                    scene.rotation.x += deltaMove.y * 0.01;
-
-                    previousMousePosition = { x: e.clientX, y: e.clientY };
-                }
-            });
-
-            canvas.addEventListener('mouseup', () => {
-                isDragging = false;
-            });
-
-            // 滚轮缩放
-            canvas.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                const zoom = e.deltaY > 0 ? 1.1 : 0.9;
-                camera.position.multiplyScalar(zoom);
-                
-                const distance = camera.position.length();
-                if (distance < 50) camera.position.normalize().multiplyScalar(50);
-                if (distance > 300) camera.position.normalize().multiplyScalar(300);
-            });
-
             // 时长控制
             const durationInput = document.getElementById('durationInput');
             const durationDisplay = document.getElementById('durationDisplay');
-            
             durationInput.addEventListener('input', (e) => {
                 const duration = parseInt(e.target.value);
                 durationDisplay.textContent = `${duration}秒`;
@@ -1270,32 +1624,52 @@
                 });
             });
 
-            // 旋转控制按钮
-            document.getElementById('pauseBtn').addEventListener('click', () => setRotationSpeed(0));
-            document.getElementById('slowBtn').addEventListener('click', () => setRotationSpeed(0.001));
-            document.getElementById('normalBtn').addEventListener('click', () => setRotationSpeed(0.005));
-            document.getElementById('fastBtn').addEventListener('click', () => setRotationSpeed(0.02));
-
-            // 其他控件
-            document.getElementById('updateBtn').addEventListener('click', updateAstronomyData);
+            // 【修改】事件监听 - 分离更新按钮和音乐生成按钮
+            document.getElementById('updateBtn').addEventListener('click', updatePreviewAstronomyData);  // 【修改】预览数据
             document.getElementById('generateMusicBtn').addEventListener('click', generateMusic);
 
             // 重试按钮
             document.getElementById('retryBtn').addEventListener('click', () => retryMusic(false));
             document.getElementById('forceRetryBtn').addEventListener('click', () => retryMusic(true));
+        }
 
-            // 显示选项
-            document.getElementById('showLabels').addEventListener('change', toggleLabels);
-            document.getElementById('showLines').addEventListener('change', toggleLines);
-            document.getElementById('showBackground').addEventListener('change', toggleBackground);
 
-            // 窗口大小变化
-            window.addEventListener('resize', () => {
-                const container = canvas.parentElement;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
+
+        // 执行导航的函数
+        function performNavigation() {
+            // 构造测试数据
+            const testData = {
+                type: 'testNavigation',
+                starCi: selectedAstronomyData.zodiac_sign,
+                mansions: selectedAstronomyData.mansions_in_zodiac,
+                solarLongitude: selectedAstronomyData.ecliptic_longitude,
+                // 🎯 完全使用用户选择的时间
+                time: new Date(Date.UTC(
+                    selectedTimeData.year,
+                    selectedTimeData.month - 1,
+                    selectedTimeData.day,
+                    selectedTimeData.hour,  // 就用用户的1点！
+                    0, 0, 0
+                )).toISOString(),
+                location: {
+                    latitude: selectedLocationData.latitude,
+                    longitude: selectedLocationData.longitude,
+                    name: selectedLocationData.address
+                }
+            };
+
+            console.log('📤 发送测试数据:');
+            console.log('  - 星次:', testData.starCi);
+            console.log('  - 星宿:', testData.mansions);
+            console.log('  - 黄经:', testData.solarLongitude);
+            console.log('  - 时间:', testData.time);
+            console.log('  - 位置:', testData.location.name);
+
+            // 发送到Stellarium
+            sendMessageToStellarium(testData);
+
+            document.getElementById('statusIndicator').textContent =
+                `🧪 已发送测试数据: ${testData.starCi}星次 → ${testData.location.name}`;
         }
 
         function updateDurationPresets(activeDuration) {
@@ -1308,9 +1682,7 @@
         function setRotationSpeed(speed) {
             rotationSpeed = speed;
             isRotating = speed > 0;
-
             document.querySelectorAll('.rotation-btn').forEach(btn => btn.classList.remove('active'));
-            
             if (speed === 0) document.getElementById('pauseBtn').classList.add('active');
             else if (speed === 0.001) document.getElementById('slowBtn').classList.add('active');
             else if (speed === 0.005) document.getElementById('normalBtn').classList.add('active');
@@ -1337,7 +1709,6 @@
 
         function animate() {
             requestAnimationFrame(animate);
-
             if (isRotating) {
                 scene.rotation.y += rotationSpeed;
             }
@@ -1355,81 +1726,56 @@
             const now = new Date();
             const timeString = now.toISOString().slice(0, 16);
             document.getElementById('timeInput').value = timeString;
-            document.getElementById('currentTime').textContent = now.toLocaleString('zh-CN');
         }
 
-        async function updateAstronomyData() {
-            try {
-                // 检查是否有前面步骤的数据
-                if (selectedTimeData && selectedTimeData.year && selectedLocationData && selectedLocationData.latitude) {
-                    // 使用前面步骤选择的数据
-                    const requestData = {
-                        time_data: selectedTimeData,
-                        location_data: selectedLocationData
-                    };
-                    
-                    console.log('使用选择的数据进行天文计算:', requestData);
-                    
-                    const response = await fetch('/api/astronomy/calculate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestData)
-                    });
-                    
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    
-                    const data = await response.json();
-                    if (!data.success) throw new Error(data.error || '获取数据失败');
-                    
-                    currentData = data;
-                    updateUI(data);
-                    highlightMoonMansion(data.current_mansion || data.mansion);
-                    
-                } else {
-                    // 使用当前时间输入框的值（兼容原有逻辑）
-                    const timeInput = document.getElementById('timeInput').value;
-                    const params = new URLSearchParams();
-                    if (timeInput) params.append('date', timeInput);
+        // 【新增】更新预览信息UI
+        function updatePreviewUI(data) {
+            const previewCard = document.getElementById('previewInfoCard');
+            const previewInfo = document.getElementById('previewInfo');
 
-                    const response = await fetch(`/api/mansion?${params}`);
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                    const data = await response.json();
-                    if (!data.success) throw new Error(data.error || '获取数据失败');
-
-                    currentData = data;
-                    updateUI(data);
-                    highlightMoonMansion(data.mansion);
-                }
-
-            } catch (error) {
-                console.error('更新天文数据失败:', error);
-                showMusicStatus('error', '数据更新失败', error.message);
-            }
-        }
-
-        function updateUI(data) {
             const timeStr = data.request_time || data.timestamp || new Date().toISOString();
-            document.getElementById('currentTime').textContent = new Date(timeStr).toLocaleString('zh-CN');
-            document.getElementById('moonMansion').textContent = (data.current_mansion || data.mansion) + '宿';
-            document.getElementById('element').textContent = data.element;
-            document.getElementById('eclipticLon').textContent = (data.ecliptic_longitude || data.moon_ecliptic_lon || 0).toFixed(2) + '°';
-            document.getElementById('instrument').textContent = data.instrument || data.music_config?.instrument || '--';
-            document.getElementById('mode').textContent = data.mode || data.music_config?.mode || '--';
+            const zodiacText = data.zodiac_sign ? `${data.zodiac_sign}星次` : '--';
+
+            // 🔑 修正：分开处理节气和星宿
+            const termText = data.solar_term || '--';  // ✅ 节气就是节气
+            const mansionsText = data.mansions_in_zodiac ? data.mansions_in_zodiac.join('、') + '宿' : '--';  // ✅ 星宿就是星宿
+
+            const longitude = data.sun_position?.ecliptic_longitude || data.sun_ecliptic_longitude || data.ecliptic_longitude || 0;
+            const modernConstText = data.zodiac_sign ? getModernConstellation(data.zodiac_sign) : '--';
+
+            previewInfo.innerHTML = `
+        <div>预览时间: ${new Date(timeStr).toLocaleString('zh-CN')}</div>
+        <div>太阳星次: ${zodiacText}</div>
+        <div>对应节气: ${termText}</div>
+        <div>太阳黄经: ${longitude.toFixed(2)}°</div>
+        <div>对应星宿: ${mansionsText}</div>
+        <div>现代星座: ${modernConstText}</div>
+    `;
+
+            previewCard.style.display = 'block';
         }
 
-        function highlightMoonMansion(mansion) {
+        // 【新增】显示预览错误
+        function showPreviewError(message) {
+            const previewCard = document.getElementById('previewInfoCard');
+            const previewInfo = document.getElementById('previewInfo');
+
+            previewInfo.innerHTML = `<div style="color: #ff6b6b;">预览失败: ${message}</div>`;
+            previewCard.style.display = 'block';
+        }
+
+        function highlightZodiacMansions(mansions) {
             constellationGroups.forEach(group => {
-                const isCurrentMansion = group.name === mansion;
+                const isInZodiac = mansions.includes(group.name);
                 group.children.forEach(child => {
                     if (child.material) {
-                        if (isCurrentMansion) {
+                        if (isInZodiac) {
                             child.material.opacity = 1.0;
                             if (child.material.emissive) {
-                                child.material.emissive.setHex(0x331100);
+                                child.material.emissive.setHex(0x003311);  // 绿色高亮表示当前星次
                             }
                         } else {
-                            child.material.opacity = 0.6;
+                            child.material.opacity = 0.4;
                             if (child.material.emissive) {
                                 child.material.emissive.setHex(0x000000);
                             }
@@ -1439,72 +1785,78 @@
             });
         }
 
+        // 【修改】generateMusic - 使用已选择时间的数据
         async function generateMusic() {
-            if (!currentData) {
-                showMusicStatus('error', '请先更新天文数据', '需要先获取天文信息才能生成音乐');
-                return;
-            }
-
             const generateBtn = document.getElementById('generateMusicBtn');
             const originalText = generateBtn.innerHTML;
             const duration = parseInt(document.getElementById('durationInput').value);
-            
+
             try {
-                // 禁用按钮，显示加载状态
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成节气音乐...';
                 generateBtn.disabled = true;
-                
-                showMusicStatus('loading', `正在生成${duration}秒音乐...`, '正在计算天文参数并调用音乐生成服务');
-                showLoadingIndicator(true, `生成${duration}秒音乐中...`);
-                
-                // 从当前数据中获取音乐参数，确保不是undefined
-                const instrument = currentData.instrument || currentData.music_config?.instrument || 'Piano';
-                const mode = currentData.mode || currentData.music_config?.mode || 'Major';
-                
-                console.log('使用音乐参数:', { instrument, mode, duration });
-                console.log('当前天文数据:', currentData);
-                
-                // 检查参数有效性
-                if (!instrument || instrument === 'undefined' || instrument === '--') {
-                    throw new Error('无法获取有效的乐器参数，请先更新天文数据');
+                showMusicStatus('loading', `正在生成${duration}秒节气音乐...`, '正在根据已选择时间的节气特色生成音乐');
+                showLoadingIndicator(true, `生成${duration}秒节气音乐中...`);
+
+                let requestData;
+
+                // 【关键修改】优先使用原始选择的数据
+                if (selectedTimeData && selectedTimeData.year && selectedLocationData && selectedLocationData.latitude) {
+                    // 使用原始选择的数据
+                    const originalDate = new Date(
+                        selectedTimeData.year,
+                        selectedTimeData.month - 1,
+                        selectedTimeData.day,
+                        selectedTimeData.hour
+                    );
+
+                    requestData = {
+                        date: originalDate.toISOString(),
+                        duration: duration,
+                        lat: selectedLocationData.latitude,
+                        lon: selectedLocationData.longitude,
+                        is_lunar: selectedTimeData.is_lunar || false
+                    };
+
+                    console.log('🔑 [音乐生成] 使用已选择时间数据:', requestData);
+                } else {
+                    // 备用：使用观测时间输入框（兼容模式）
+                    // 备用：使用观测时间输入框（兼容模式）
+                    requestData = {
+                        date: document.getElementById('timeInput').value,
+                        duration: duration,
+                        lat: 22.3964,
+                        lon: 114.1095,
+                        is_lunar: false
+                    };
+
+                    console.log('⚠️ [音乐生成] 使用备用数据:', requestData);
                 }
-                if (!mode || mode === 'undefined' || mode === '--') {
-                    throw new Error('无法获取有效的调式参数，请先更新天文数据');
-                }
-                
-                const params = new URLSearchParams({
-                    instrument: instrument,
-                    mode: mode,
-                    style: 'cinematic, ethereal',
-                    duration: duration
-                });
-                
-                console.log('发送音乐生成请求:', params.toString());
-                
-                const response = await fetch(`/api/music/generate?${params}`, {
+
+                const response = await fetch('/api/generate_music', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(requestData)
                 });
 
                 if (!response.ok) {
                     throw new Error(`服务器错误: ${response.status} ${response.statusText}`);
                 }
-                
+
                 const result = await response.json();
-                console.log('收到音乐生成响应:', result);
-                
+                console.log('收到节气音乐生成响应:', result);
+
                 if (!result.success) {
-                    throw new Error(result.error || '音乐生成失败');
+                    throw new Error(result.error || '节气音乐生成失败');
                 }
 
                 handleMusicResult(result);
 
             } catch (error) {
-                console.error('音乐生成失败:', error);
-                showMusicStatus('error', '音乐生成失败', error.message);
+                console.error('节气音乐生成失败:', error);
+                showMusicStatus('error', '节气音乐生成失败', error.message);
                 retryCount = 0;
                 showRetryOptions(true);
             } finally {
@@ -1518,61 +1870,51 @@
             console.log('处理音乐结果:', result);
 
             // 显示音乐参数
-            if (result.parameters) {
+            if (result.astronomy && result.parameters) {
                 showMusicParams(result.astronomy, result.parameters);
-                
-                // 显示增强提示词
-                if (result.parameters.enhanced_prompt) {
-                    showEnhancedPrompt(result.parameters.enhanced_prompt);
+
+                // 显示节气音乐提示词
+                if (result.parameters.prompt || result.parameters.enhanced_prompt) {
+                    showEnhancedPrompt(result.parameters.prompt || result.parameters.enhanced_prompt);
                 }
             }
 
             // 检查音乐生成是否成功
             if (result.music && result.music.success !== false) {
                 const duration = result.parameters?.duration || 45;
-                
-                // 检查是否有download_url
+
                 if (result.music.download_url) {
-                    showMusicStatus('success', `${duration}秒音乐生成成功！`, '正在加载音频文件...');
+                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
                     loadAndPlayAudio(result.music.download_url, result.music.pdf_download_url);
                     showRetryOptions(false);
                 } else if (result.music.id || (typeof result.music === 'string' && result.music.length > 0)) {
-                    // 没有download_url，但有ID，尝试构造URL
                     const musicId = result.music.id || result.music;
                     console.log('尝试构造音频URL，ID:', musicId);
-                    
-                    // 根据您的音乐API调整URL构造方式
                     const downloadUrl = `https://yue-inst.ngrok.app/download/${musicId}`;
-                    showMusicStatus('success', `${duration}秒音乐生成成功！`, '正在加载音频文件...');
+                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
                     loadAndPlayAudio(downloadUrl);
                     showRetryOptions(false);
                 } else {
                     showMusicStatus('warning', '音乐生成完成但无法获取音频文件', '服务器返回了结果但没有可用的下载链接');
                     showRetryOptions(true);
                 }
-                
             } else if (result.music && result.music.success === false) {
-                // 音乐生成失败，但天文计算成功
                 const errorMsg = result.music.error || '外部音乐服务超时';
                 const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒音乐参数生成成功`, 
-                    `天文计算已完成，但音频生成失败：${errorMsg}`);
+                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, `天文计算已完成，但音频生成失败：${errorMsg}`);
                 showRetryOptions(true);
-                
             } else {
-                // 无音乐数据
                 const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒音乐参数生成成功`, 
-                    '天文数据计算完成，但音频文件生成失败，请重试');
+                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, '天文数据计算完成，但音频文件生成失败，请重试');
                 showRetryOptions(true);
             }
         }
 
         function showMusicParams(astronomy, parameters) {
-            document.getElementById('paramMansion').textContent = astronomy.mansion + '宿';
-            document.getElementById('paramElement').textContent = parameters.element;
-            document.getElementById('paramInstrument').textContent = parameters.instrument;
-            document.getElementById('paramMode').textContent = parameters.mode;
+            document.getElementById('paramZodiac').textContent = astronomy.zodiac_sign || parameters.zodiac_sign || '--';
+            document.getElementById('paramSolarTerm').textContent = astronomy.solar_term || parameters.solar_term || '--';
+            document.getElementById('paramInstrument').textContent = parameters.instrument || '--';
+            document.getElementById('paramMode').textContent = parameters.mode || '--';
             document.getElementById('paramDuration').textContent = (parameters.duration || 45) + '秒';
             document.getElementById('musicParamsDisplay').style.display = 'block';
         }
@@ -1584,55 +1926,49 @@
 
         async function loadAndPlayAudio(audioUrl, pdfUrl = null) {
             const player = document.getElementById('musicPlayer');
-            
             try {
                 showMusicStatus('loading', '加载音频文件...', '正在从服务器加载音乐文件');
-                
-                // 显示播放器
+
                 player.style.display = 'block';
                 player.src = audioUrl;
-                
-                // 添加音频事件监听器
+
                 player.onloadstart = () => {
                     showMusicStatus('loading', '正在加载音频...', '音频文件开始下载');
                 };
-                
+
                 player.oncanplay = () => {
                     showMusicStatus('success', '音频加载完成', '可以开始播放音乐');
                 };
-                
+
                 player.onplaying = () => {
-                    showMusicStatus('success', '正在播放音乐 🎵', '享受由星宿生成的美妙音乐');
+                    showMusicStatus('success', '正在播放节气音乐 🎵', '享受由星次和节气生成的美妙音乐');
                 };
-                
+
                 player.onpause = () => {
                     showMusicStatus('success', '音乐已暂停', '点击播放按钮继续');
                 };
-                
+
                 player.onended = () => {
                     showMusicStatus('success', '播放完成', '音乐播放结束');
                 };
-                
+
                 player.onerror = (e) => {
                     console.error('音频播放错误:', e);
                     const errorCode = player.error ? player.error.code : '未知';
-                    const errorMsg = getAudioErrorMessage(errorCode);
-                    showMusicStatus('error', '音频播放失败', `${errorMsg} (错误代码: ${errorCode})`);
+                    showMusicStatus('error', '音频播放失败', `错误代码: ${errorCode}`);
                     showRetryOptions(true);
                 };
-                
-                // 设置下载按钮
+
                 setupDownloadButtons(audioUrl, pdfUrl);
-                
-                // 尝试自动播放
+
                 try {
                     await player.play();
-                    showMusicStatus('success', '自动播放已开始 🎵', '正在播放根据星宿生成的音乐');
+                    showMusicStatus('success', '自动播放已开始 🎵', '正在播放根据节气生成的音乐');
                 } catch (autoplayError) {
                     console.log('自动播放被阻止:', autoplayError);
                     showMusicStatus('success', '音频已就绪', '由于浏览器策略，请手动点击播放按钮');
                 }
-                
+
             } catch (error) {
                 console.error('音频处理失败:', error);
                 showMusicStatus('error', '音频处理失败', error.message);
@@ -1640,49 +1976,39 @@
             }
         }
 
-        function getAudioErrorMessage(errorCode) {
-            const errorMessages = {
-                1: '音频文件被中止加载',
-                2: '网络错误导致音频加载失败',
-                3: '音频文件解码失败',
-                4: '不支持的音频格式'
-            };
-            return errorMessages[errorCode] || '未知的音频错误';
-        }
-
         function setupDownloadButtons(audioUrl, pdfUrl) {
             const downloadSection = document.getElementById('downloadSection');
             const downloadMusic = document.getElementById('downloadMusic');
             const downloadSheet = document.getElementById('downloadSheet');
-            
+
             if (audioUrl) {
                 downloadMusic.onclick = () => {
                     const link = document.createElement('a');
                     link.href = audioUrl;
                     const timestamp = new Date().getTime();
-                    const mansion = currentData?.mansion || currentData?.current_mansion || '星宿';
-                    link.download = `${mansion}音乐_${timestamp}.mp3`;
+                    const solarTerm = selectedAstronomyData?.solar_term || '节气';
+                    link.download = `${solarTerm}音乐_${timestamp}.mp3`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                 };
                 downloadMusic.style.display = 'block';
             }
-            
+
             if (pdfUrl) {
                 downloadSheet.onclick = () => {
                     const link = document.createElement('a');
                     link.href = pdfUrl;
                     const timestamp = new Date().getTime();
-                    const mansion = currentData?.mansion || currentData?.current_mansion || '星宿';
-                    link.download = `${mansion}乐谱_${timestamp}.pdf`;
+                    const solarTerm = selectedAstronomyData?.solar_term || '节气';
+                    link.download = `${solarTerm}乐谱_${timestamp}.pdf`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                 };
                 downloadSheet.style.display = 'block';
             }
-            
+
             if (audioUrl || pdfUrl) {
                 downloadSection.style.display = 'block';
             }
@@ -1690,33 +2016,18 @@
 
         function showMusicStatus(type, title, description) {
             const card = document.getElementById('musicStatusCard');
-            
-            // 移除所有状态类
             card.className = 'music-status-card';
-            
-            // 添加对应状态类
             card.classList.add(`status-${type}`);
-            
-            // 设置图标
+
             let icon;
             switch (type) {
-                case 'success':
-                    icon = 'fas fa-check-circle';
-                    break;
-                case 'warning':
-                    icon = 'fas fa-exclamation-triangle';
-                    break;
-                case 'error':
-                    icon = 'fas fa-times-circle';
-                    break;
-                case 'loading':
-                    icon = 'fas fa-spinner fa-spin';
-                    break;
-                default:
-                    icon = 'fas fa-info-circle';
+                case 'success': icon = 'fas fa-check-circle'; break;
+                case 'warning': icon = 'fas fa-exclamation-triangle'; break;
+                case 'error': icon = 'fas fa-times-circle'; break;
+                case 'loading': icon = 'fas fa-spinner fa-spin'; break;
+                default: icon = 'fas fa-info-circle';
             }
-            
-            // 更新内容
+
             card.innerHTML = `
                 <div class="flex items-center gap-2 mb-2">
                     <i class="${icon}"></i>
@@ -1729,14 +2040,10 @@
         function showRetryOptions(show) {
             const retrySection = document.getElementById('retrySection');
             retrySection.style.display = show ? 'block' : 'none';
-            
             if (show) {
-                // 更新重试按钮状态
                 const retryBtn = document.getElementById('retryBtn');
                 const forceRetryBtn = document.getElementById('forceRetryBtn');
-                
                 retryBtn.innerHTML = `<i class="fas fa-redo"></i> 重试 (${retryCount + 1}/${maxRetries})`;
-                
                 if (retryCount >= maxRetries - 1) {
                     retryBtn.disabled = true;
                     forceRetryBtn.innerHTML = '<i class="fas fa-bolt"></i> 强制重试';
@@ -1749,18 +2056,17 @@
                 showMusicStatus('error', '重试次数已达上限', '请稍后再试或检查网络连接');
                 return;
             }
-            
+
             if (!force) {
                 retryCount++;
             } else {
-                retryCount = 0; // 强制重试时重置计数
+                retryCount = 0;
             }
-            
-            // 等待一段时间后重试
+
             const waitTime = force ? 1000 : (retryCount * 2000);
             const duration = parseInt(document.getElementById('durationInput').value);
-            showMusicStatus('loading', '准备重试...', `等待 ${waitTime/1000} 秒后重新生成${duration}秒音乐`);
-            
+            showMusicStatus('loading', '准备重试...', `等待 ${waitTime / 1000} 秒后重新生成${duration}秒节气音乐`);
+
             setTimeout(() => {
                 generateMusic();
             }, waitTime);
@@ -1769,7 +2075,6 @@
         function showLoadingIndicator(show, text = '加载中...') {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const loadingText = document.getElementById('loadingText');
-            
             if (show) {
                 loadingText.textContent = text;
                 loadingIndicator.style.display = 'block';
@@ -1779,4 +2084,5 @@
         }
     </script>
 </body>
+
 </html>

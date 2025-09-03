@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精简版天球坐标系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #2a2a4a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .glass-panel {
+            background: rgba(15, 15, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: linear-gradient(45deg, #4ade80, #22c55e);
+            color: white;
+        }
+
+        .step.active {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .step-line {
+            width: 60px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .step-line.completed {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+        }
+
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: linear-gradient(45deg, #4ade80, #22c55e);
+            color: white;
+        }
+
+        .step.active {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .step.inactive {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        #celestialCanvas {
+            border-radius: 15px;
+            cursor: grab;
+            transition: transform 0.3s ease;
+        }
+
+        #celestialCanvas:active {
+            cursor: grabbing;
+        }
+
+        #celestialCanvas:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .control-btn {
+            background: rgba(59, 130, 246, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .control-btn:hover {
+            background: rgba(59, 130, 246, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .control-btn.active {
+            background: rgba(34, 197, 94, 0.8);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .glass-panel {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="main-wrapper relative z-10">
+        <div class="content-container">
+            <!-- 步骤指示器 -->
+            <div class="step-indicator mt-8">
+                <div class="step completed">1</div>
+                <div class="step-line completed"></div>
+                <div class="step completed">2</div>
+                <div class="step-line completed"></div>
+                <div class="step active">3</div>
+                <div class="step-line inactive"></div>
+                <div class="step inactive">4</div>
+            </div>
+
+            <!-- 标题 -->
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-white mb-2">天球坐标系统</h1>
+                <p class="text-gray-300">地球在天球中的三维位置 | 黄道面 | 赤道面 | 黄赤交角</p>
+            </div>
+
+            <!-- 主要内容区域 -->
+            <div class="main-content">
+                <!-- 左侧控制面板 -->
+                <div class="glass-panel p-6 w-80 flex-shrink-0">
+                    <!-- 天文信息 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-globe text-blue-400 mr-2"></i>
+                            <span class="text-white font-semibold">天文信息</span>
+                        </div>
+                        <div class="info-card">
+                            <div class="text-gray-300 text-sm">观测时间</div>
+                            <div class="text-white font-mono" id="observationTime">2024年12月21日 12:00</div>
+                            <div class="text-gray-400 text-xs mt-1" id="seasonDetails">冬至 | 太阳黄经270°</div>
+                        </div>
+                    </div>
+
+                    <!-- 位置信息 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-map-marker-alt text-yellow-400 mr-2"></i>
+                            <span class="text-white font-semibold">观测位置</span>
+                        </div>
+                        <div class="info-card">
+                            <div class="text-gray-300 text-sm">位置</div>
+                            <div class="text-white" id="locationName">深圳, 中国</div>
+                            <div class="text-gray-400 text-xs mt-1">纬度: 22.5°N, 经度: 114.1°E</div>
+                        </div>
+                    </div>
+
+                    <!-- 天文数据 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-calculator text-purple-400 mr-2"></i>
+                            <span class="text-white font-semibold">天文数据</span>
+                        </div>
+                        <div class="info-card">
+                            <div class="text-gray-300 text-sm">太阳黄经</div>
+                            <div class="text-yellow-400 font-mono text-lg" id="solarLongitude">计算中..</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="text-gray-300 text-sm">地球轨道位置</div>
+                            <div class="text-blue-400" id="earthPosition">冬至点附近</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="text-gray-300 text-sm">黄赤交角</div>
+                            <div class="text-green-400 font-mono">23.5°</div>
+                        </div>
+                    </div>
+
+                    <!-- 快速时间切换 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-clock text-orange-400 mr-2"></i>
+                            <span class="text-white font-semibold">快速时间</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="control-btn text-sm" data-season="spring">
+                                <i class="fas fa-seedling"></i>春分
+                            </button>
+                            <button class="control-btn text-sm" data-season="summer">
+                                <i class="fas fa-sun"></i>夏至
+                            </button>
+                            <button class="control-btn text-sm" data-season="autumn">
+                                <i class="fas fa-leaf"></i>秋分
+                            </button>
+                            <button class="control-btn text-sm active" data-season="winter">
+                                <i class="fas fa-snowflake"></i>冬至
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 中央天球显示 -->
+                <div class="glass-panel p-6 flex-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-globe-americas text-blue-400 mr-2"></i>
+                            <span class="text-white font-semibold">天球坐标系统</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="control-btn text-sm" id="autoRotateBtn">
+                                <!-- <i class="fas fa-sync-alt"></i> -->
+                                <span>自动旋转</span>
+                            </button>
+                            <button class="control-btn text-sm" id="resetViewBtn">
+                                <!-- <i class="fas fa-home"></i> -->
+                                <span>重置视角</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <canvas id="celestialCanvas" width="600" height="600"></canvas>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <p class="text-gray-300 text-sm">拖拽旋转视角 | 滚轮缩放 | 点击元素查看详情</p>
+                        <p class="text-gray-400 text-xs mt-1">🟡 太阳 | 🔵 地球 | 🟢 黄道面 | 🔴 赤道面 | ⚪ 天球</p>
+                    </div>
+                </div>
+
+                <!-- 右侧操作面板 -->
+                <div class="glass-panel p-6 w-80 flex-shrink-0">
+                    <!-- 视角控制 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-eye text-cyan-400 mr-2"></i>
+                            <span class="text-white font-semibold">视角控制</span>
+                        </div>
+                        <button class="control-btn" id="topViewBtn">
+                            <i class="fas fa-arrow-up"></i>
+                            俯视视角
+                        </button>
+                        <button class="control-btn" id="sideViewBtn">
+                            <i class="fas fa-arrows-alt-h"></i>
+                            侧视视角
+                        </button>
+                        <button class="control-btn" id="obliquViewBtn">
+                            <i class="fas fa-cube"></i>
+                            倾斜视角
+                        </button>
+                        <button class="control-btn" id="perspectiveBtn">
+                            <i class="fas fa-eye"></i>
+                            透视视角
+                        </button>
+                    </div>
+
+                    <!-- 显示控制 -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-layer-group text-indigo-400 mr-2"></i>
+                            <span class="text-white font-semibold">显示控制</span>
+                        </div>
+                        <button class="control-btn active" id="showEclipticBtn">
+                            <i class="fas fa-minus"></i>
+                            显示黄道面
+                        </button>
+                        <button class="control-btn active" id="showEquatorBtn">
+                            <i class="fas fa-minus"></i>
+                            显示赤道面
+                        </button>
+                        <button class="control-btn active" id="showAxesBtn">
+                            <i class="fas fa-plus"></i>
+                            显示坐标轴
+                        </button>
+                        <button class="control-btn active" id="showLabelsBtn">
+                            <i class="fas fa-font"></i>
+                            显示标签
+                        </button>
+                    </div>
+
+                    <!-- 导航按钮 -->
+                    <div>
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-compass text-pink-400 mr-2"></i>
+                            <span class="text-white font-semibold">导航</span>
+                        </div>
+                        <button class="btn-primary" id="enterStarmapBtn">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            进入星图生成
+                        </button>
+                        <button class="btn-secondary" id="backToLocationBtn">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            返回位置选择
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let canvas, ctx;
+        let rotation = { x: 0.3, y: 0.2, z: 0 };
+        let targetRotation = { x: 0.3, y: 0.2, z: 0 };
+        let isAnimating = false;
+        let animationSpeed = 0.05;
+        let isDragging = false;
+        let lastMousePos = { x: 0, y: 0 };
+        let autoRotate = false;
+        let zoomLevel = 1;
+        let showEcliptic = true;
+        let showEquator = true;
+        let showAxes = true;
+        let showLabels = true;
+
+        // 季节数据
+        const seasons = {
+            spring: { name: "春分", date: "2024年3月21日", longitude: 0, position: "春分点" },
+            summer: { name: "夏至", date: "2024年6月21日", longitude: 90, position: "夏至点" },
+            autumn: { name: "秋分", date: "2024年9月23日", longitude: 180, position: "秋分点" },
+            winter: { name: "冬至", date: "2024年12月21日", longitude: 270, position: "冬至点" }
+        };
+        let currentSeason = 'winter';
+
+        // 地球纹理
+        let earthTexture = null;
+        let isTextureLoaded = false;
+        let textureDataCache = null;
+
+        // 初始化
+        function init() {
+            createStars();
+            initCanvas();
+            loadEarthTexture();
+            loadSelectedData();
+            bindEvents();
+            startAnimation();
+        }
+
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 300; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 初始化Canvas
+        function initCanvas() {
+            canvas = document.getElementById('celestialCanvas');
+            ctx = canvas.getContext('2d');
+        }
+
+        // 加载地球纹理
+        function loadEarthTexture() {
+            earthTexture = new Image();
+            earthTexture.crossOrigin = 'anonymous';
+            earthTexture.onload = function () {
+                isTextureLoaded = true;
+                // 缓存纹理数据
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = earthTexture.width;
+                tempCanvas.height = earthTexture.height;
+                tempCtx.drawImage(earthTexture, 0, 0);
+                textureDataCache = tempCtx.getImageData(0, 0, earthTexture.width, earthTexture.height);
+            };
+
+            earthTexture.src = '/static/image/earth_atmos_2048_3.png'; // 使用本地纹理
+        }
+
+        // 加载选中的数据
+        async function loadSelectedData() {
+            try {
+                const timeData = JSON.parse(sessionStorage.getItem('selectedTime') || '{}');
+                const locationData = JSON.parse(sessionStorage.getItem('selectedLocation') || '{}');
+
+                if (timeData.year) {
+                    document.getElementById('observationTime').textContent =
+                        `${timeData.year}年${timeData.month}月${timeData.day}日 ${timeData.hour}:00`;
+
+                    // ✅ 计算真实的太阳黄经
+                    const solarLongitude = await calculateSolarLongitude(
+                        timeData.year, timeData.month, timeData.day, timeData.hour
+                    );
+
+                    document.getElementById('solarLongitude').textContent = `${solarLongitude.toFixed(2)}°`;
+
+                    // ✅ 添加这行 - 更新观测时间下面的详细信息
+
+                    // ✅ 更新季节详情
+                    const seasonName = getCurrentSeasonName(solarLongitude);
+                    document.getElementById('seasonDetails').textContent = `${seasonName} | 太阳黄经${solarLongitude.toFixed(2)}°`;
+
+                    // ✅ 更新地球轨道位置
+                    const position = getSolarPositionDescription(solarLongitude);
+                    document.getElementById('earthPosition').textContent = position;
+                }
+
+                if (locationData.address) {
+                    document.getElementById('locationName').textContent = locationData.address;
+                    const lat = locationData.latitude >= 0 ?
+                        `${locationData.latitude.toFixed(1)}°N` :
+                        `${Math.abs(locationData.latitude).toFixed(1)}°S`;
+                    const lng = locationData.longitude >= 0 ?
+                        `${locationData.longitude.toFixed(1)}°E` :
+                        `${Math.abs(locationData.longitude).toFixed(1)}°W`;
+                    document.querySelector('#locationName').nextElementSibling.textContent =
+                        `纬度: ${lat}, 经度: ${lng}`;
+                }
+            } catch (e) {
+                console.log('使用默认数据');
+            }
+        }
+
+        // ✅ 添加获取当前季节名称的函数
+        function getCurrentSeasonName(longitude) {
+            if (longitude >= 260 && longitude <= 290) {
+                return "深冬季节";
+            } else if (longitude >= 350 || longitude <= 20) {
+                return "早春季节";
+            } else if (longitude >= 80 && longitude <= 110) {
+                return "盛夏季节";
+            } else if (longitude >= 170 && longitude <= 200) {
+                return "深秋季节";
+            } else if (longitude > 290 && longitude < 350) {
+                return "冬春过渡";
+            } else if (longitude > 20 && longitude < 80) {
+                return "春夏过渡";
+            } else if (longitude > 110 && longitude < 170) {
+                return "夏秋过渡";
+            } else if (longitude > 200 && longitude < 260) {
+                return "秋冬过渡";
+            }
+            return "季节过渡";
+        }
+
+        // ✅ 添加轨道位置描述函数
+        function getSolarPositionDescription(longitude) {
+            if (longitude >= 260 && longitude <= 280) {
+                return "冬至点附近";
+            } else if (longitude >= 350 || longitude <= 10) {
+                return "春分点附近";
+            } else if (longitude >= 80 && longitude <= 100) {
+                return "夏至点附近";
+            } else if (longitude >= 170 && longitude <= 190) {
+                return "秋分点附近";
+            } else if (longitude > 280 && longitude < 350) {
+                return "冬至后向春分移动";
+            } else if (longitude > 10 && longitude < 80) {
+                return "春分后向夏至移动";
+            } else if (longitude > 100 && longitude < 170) {
+                return "夏至后向秋分移动";
+            } else if (longitude > 190 && longitude < 260) {
+                return "秋分后向冬至移动";
+            }
+            return "轨道中间位置";
+        }
+
+
+        // 3D点投影到2D
+        function project3D(x, y, z) {
+            // 应用旋转变换
+            const cosX = Math.cos(rotation.x);
+            const sinX = Math.sin(rotation.x);
+            const cosY = Math.cos(rotation.y);
+            const sinY = Math.sin(rotation.y);
+
+            // 绕Y轴旋转
+            let x1 = x * cosY - z * sinY;
+            let z1 = x * sinY + z * cosY;
+            let y1 = y;
+
+            // 绕X轴旋转
+            let y2 = y1 * cosX - z1 * sinX;
+            let z2 = y1 * sinX + z1 * cosX;
+            let x2 = x1;
+
+            // 透视投影
+            const distance = 400;
+            const perspective = distance / (distance + z2);
+
+            return {
+                x: 300 + x2 * perspective * zoomLevel,
+                y: 300 + y2 * perspective * zoomLevel,
+                z: z2,
+                visible: z2 > -200,
+                perspective: perspective
+            };
+        }
+
+        // 绘制地球（保持不变）
+        function drawEarth() {
+            const centerX = 300;
+            const centerY = 300;
+            const currentRadius = 20 * zoomLevel;
+
+            if (!isTextureLoaded || !textureDataCache) {
+                // 简单的蓝色球体
+                const gradient = ctx.createRadialGradient(centerX - 15, centerY - 15, 0, centerX, centerY, currentRadius);
+                gradient.addColorStop(0, '#4a90e2');
+                gradient.addColorStop(0.7, '#2e7d32');
+                gradient.addColorStop(1, '#1976d2');
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
+                ctx.fill();
+            } else {
+                // 使用高质量球面纹理映射
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
+                ctx.clip();
+
+                const imageSize = Math.ceil(currentRadius * 2);
+                const imageData = ctx.createImageData(imageSize, imageSize);
+                const data = imageData.data;
+
+                // 预计算旋转矩阵
+                const cosX = Math.cos(rotation.x);
+                const sinX = Math.sin(rotation.x);
+                const cosY = Math.cos(rotation.y);
+                const sinY = Math.sin(rotation.y);
+
+                const step = currentRadius > 100 ? 2 : 1;
+
+                for (let y = 0; y < imageSize; y += step) {
+                    for (let x = 0; x < imageSize; x += step) {
+                        const dx = x - currentRadius;
+                        const dy = y - currentRadius;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance <= currentRadius) {
+                            const nx = dx / currentRadius;
+                            const ny = dy / currentRadius;
+                            const nz = Math.sqrt(Math.max(0, 1 - nx * nx - ny * ny));
+
+                            // 应用旋转
+                            const x1 = nx * cosY - nz * sinY;
+                            const z1 = nx * sinY + nz * cosY;
+                            const y1 = ny * cosX - z1 * sinX;
+                            const z2 = ny * sinX + z1 * cosX;
+
+                            // 转换为经纬度
+                            const lat = Math.asin(Math.max(-1, Math.min(1, y1)));
+                            const lng = Math.atan2(x1, z2);
+
+                            // 映射到纹理坐标
+                            const textureX = Math.floor(((lng + Math.PI) / (2 * Math.PI)) * earthTexture.width) % earthTexture.width;
+                            const textureY = Math.floor(((Math.PI / 2 - lat) / Math.PI) * earthTexture.height);
+
+                            if (textureX >= 0 && textureX < earthTexture.width &&
+                                textureY >= 0 && textureY < earthTexture.height) {
+
+                                const textureIndex = (textureY * earthTexture.width + textureX) * 4;
+
+                                const r = textureDataCache.data[textureIndex];
+                                const g = textureDataCache.data[textureIndex + 1];
+                                const b = textureDataCache.data[textureIndex + 2];
+
+                                // 光照效果
+                                const lightIntensity = Math.max(0.3, (nz + 1) / 2);
+                                const finalR = r * lightIntensity;
+                                const finalG = g * lightIntensity;
+                                const finalB = b * lightIntensity;
+
+                                // 填充采样区域
+                                for (let sy = 0; sy < step && y + sy < imageSize; sy++) {
+                                    for (let sx = 0; sx < step && x + sx < imageSize; sx++) {
+                                        const imageIndex = ((y + sy) * imageSize + (x + sx)) * 4;
+                                        data[imageIndex] = finalR;
+                                        data[imageIndex + 1] = finalG;
+                                        data[imageIndex + 2] = finalB;
+                                        data[imageIndex + 3] = 255;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ctx.putImageData(imageData, centerX - imageSize / 2, centerY - imageSize / 2);
+                ctx.restore();
+            }
+
+            // 地球边缘高光
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
+            ctx.stroke();
+        }
+
+        // ✅ 添加获取当前黄经的函数
+        function getCurrentSolarLongitude() {
+            // 从DOM元素获取，或者存储在全局变量中
+            const longText = document.getElementById('solarLongitude').textContent;
+            return parseFloat(longText.replace('°', ''));
+        }
+
+        // 绘制太阳
+        function drawSun() {
+            const currentLongitude = getCurrentSolarLongitude(); // 获取实时黄经
+            const angle = currentLongitude * Math.PI / 180;
+
+            // ✅ 教学比例设置
+            const earthRadius = 20; // 地球半径（与你的代码一致）
+            const sunDistance = earthRadius * 10; // 距离是地球6倍 = 300
+
+            // 原始太阳位置
+            const sunX = Math.sin(angle) * sunDistance;
+            const sunY = 0;
+            const sunZ = Math.cos(angle) * sunDistance;
+
+            const projected = project3D(sunX, sunY, sunZ);
+
+            if (projected.visible) {
+                // const radius = 25 * projected.perspective * zoomLevel;
+                // ✅ 太阳比地球大3倍
+                const sunRadius = (earthRadius * 3) * projected.perspective * zoomLevel; // 150 * perspective
+
+                // 太阳光晕
+                const gradient = ctx.createRadialGradient(
+                    projected.x, projected.y, 0,
+                    projected.x, projected.y, sunRadius * 1.5
+                );
+                gradient.addColorStop(0, 'rgba(255, 255, 0, 0.8)');
+                gradient.addColorStop(0.5, 'rgba(255, 200, 0, 0.4)');
+                gradient.addColorStop(1, 'rgba(255, 200, 0, 0)');
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(projected.x, projected.y, sunRadius * 1.5, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 太阳本体
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(projected.x, projected.y, sunRadius, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 太阳边缘
+                ctx.strokeStyle = '#FFA500';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        // 绘制黄道面（虚线）
+        function drawEclipticPlane() {
+            if (!showEcliptic) return;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.lineWidth = 1;
+
+            // 绘制黄道圆环
+            const points = [];
+            for (let i = 0; i <= 360; i += 5) {
+                const angle = i * Math.PI / 180;
+                const radius = 120;
+                const x = Math.sin(angle) * radius;
+                const y = 0;
+                const z = Math.cos(angle) * radius;
+
+                const projected = project3D(x, y, z);
+                if (projected.visible) {
+                    points.push(projected);
+                }
+            }
+
+            if (points.length > 2) {
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            ctx.setLineDash([]); // 重置虚线
+
+            // 绘制季节标记点
+            const seasonAngles = { spring: 0, summer: 90, autumn: 180, winter: 270 };
+            const seasonColors = { spring: '#00FF00', summer: '#FFFF00', autumn: '#FF8800', winter: '#0088FF' };
+            const seasonNames = { spring: '春分点', summer: '夏至点', autumn: '秋分点', winter: '冬至点' };
+
+            Object.entries(seasonAngles).forEach(([season, angle]) => {
+                const rad = angle * Math.PI / 180;
+                const radius = 120;
+                const x = Math.sin(rad) * radius;
+                const y = 0;
+                const z = Math.cos(rad) * radius;
+
+                const projected = project3D(x, y, z);
+
+                if (projected.visible) {
+                    const markerRadius = 6 * projected.perspective * zoomLevel;
+
+                    ctx.fillStyle = seasonColors[season];
+                    ctx.beginPath();
+                    ctx.arc(projected.x, projected.y, markerRadius, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    if (showLabels) {
+                        ctx.fillStyle = 'white';
+                        ctx.font = 'bold 12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(seasonNames[season], projected.x, projected.y - markerRadius - 8);
+                    }
+                }
+            });
+        }
+
+        // 绘制赤道面（虚线）
+        function drawEquatorPlane() {
+            if (!showEquator) return;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 4]); // 设置虚线样式
+
+            // 绘制赤道圆环（倾斜23.5度）
+            const points = [];
+            const tiltAngle = 23.5 * Math.PI / 180;
+
+            for (let i = 0; i <= 360; i += 5) {
+                const angle = i * Math.PI / 180;
+                const radius = 100;
+                const x = Math.sin(angle) * radius * Math.cos(tiltAngle);
+                const y = Math.sin(angle) * radius * Math.sin(tiltAngle);
+                const z = Math.cos(angle) * radius;
+
+                const projected = project3D(x, y, z);
+                if (projected.visible) {
+                    points.push(projected);
+                }
+            }
+
+            if (points.length > 2) {
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+
+            ctx.setLineDash([]); // 重置虚线
+        }
+
+        // 绘制天球网格（保持不变）
+        function drawCelestialSphere() {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+
+            const radius = 180;
+
+            // 绘制经线
+            for (let lng = 0; lng < 360; lng += 30) {
+                const points = [];
+                for (let lat = -90; lat <= 90; lat += 10) {
+                    const latRad = lat * Math.PI / 180;
+                    const lngRad = lng * Math.PI / 180;
+
+                    const x = Math.cos(latRad) * Math.sin(lngRad) * radius;
+                    const y = Math.sin(latRad) * radius;
+                    const z = Math.cos(latRad) * Math.cos(lngRad) * radius;
+
+                    // 天球网格不旋转
+                    const projected = project3D(x, y, z);
+                    if (projected.visible) {
+                        points.push(projected);
+                    }
+                }
+
+                if (points.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (let i = 1; i < points.length; i++) {
+                        ctx.lineTo(points[i].x, points[i].y);
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            // 绘制纬线
+            for (let lat = -60; lat <= 60; lat += 30) {
+                const points = [];
+                for (let lng = 0; lng <= 360; lng += 10) {
+                    const latRad = lat * Math.PI / 180;
+                    const lngRad = lng * Math.PI / 180;
+
+                    const x = Math.cos(latRad) * Math.sin(lngRad) * radius;
+                    const y = Math.sin(latRad) * radius;
+                    const z = Math.cos(latRad) * Math.cos(lngRad) * radius;
+
+                    // 天球网格不旋转
+                    const projected = project3D(x, y, z);
+                    if (projected.visible) {
+                        points.push(projected);
+                    }
+                }
+
+                if (points.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (let i = 1; i < points.length; i++) {
+                        ctx.lineTo(points[i].x, points[i].y);
+                    }
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // 绘制坐标轴和角度标注
+        function drawAxes() {
+            if (!showAxes) return;
+
+            const axisLength = 160;
+
+            // 黄道垂直轴
+            const eclipticNormalX = 0;
+            const eclipticNormalY = -axisLength;
+            const eclipticNormalZ = 0;
+            const eclipticNormalProj = project3D(eclipticNormalX, eclipticNormalY, eclipticNormalZ);
+
+            if (eclipticNormalProj.visible) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(300, 300);
+                ctx.lineTo(eclipticNormalProj.x, eclipticNormalProj.y);
+                ctx.stroke();
+
+                if (showLabels) {
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = 'bold 11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('黄道垂直轴', eclipticNormalProj.x, eclipticNormalProj.y - 15);
+                }
+            }
+
+            // 地球南北极轴（与黄道垂直轴成23.5°夹角）
+            const tiltAngle = 23.5 * Math.PI / 180;
+            const northPoleX = Math.sin(tiltAngle) * axisLength;
+            const northPoleY = -Math.cos(tiltAngle) * axisLength;
+            const northPoleZ = 0;
+            const northPoleProj = project3D(northPoleX, northPoleY, northPoleZ);
+            const southPoleX = -northPoleX;
+            const southPoleY = -northPoleY;
+            const southPoleZ = 0;
+            const southPoleProj = project3D(southPoleX, southPoleY, southPoleZ);
+
+            if (northPoleProj.visible) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(300, 300);
+                ctx.lineTo(northPoleProj.x, northPoleProj.y);
+                ctx.stroke();
+
+                if (showLabels) {
+                    ctx.fillStyle = '#00BFFF';
+                    ctx.font = 'bold 11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('天球北极', northPoleProj.x, northPoleProj.y - 15);
+                    ctx.fillText('N', northPoleProj.x, northPoleProj.y - 30);
+                }
+            }
+
+            if (southPoleProj.visible) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(300, 300);
+                ctx.lineTo(southPoleProj.x, southPoleProj.y);
+                ctx.stroke();
+
+                if (showLabels) {
+                    ctx.fillStyle = '#00BFFF';
+                    ctx.font = 'bold 11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('S', southPoleProj.x, southPoleProj.y + 25);
+                }
+            }
+
+            // 绘制23.5°角度标注
+            if (eclipticNormalProj.visible && northPoleProj.visible && showLabels) {
+                const arcRadius = 50;
+                const centerX = 300;
+                const centerY = 300;
+
+                // 计算两个向量的角度
+                const vec1X = eclipticNormalProj.x - centerX;
+                const vec1Y = eclipticNormalProj.y - centerY;
+                const vec2X = northPoleProj.x - centerX;
+                const vec2Y = northPoleProj.y - centerY;
+
+                const angle1 = Math.atan2(vec1Y, vec1X);
+                const angle2 = Math.atan2(vec2Y, vec2X);
+
+                // 绘制角度弧线
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, arcRadius, Math.min(angle1, angle2), Math.max(angle1, angle2));
+                ctx.stroke();
+
+                // 角度标注
+                const midAngle = (angle1 + angle2) / 2;
+                const labelX = centerX + Math.cos(midAngle) * (arcRadius + 20);
+                const labelY = centerY + Math.sin(midAngle) * (arcRadius + 20);
+
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('23.5°', labelX, labelY);
+            }
+        }
+
+        // 主绘制函数
+        function draw() {
+            ctx.clearRect(0, 0, 600, 600);
+
+            // 绘制背景渐变
+            const gradient = ctx.createRadialGradient(300, 300, 0, 300, 300, 300);
+            gradient.addColorStop(0, 'rgba(0, 0, 50, 0.3)');
+            gradient.addColorStop(1, 'rgba(0, 0, 20, 0.8)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 600, 600);
+
+            // 绘制各个元素（按层次顺序）
+            drawCelestialSphere();   // 背景网格（不旋转）
+            drawEarth();             // 地球（不旋转）
+            drawEclipticPlane();     // 黄道面（旋转90度）
+            drawEquatorPlane();      // 赤道面（旋转90度）
+            drawAxes();              // 坐标轴（旋转90度）
+            drawSun();               // 太阳（旋转90度）
+        }
+
+        // 绑定事件
+        function bindEvents() {
+            // 季节选择
+            document.querySelectorAll('[data-season]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-season]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentSeason = btn.dataset.season;
+                    updateSeasonDisplay();
+                });
+            });
+
+            // 自动旋转
+            document.getElementById('autoRotateBtn').addEventListener('click', () => {
+                autoRotate = !autoRotate;
+                const btn = document.getElementById('autoRotateBtn');
+                if (autoRotate) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<span>停止旋转</span>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<span>自动旋转</span>';
+                }
+            });
+
+            // 重置视角
+            document.getElementById('resetViewBtn').addEventListener('click', () => {
+                rotation = { x: 0.3, y: 0.2, z: 0 };
+                zoomLevel = 1;
+            });
+
+            // 视角控制
+            document.getElementById('topViewBtn').addEventListener('click', () => {
+                rotation = { x: Math.PI / 2, y: 0, z: 0 };
+            });
+
+            document.getElementById('sideViewBtn').addEventListener('click', () => {
+                rotation = { x: 0, y: Math.PI / 2, z: 0 };
+            });
+
+            document.getElementById('obliquViewBtn').addEventListener('click', () => {
+                rotation = { x: 0.3, y: 0.2, z: 0 };
+            });
+
+            document.getElementById('perspectiveBtn').addEventListener('click', () => {
+                rotation = { x: 0.5, y: 0.3, z: 0.1 };
+            });
+
+            // 显示控制
+            document.getElementById('showEclipticBtn').addEventListener('click', () => {
+                showEcliptic = !showEcliptic;
+                toggleButtonState('showEclipticBtn', showEcliptic);
+            });
+
+            document.getElementById('showEquatorBtn').addEventListener('click', () => {
+                showEquator = !showEquator;
+                toggleButtonState('showEquatorBtn', showEquator);
+            });
+
+            document.getElementById('showAxesBtn').addEventListener('click', () => {
+                showAxes = !showAxes;
+                toggleButtonState('showAxesBtn', showAxes);
+            });
+
+            document.getElementById('showLabelsBtn').addEventListener('click', () => {
+                showLabels = !showLabels;
+                toggleButtonState('showLabelsBtn', showLabels);
+            });
+
+            // 鼠标交互
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+            canvas.addEventListener('wheel', handleWheel, { passive: false });
+
+            // 导航按钮
+            document.getElementById('enterStarmapBtn').addEventListener('click', () => {
+                window.location.href = '/starmap';
+            });
+
+            document.getElementById('backToLocationBtn').addEventListener('click', () => {
+                window.location.href = '/location';
+            });
+        }
+
+        // 切换按钮状态
+        function toggleButtonState(btnId, isActive) {
+            const btn = document.getElementById(btnId);
+            if (isActive) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        // 更新季节显示
+        // ✅ 修改：使用seasons获取日期，但用API计算真实黄经
+        async function updateSeasonDisplay() {
+            const seasonData = seasons[currentSeason];
+
+            // 解析seasons中的日期
+            const dateParts = seasonData.date.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+            if (dateParts) {
+                const [, year, month, day] = dateParts;
+
+                // ✅ 用API计算真实黄经，而不是用预设的270°
+                const realLongitude = await calculateSolarLongitude(parseInt(year), parseInt(month), parseInt(day));
+
+                document.getElementById('observationTime').textContent = `${seasonData.date} 12:00`;
+                document.getElementById('solarLongitude').textContent = `${realLongitude.toFixed(2)}°`;  // ✅ 真实值
+
+                const position = getSolarPositionDescription(realLongitude);
+                document.getElementById('earthPosition').textContent = position;  // ✅ 真实位置
+
+                const detailsEl = document.querySelector('#observationTime').nextElementSibling;
+                const seasonName = getCurrentSeasonName(realLongitude);
+                detailsEl.textContent = `${seasonName} | 太阳黄经${realLongitude.toFixed(2)}°`;  // ✅ 真实值
+            }
+        }
+
+        // 鼠标事件处理
+        function handleMouseDown(e) {
+            isDragging = true;
+            const rect = canvas.getBoundingClientRect();
+            lastMousePos = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function handleMouseMove(e) {
+            if (!isDragging) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const currentPos = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+
+            const deltaX = currentPos.x - lastMousePos.x;
+            const deltaY = currentPos.y - lastMousePos.y;
+
+            rotation.y += deltaX * 0.01;
+            rotation.x -= deltaY * 0.01;
+
+            // 限制X轴旋转
+            rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotation.x));
+
+            lastMousePos = currentPos;
+        }
+
+        function handleMouseUp() {
+            isDragging = false;
+        }
+
+        function handleWheel(e) {
+            e.preventDefault();
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            zoomLevel = Math.max(0.5, Math.min(3, zoomLevel * zoomFactor));
+        }
+
+        // 动画循环
+        function animate() {
+            if (autoRotate) {
+                rotation.y += 0.01;
+            }
+
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // 开始动画
+        function startAnimation() {
+            animate();
+        }
+
+        // ✅ 添加API调用函数
+        async function calculateSolarLongitude(year, month, day, hour = 12) {
+            try {
+                const response = await fetch(
+                    `/api/solar-longitude?year=${year}&month=${month}&day=${day}&hour=${hour}`
+                );
+                const data = await response.json();
+                return data.longitude;
+            } catch (error) {
+                console.error('太阳黄经计算失败:', error);
+                return 270; // 回退值
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

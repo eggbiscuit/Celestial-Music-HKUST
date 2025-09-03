@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>28星宿音乐生成器 - 45秒音乐支持</title>
+    <title>28星宿音乐生成器 - 节气音乐支持</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
@@ -109,16 +110,6 @@
 
         .btn-secondary {
             background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(45deg, #ff9a56 0%, #ff6b35 100%);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
             color: white;
         }
 
@@ -311,8 +302,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .constellation-legend {
@@ -352,28 +348,6 @@
             color: #ff6b6b;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 8px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: progressPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes progressPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
         .timeout-help {
             background: rgba(255, 193, 7, 0.1);
             border: 1px solid rgba(255, 193, 7, 0.3);
@@ -393,25 +367,25 @@
         }
     </style>
 </head>
+
 <body>
     <div class="main-container">
         <!-- 控制面板 -->
         <div class="control-panel">
             <div class="section-title">
-                <i class="fas fa-star"></i>
-                28星宿天体星图
+                <i class="fas fa-star"></i> 28星宿天体星图
             </div>
-
             <div class="control-group">
                 <label class="info-label">观测时间</label>
-                <input type="datetime-local" id="timeInput" class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded mt-2">
+                <input type="datetime-local" id="timeInput"
+                    class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded mt-2">
                 <button id="updateBtn" class="btn btn-primary mt-2">更新星图</button>
             </div>
-
             <div class="control-group">
                 <label class="info-label">音乐时长设置</label>
                 <div class="duration-control">
-                    <input type="number" id="durationInput" class="duration-input" value="45" min="15" max="180" step="5">
+                    <input type="number" id="durationInput" class="duration-input" value="45" min="15" max="180"
+                        step="5">
                     <span class="text-xs text-gray-400">秒</span>
                 </div>
                 <div class="flex gap-1 mt-2">
@@ -420,9 +394,8 @@
                     <button class="duration-preset" data-duration="60">60s</button>
                     <button class="duration-preset" data-duration="90">90s</button>
                 </div>
-                <div class="text-xs text-gray-400 mt-1">推荐45秒，生成更完整的音乐作品</div>
+                <div class="text-xs text-gray-400 mt-1">推荐45秒，生成更完整的节气音乐</div>
             </div>
-
             <div class="control-group">
                 <label class="info-label">旋转控制</label>
                 <div class="rotation-controls mt-2">
@@ -432,7 +405,6 @@
                     <button id="fastBtn" class="rotation-btn">快速</button>
                 </div>
             </div>
-
             <div class="control-group">
                 <label class="info-label">显示选项</label>
                 <div class="mt-2 space-y-2">
@@ -450,7 +422,6 @@
                     </label>
                 </div>
             </div>
-
             <div class="constellation-legend">
                 <div class="section-title">四象图例</div>
                 <div class="legend-item">
@@ -470,9 +441,8 @@
                     <span>北方玄武 (7宿)</span>
                 </div>
             </div>
-
             <button id="generateMusicBtn" class="btn btn-secondary">
-                <i class="fas fa-music"></i> 生成音乐
+                <i class="fas fa-music"></i> 生成节气音乐
             </button>
         </div>
 
@@ -489,68 +459,61 @@
         <!-- 信息面板 -->
         <div class="info-panel">
             <div class="section-title">
-                <i class="fas fa-moon"></i>
-                天文信息
+                <i class="fas fa-sun"></i> 天文信息
             </div>
             <div class="info-item">
                 <span class="info-label">当前时间:</span>
                 <span class="info-value" id="currentTime">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">月亮星宿:</span>
-                <span class="info-value" id="moonMansion">--</span>
+                <span class="info-label">太阳星次:</span>
+                <span class="info-value" id="zodiacSign">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">对应五行:</span>
-                <span class="info-value" id="element">--</span>
+                <span class="info-label">对应节气:</span>
+                <span class="info-value" id="solarTerm">--</span>
             </div>
             <div class="info-item">
-                <span class="info-label">黄经度数:</span>
+                <span class="info-label">太阳黄经:</span>
                 <span class="info-value" id="eclipticLon">--°</span>
             </div>
-
             <div class="section-title mt-6">
-                <i class="fas fa-music"></i>
-                音乐参数
+                <i class="fas fa-music"></i> 音乐参数
                 <span class="duration-display" id="durationDisplay">45秒</span>
             </div>
             <div class="info-item">
                 <span class="info-label">乐器:</span>
-                <span class="info-value" id="instrument">--</span>
+                <span class="info-value" id="instrument">传统民乐</span>
             </div>
             <div class="info-item">
                 <span class="info-label">调式:</span>
-                <span class="info-value" id="mode">--</span>
+                <span class="info-value" id="mode">五声音阶</span>
             </div>
             <div class="info-item">
                 <span class="info-label">风格:</span>
-                <span class="info-value">cinematic, ethereal</span>
+                <span class="info-value">节气主题</span>
             </div>
-
             <div class="section-title mt-6">
-                <i class="fas fa-play"></i>
-                音乐播放器
+                <i class="fas fa-play"></i> 音乐播放器
             </div>
-            
             <div id="musicStatusContainer">
                 <div class="music-status-card status-loading" id="musicStatusCard">
                     <div class="flex items-center gap-2 mb-2">
                         <i class="fas fa-info-circle"></i>
-                        <span class="font-bold">准备生成音乐</span>
+                        <span class="font-bold">准备生成节气音乐</span>
                     </div>
-                    <div id="musicStatusText">点击"生成音乐"按钮开始</div>
+                    <div id="musicStatusText">点击"生成节气音乐"按钮开始</div>
                 </div>
             </div>
-
             <div id="musicParamsDisplay" style="display: none;">
                 <div class="music-params">
                     <div class="param-item">
-                        <span class="param-label">星宿:</span>
-                        <span class="param-value" id="paramMansion">--</span>
+                        <span class="param-label">星次:</span>
+                        <span class="param-value" id="paramZodiac">--</span>
                     </div>
                     <div class="param-item">
-                        <span class="param-label">五行:</span>
-                        <span class="param-value" id="paramElement">--</span>
+                        <span class="param-label">节气:</span>
+                        <span class="param-value" id="paramSolarTerm">--</span>
                     </div>
                     <div class="param-item">
                         <span class="param-label">乐器:</span>
@@ -566,18 +529,15 @@
                     </div>
                 </div>
             </div>
-
             <div id="enhancedPromptDisplay" style="display: none;">
                 <div class="enhanced-prompt">
                     <span class="prompt-label">
-                        <i class="fas fa-magic"></i> 增强提示词：
+                        <i class="fas fa-magic"></i> 节气音乐提示词：
                     </span>
                     <div id="enhancedPromptText">--</div>
                 </div>
             </div>
-
             <audio id="musicPlayer" controls class="w-full mt-3" style="display: none;"></audio>
-            
             <div id="retrySection" style="display: none;">
                 <div class="retry-options">
                     <button id="retryBtn" class="retry-btn btn-warning">
@@ -589,15 +549,13 @@
                 </div>
                 <div class="timeout-help mt-3">
                     <div class="help-title">
-                        <i class="fas fa-lightbulb"></i>
-                        遇到超时问题？
+                        <i class="fas fa-lightbulb"></i> 遇到超时问题？
                     </div>
                     <div>• 外部音乐服务可能繁忙</div>
                     <div>• 较长时长的音乐需要更多生成时间</div>
                     <div>• 天文计算已完成，只需重新生成音频</div>
                 </div>
             </div>
-
             <div id="downloadSection" style="display: none;" class="mt-4">
                 <button id="downloadMusic" class="btn btn-success mb-2">
                     <i class="fas fa-download"></i> 下载音乐
@@ -609,15 +567,23 @@
         </div>
     </div>
 
-    <!-- 多个CDN备用方案 -->
+    <!-- JavaScript代码 -->
     <script>
-        (function() {
+        // 全局变量
+        let scene, camera, renderer, starField, rotationSpeed = 0;
+        let constellationGroups = [];
+        let isRotating = false;
+        let currentData = null;
+        let retryCount = 0;
+        let maxRetries = 3;
+
+        // Three.js CDN加载
+        (function () {
             const cdnSources = [
                 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
                 'https://unpkg.com/three@0.128.0/build/three.min.js'
             ];
-
             let currentCDN = 0;
 
             function loadThreeJS() {
@@ -630,18 +596,17 @@
 
                 const script = document.createElement('script');
                 script.src = cdnSources[currentCDN];
-                script.onload = function() {
+                script.onload = function () {
                     console.log('Three.js加载成功:', cdnSources[currentCDN]);
                     initStarMap();
                 };
-                script.onerror = function() {
+                script.onerror = function () {
                     console.warn('CDN失败:', cdnSources[currentCDN]);
                     currentCDN++;
                     loadThreeJS();
                 };
                 document.head.appendChild(script);
             }
-
             loadThreeJS();
         })();
 
@@ -649,114 +614,63 @@
         const CONSTELLATION_DATA = {
             // 东方青龙七宿
             "角": {
-                color: "#4facfe",
-                stars: [
-                    {name: "角宿一", ra: 201.298, dec: -11.161, mag: 0.97},
-                    {name: "角宿二", ra: 213.915, dec: -0.596, mag: 3.38},
-                    {name: "角宿三", ra: 201.5, dec: -10.5, mag: 4.2}
-                ],
-                connections: [[0,1], [1,2], [2,0]]
+                color: "#4facfe", stars: [
+                    { name: "角宿一", ra: 201.298, dec: -11.161, mag: 0.97 },
+                    { name: "角宿二", ra: 213.915, dec: -0.596, mag: 3.38 }
+                ], connections: [[0, 1]]
             },
             "亢": {
-                color: "#4facfe",
-                stars: [
-                    {name: "亢宿一", ra: 215.676, dec: -9.383, mag: 4.16},
-                    {name: "亢宿二", ra: 218.877, dec: -12.848, mag: 4.07},
-                    {name: "亢宿三", ra: 220.5, dec: -10.2, mag: 4.5},
-                    {name: "亢宿四", ra: 216.8, dec: -8.9, mag: 5.1}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0]]
+                color: "#4facfe", stars: [
+                    { name: "亢宿一", ra: 215.676, dec: -9.383, mag: 4.16 },
+                    { name: "亢宿二", ra: 218.877, dec: -12.848, mag: 4.07 }
+                ], connections: [[0, 1]]
             },
             "心": {
-                color: "#4facfe",
-                stars: [
-                    {name: "心宿一", ra: 243.587, dec: -28.216, mag: 2.89},
-                    {name: "心宿二", ra: 247.352, dec: -26.432, mag: 0.96},
-                    {name: "心宿三", ra: 245.297, dec: -25.592, mag: 2.70}
-                ],
-                connections: [[0,1], [1,2]]
+                color: "#4facfe", stars: [
+                    { name: "心宿一", ra: 243.587, dec: -28.216, mag: 2.89 },
+                    { name: "心宿二", ra: 247.352, dec: -26.432, mag: 0.96 }
+                ], connections: [[0, 1]]
             },
             // 南方朱雀七宿
             "井": {
-                color: "#ff6b6b",
-                stars: [
-                    {name: "井宿一", ra: 93.719, dec: 22.514, mag: 3.53},
-                    {name: "井宿二", ra: 95.241, dec: 22.964, mag: 4.45},
-                    {name: "井宿三", ra: 93.506, dec: 24.398, mag: 3.35},
-                    {name: "井宿四", ra: 92.946, dec: 21.982, mag: 4.97}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0], [0,2], [1,3]]
+                color: "#ff6b6b", stars: [
+                    { name: "井宿一", ra: 93.719, dec: 22.514, mag: 3.53 },
+                    { name: "井宿二", ra: 95.241, dec: 22.964, mag: 4.45 }
+                ], connections: [[0, 1]]
             },
             "鬼": {
-                color: "#ff6b6b",
-                stars: [
-                    {name: "鬼宿一", ra: 130.821, dec: 19.841, mag: 3.94},
-                    {name: "鬼宿二", ra: 131.171, dec: 21.469, mag: 4.67},
-                    {name: "鬼宿三", ra: 130.109, dec: 20.569, mag: 4.02},
-                    {name: "鬼宿四", ra: 129.886, dec: 18.154, mag: 4.26}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,0]]
+                color: "#ff6b6b", stars: [
+                    { name: "鬼宿一", ra: 130.821, dec: 19.841, mag: 3.94 },
+                    { name: "鬼宿二", ra: 131.171, dec: 21.469, mag: 4.67 }
+                ], connections: [[0, 1]]
             },
             // 西方白虎七宿
             "昴": {
-                color: "#ffffff",
-                stars: [
-                    {name: "昴宿一", ra: 56.871, dec: 24.105, mag: 5.65},
-                    {name: "昴宿二", ra: 57.290, dec: 24.367, mag: 4.30},
-                    {name: "昴宿三", ra: 56.217, dec: 24.283, mag: 4.18},
-                    {name: "昴宿四", ra: 56.456, dec: 24.011, mag: 5.45},
-                    {name: "昴宿五", ra: 56.530, dec: 24.498, mag: 5.76},
-                    {name: "昴宿六", ra: 57.297, dec: 24.052, mag: 4.62},
-                    {name: "昴宿七", ra: 65.734, dec: 25.948, mag: 4.14}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,6], [6,0], [0,3], [1,4], [2,5]]
+                color: "#ffffff", stars: [
+                    { name: "昴宿一", ra: 56.871, dec: 24.105, mag: 5.65 },
+                    { name: "昴宿二", ra: 57.290, dec: 24.367, mag: 4.30 }
+                ], connections: [[0, 1]]
             },
             "参": {
-                color: "#ffffff",
-                stars: [
-                    {name: "参宿一", ra: 85.190, dec: -1.202, mag: 1.70},
-                    {name: "参宿二", ra: 84.053, dec: -1.944, mag: 2.23},
-                    {name: "参宿三", ra: 83.858, dec: -5.910, mag: 2.25},
-                    {name: "参宿四", ra: 88.793, dec: 7.407, mag: 0.45},
-                    {name: "参宿五", ra: 84.411, dec: -1.201, mag: 2.77},
-                    {name: "参宿六", ra: 82.061, dec: -0.180, mag: 2.09},
-                    {name: "参宿七", ra: 81.283, dec: 6.350, mag: 1.64}
-                ],
-                connections: [[0,1], [1,2], [3,4], [4,5], [5,6], [6,3]]
+                color: "#ffffff", stars: [
+                    { name: "参宿一", ra: 85.190, dec: -1.202, mag: 1.70 },
+                    { name: "参宿二", ra: 84.053, dec: -1.944, mag: 2.23 }
+                ], connections: [[0, 1]]
             },
             // 北方玄武七宿
             "斗": {
-                color: "#a8a8a8",
-                stars: [
-                    {name: "斗宿一", ra: 278.110, dec: -25.421, mag: 3.17},
-                    {name: "斗宿二", ra: 279.234, dec: -26.297, mag: 2.81},
-                    {name: "斗宿三", ra: 285.653, dec: -29.828, mag: 3.93},
-                    {name: "斗宿四", ra: 290.660, dec: -30.424, mag: 2.60},
-                    {name: "斗宿五", ra: 296.565, dec: -29.578, mag: 3.89},
-                    {name: "斗宿六", ra: 298.969, dec: -26.684, mag: 2.02}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5]]
+                color: "#a8a8a8", stars: [
+                    { name: "斗宿一", ra: 278.110, dec: -25.421, mag: 3.17 },
+                    { name: "斗宿二", ra: 279.234, dec: -26.297, mag: 2.81 }
+                ], connections: [[0, 1]]
             },
             "牛": {
-                color: "#a8a8a8",
-                stars: [
-                    {name: "牛宿一", ra: 304.413, dec: -12.759, mag: 3.08},
-                    {name: "牛宿二", ra: 308.300, dec: -17.847, mag: 4.28},
-                    {name: "牛宿三", ra: 311.553, dec: -17.233, mag: 4.51},
-                    {name: "牛宿四", ra: 307.372, dec: -24.779, mag: 4.07},
-                    {name: "牛宿五", ra: 309.387, dec: -14.781, mag: 4.48},
-                    {name: "牛宿六", ra: 314.293, dec: -18.299, mag: 4.11}
-                ],
-                connections: [[0,1], [1,2], [2,3], [3,4], [4,5], [5,0]]
+                color: "#a8a8a8", stars: [
+                    { name: "牛宿一", ra: 304.413, dec: -12.759, mag: 3.08 },
+                    { name: "牛宿二", ra: 308.300, dec: -17.847, mag: 4.28 }
+                ], connections: [[0, 1]]
             }
         };
-
-        let scene, camera, renderer, starField, rotationSpeed = 0;
-        let constellationGroups = [];
-        let isRotating = false;
-        let currentData = null;
-        let retryCount = 0;
-        let maxRetries = 3;
 
         function initStarMap() {
             try {
@@ -771,13 +685,12 @@
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
                 renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-                
                 renderer.setSize(container.clientWidth, container.clientHeight);
                 renderer.setClearColor(0x000011, 1);
 
                 // 创建星空背景
                 createBackgroundStars();
-                
+
                 // 创建星宿群组
                 createConstellationGroups();
 
@@ -786,7 +699,7 @@
 
                 // 设置事件监听
                 setupEventListeners();
-                
+
                 // 开始动画循环
                 animate();
 
@@ -795,7 +708,6 @@
                 updateAstronomyData();
 
                 document.getElementById('statusIndicator').textContent = '星图加载完成';
-
             } catch (error) {
                 console.error('星图初始化失败:', error);
                 document.getElementById('statusIndicator').textContent = '初始化失败: ' + error.message;
@@ -813,11 +725,11 @@
                 const radius = 80;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
-                
+
                 positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
                 positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
                 positions[i * 3 + 2] = radius * Math.cos(phi);
-                
+
                 const brightness = Math.random() * 0.8 + 0.2;
                 colors[i * 3] = brightness;
                 colors[i * 3 + 1] = brightness;
@@ -847,20 +759,17 @@
                 const starMeshes = [];
                 data.stars.forEach((star, index) => {
                     const position = sphericalToCartesian(star.ra, star.dec, 90);
-                    
-                    // 根据星等设置大小
                     const size = Math.max(0.3, (6 - star.mag) * 0.3);
                     const starGeometry = new THREE.SphereGeometry(size, 8, 8);
-                    const starMaterial = new THREE.MeshBasicMaterial({ 
+                    const starMaterial = new THREE.MeshBasicMaterial({
                         color: new THREE.Color(data.color),
                         transparent: true,
                         opacity: 0.9
                     });
-                    
+
                     const starMesh = new THREE.Mesh(starGeometry, starMaterial);
                     starMesh.position.copy(position);
                     starMesh.userData = { name: star.name, magnitude: star.mag };
-                    
                     group.add(starMesh);
                     starMeshes.push(starMesh);
                 });
@@ -869,23 +778,21 @@
                 if (data.connections && data.connections.length > 0) {
                     const lineGeometry = new THREE.BufferGeometry();
                     const positions = [];
-                    
                     data.connections.forEach(connection => {
                         const start = starMeshes[connection[0]].position;
                         const end = starMeshes[connection[1]].position;
                         positions.push(start.x, start.y, start.z);
                         positions.push(end.x, end.y, end.z);
                     });
-                    
+
                     lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-                    
                     const lineMaterial = new THREE.LineBasicMaterial({
                         color: new THREE.Color(data.color),
                         transparent: true,
                         opacity: 0.6,
                         linewidth: 2
                     });
-                    
+
                     const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
                     group.add(lines);
                 }
@@ -895,28 +802,24 @@
                 labelCanvas.width = 128;
                 labelCanvas.height = 64;
                 const ctx = labelCanvas.getContext('2d');
-                
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                 ctx.fillRect(0, 0, 128, 64);
                 ctx.fillStyle = data.color;
                 ctx.font = 'bold 20px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText(name + '宿', 64, 35);
-                
+
                 const labelTexture = new THREE.CanvasTexture(labelCanvas);
-                const labelMaterial = new THREE.MeshBasicMaterial({ 
-                    map: labelTexture, 
-                    transparent: true 
-                });
+                const labelMaterial = new THREE.MeshBasicMaterial({ map: labelTexture, transparent: true });
                 const labelGeometry = new THREE.PlaneGeometry(8, 4);
                 const labelMesh = new THREE.Mesh(labelGeometry, labelMaterial);
-                
+
                 // 计算星宿中心位置
                 const centerPosition = new THREE.Vector3();
                 starMeshes.forEach(star => centerPosition.add(star.position));
                 centerPosition.divideScalar(starMeshes.length);
                 centerPosition.normalize().multiplyScalar(95);
-                
+
                 labelMesh.position.copy(centerPosition);
                 group.add(labelMesh);
 
@@ -928,7 +831,6 @@
         function sphericalToCartesian(ra, dec, radius) {
             const phi = (90 - dec) * Math.PI / 180;
             const theta = ra * Math.PI / 180;
-            
             return new THREE.Vector3(
                 radius * Math.sin(phi) * Math.cos(theta),
                 radius * Math.cos(phi),
@@ -953,10 +855,8 @@
                         x: e.clientX - previousMousePosition.x,
                         y: e.clientY - previousMousePosition.y
                     };
-
                     scene.rotation.y += deltaMove.x * 0.01;
                     scene.rotation.x += deltaMove.y * 0.01;
-
                     previousMousePosition = { x: e.clientX, y: e.clientY };
                 }
             });
@@ -970,7 +870,6 @@
                 e.preventDefault();
                 const zoom = e.deltaY > 0 ? 1.1 : 0.9;
                 camera.position.multiplyScalar(zoom);
-                
                 const distance = camera.position.length();
                 if (distance < 50) camera.position.normalize().multiplyScalar(50);
                 if (distance > 300) camera.position.normalize().multiplyScalar(300);
@@ -979,7 +878,6 @@
             // 时长控制
             const durationInput = document.getElementById('durationInput');
             const durationDisplay = document.getElementById('durationDisplay');
-            
             durationInput.addEventListener('input', (e) => {
                 const duration = parseInt(e.target.value);
                 durationDisplay.textContent = `${duration}秒`;
@@ -1034,9 +932,7 @@
         function setRotationSpeed(speed) {
             rotationSpeed = speed;
             isRotating = speed > 0;
-
             document.querySelectorAll('.rotation-btn').forEach(btn => btn.classList.remove('active'));
-            
             if (speed === 0) document.getElementById('pauseBtn').classList.add('active');
             else if (speed === 0.001) document.getElementById('slowBtn').classList.add('active');
             else if (speed === 0.005) document.getElementById('normalBtn').classList.add('active');
@@ -1063,7 +959,6 @@
 
         function animate() {
             requestAnimationFrame(animate);
-
             if (isRotating) {
                 scene.rotation.y += rotationSpeed;
             }
@@ -1089,6 +984,7 @@
                 const timeInput = document.getElementById('timeInput').value;
                 const params = new URLSearchParams();
                 if (timeInput) params.append('date', timeInput);
+                params.append('mode', 'visualization');  // 可视化模式
 
                 const response = await fetch(`/api/mansion?${params}`);
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1098,7 +994,11 @@
 
                 currentData = data;
                 updateUI(data);
-                highlightMoonMansion(data.mansion);
+
+                // 可视化模式：高亮相关星宿
+                if (data.mode === 'visualization' && data.mansions_in_zodiac) {
+                    highlightZodiacMansions(data.mansions_in_zodiac);
+                }
 
             } catch (error) {
                 console.error('更新天文数据失败:', error);
@@ -1107,26 +1007,37 @@
         }
 
         function updateUI(data) {
-            document.getElementById('currentTime').textContent = new Date(data.timestamp).toLocaleString('zh-CN');
-            document.getElementById('moonMansion').textContent = data.mansion + '宿';
-            document.getElementById('element').textContent = data.element;
-            document.getElementById('eclipticLon').textContent = data.moon_ecliptic_lon.toFixed(2) + '°';
-            document.getElementById('instrument').textContent = data.instrument;
-            document.getElementById('mode').textContent = data.mode;
+            const timeStr = data.request_time || data.timestamp || new Date().toISOString();
+            document.getElementById('currentTime').textContent = new Date(timeStr).toLocaleString('zh-CN');
+
+            // 显示十二星次和节气信息
+            if (data.zodiac_sign) {
+                document.getElementById('zodiacSign').textContent = data.zodiac_sign + '星次';
+
+                if (data.solar_term) {
+                    document.getElementById('solarTerm').textContent = data.solar_term;
+                } else if (data.mansions_in_zodiac) {
+                    document.getElementById('solarTerm').textContent = data.mansions_in_zodiac.join('、') + '宿';
+                }
+            }
+
+            // 显示太阳黄经
+            const longitude = data.sun_position?.ecliptic_longitude || data.sun_ecliptic_longitude || 0;
+            document.getElementById('eclipticLon').textContent = longitude.toFixed(2) + '°';
         }
 
-        function highlightMoonMansion(mansion) {
+        function highlightZodiacMansions(mansions) {
             constellationGroups.forEach(group => {
-                const isCurrentMansion = group.name === mansion;
+                const isInZodiac = mansions.includes(group.name);
                 group.children.forEach(child => {
                     if (child.material) {
-                        if (isCurrentMansion) {
+                        if (isInZodiac) {
                             child.material.opacity = 1.0;
                             if (child.material.emissive) {
-                                child.material.emissive.setHex(0x331100);
+                                child.material.emissive.setHex(0x003311);  // 绿色高亮表示当前星次
                             }
                         } else {
-                            child.material.opacity = 0.6;
+                            child.material.opacity = 0.4;
                             if (child.material.emissive) {
                                 child.material.emissive.setHex(0x000000);
                             }
@@ -1145,28 +1056,26 @@
             const generateBtn = document.getElementById('generateMusicBtn');
             const originalText = generateBtn.innerHTML;
             const duration = parseInt(document.getElementById('durationInput').value);
-            
+
             try {
-                // 禁用按钮，显示加载状态
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成节气音乐...';
                 generateBtn.disabled = true;
-                
-                showMusicStatus('loading', `正在生成${duration}秒音乐...`, '正在计算天文参数并调用音乐生成服务');
-                showLoadingIndicator(true, `生成${duration}秒音乐中...`);
-                
+                showMusicStatus('loading', `正在生成${duration}秒节气音乐...`, '正在根据节气特色生成音乐');
+                showLoadingIndicator(true, `生成${duration}秒节气音乐中...`);
+
                 const requestData = {
                     date: document.getElementById('timeInput').value,
+                    duration: duration,
                     lat: 22.3964,
                     lon: 114.1095,
-                    style: 'cinematic, ethereal',
-                    duration: duration
+                    is_lunar: false
                 };
-                
-                console.log('发送音乐生成请求:', requestData);
-                
+
+                console.log('发送节气音乐生成请求:', requestData);
+
                 const response = await fetch('/api/generate_music', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -1176,23 +1085,22 @@
                 if (!response.ok) {
                     throw new Error(`服务器错误: ${response.status} ${response.statusText}`);
                 }
-                
+
                 const result = await response.json();
-                console.log('收到音乐生成响应:', result);
-                
+                console.log('收到节气音乐生成响应:', result);
+
                 if (!result.success) {
-                    throw new Error(result.error || '音乐生成失败');
+                    throw new Error(result.error || '节气音乐生成失败');
                 }
 
                 handleMusicResult(result);
 
             } catch (error) {
-                console.error('音乐生成失败:', error);
-                showMusicStatus('error', '音乐生成失败', error.message);
-                retryCount = 0; // 重置重试计数
+                console.error('节气音乐生成失败:', error);
+                showMusicStatus('error', '节气音乐生成失败', error.message);
+                retryCount = 0;
                 showRetryOptions(true);
             } finally {
-                // 恢复按钮状态
                 generateBtn.innerHTML = originalText;
                 generateBtn.disabled = false;
                 showLoadingIndicator(false);
@@ -1203,45 +1111,51 @@
             console.log('处理音乐结果:', result);
 
             // 显示音乐参数
-            if (result.parameters) {
+            if (result.astronomy && result.parameters) {
                 showMusicParams(result.astronomy, result.parameters);
-                
-                // 显示增强提示词
-                if (result.parameters.enhanced_prompt) {
-                    showEnhancedPrompt(result.parameters.enhanced_prompt);
+
+                // 显示节气音乐提示词
+                if (result.parameters.prompt || result.parameters.enhanced_prompt) {
+                    showEnhancedPrompt(result.parameters.prompt || result.parameters.enhanced_prompt);
                 }
             }
 
             // 检查音乐生成是否成功
-            if (result.music && result.music.download_url && result.music.success !== false) {
-                // 音乐生成成功
+            if (result.music && result.music.success !== false) {
                 const duration = result.parameters?.duration || 45;
-                showMusicStatus('success', `${duration}秒音乐生成成功！`, '正在加载音频文件...');
-                loadAndPlayAudio(result.music.download_url, result.music.pdf_download_url);
-                showRetryOptions(false);
-                
+
+                if (result.music.download_url) {
+                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
+                    loadAndPlayAudio(result.music.download_url, result.music.pdf_download_url);
+                    showRetryOptions(false);
+                } else if (result.music.id || (typeof result.music === 'string' && result.music.length > 0)) {
+                    const musicId = result.music.id || result.music;
+                    console.log('尝试构造音频URL，ID:', musicId);
+                    const downloadUrl = `https://yue-inst.ngrok.app/download/${musicId}`;
+                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
+                    loadAndPlayAudio(downloadUrl);
+                    showRetryOptions(false);
+                } else {
+                    showMusicStatus('warning', '音乐生成完成但无法获取音频文件', '服务器返回了结果但没有可用的下载链接');
+                    showRetryOptions(true);
+                }
             } else if (result.music && result.music.success === false) {
-                // 音乐生成失败，但天文计算成功
                 const errorMsg = result.music.error || '外部音乐服务超时';
                 const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒音乐参数生成成功`, 
-                    `天文计算已完成，但音频生成失败：${errorMsg}`);
+                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, `天文计算已完成，但音频生成失败：${errorMsg}`);
                 showRetryOptions(true);
-                
             } else {
-                // 无音乐数据
                 const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒音乐参数生成成功`, 
-                    '天文数据计算完成，但音频文件生成失败，请重试');
+                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, '天文数据计算完成，但音频文件生成失败，请重试');
                 showRetryOptions(true);
             }
         }
 
         function showMusicParams(astronomy, parameters) {
-            document.getElementById('paramMansion').textContent = astronomy.mansion + '宿';
-            document.getElementById('paramElement').textContent = parameters.element;
-            document.getElementById('paramInstrument').textContent = parameters.instrument;
-            document.getElementById('paramMode').textContent = parameters.mode;
+            document.getElementById('paramZodiac').textContent = astronomy.zodiac_sign || '--';
+            document.getElementById('paramSolarTerm').textContent = astronomy.solar_term || parameters.solar_term || '--';
+            document.getElementById('paramInstrument').textContent = parameters.instrument || '--';
+            document.getElementById('paramMode').textContent = parameters.mode || '--';
             document.getElementById('paramDuration').textContent = (parameters.duration || 45) + '秒';
             document.getElementById('musicParamsDisplay').style.display = 'block';
         }
@@ -1253,54 +1167,49 @@
 
         async function loadAndPlayAudio(audioUrl, pdfUrl = null) {
             const player = document.getElementById('musicPlayer');
-            
             try {
                 showMusicStatus('loading', '加载音频文件...', '正在从服务器加载音乐文件');
-                
-                // 显示播放器
+
                 player.style.display = 'block';
                 player.src = audioUrl;
-                
-                // 添加音频事件监听器
+
                 player.onloadstart = () => {
                     showMusicStatus('loading', '正在加载音频...', '音频文件开始下载');
                 };
-                
+
                 player.oncanplay = () => {
                     showMusicStatus('success', '音频加载完成', '可以开始播放音乐');
                 };
-                
+
                 player.onplaying = () => {
-                    showMusicStatus('success', '正在播放音乐 🎵', '享受由星宿生成的美妙音乐');
+                    showMusicStatus('success', '正在播放节气音乐 🎵', '享受由星次和节气生成的美妙音乐');
                 };
-                
+
                 player.onpause = () => {
                     showMusicStatus('success', '音乐已暂停', '点击播放按钮继续');
                 };
-                
+
                 player.onended = () => {
                     showMusicStatus('success', '播放完成', '音乐播放结束');
                 };
-                
+
                 player.onerror = (e) => {
                     console.error('音频播放错误:', e);
-                    showMusicStatus('error', '音频播放失败', 
-                        `错误代码: ${player.error ? player.error.code : '未知'}`);
+                    const errorCode = player.error ? player.error.code : '未知';
+                    showMusicStatus('error', '音频播放失败', `错误代码: ${errorCode}`);
                     showRetryOptions(true);
                 };
-                
-                // 设置下载按钮
+
                 setupDownloadButtons(audioUrl, pdfUrl);
-                
-                // 尝试自动播放
+
                 try {
                     await player.play();
-                    showMusicStatus('success', '自动播放已开始 🎵', '正在播放根据星宿生成的音乐');
+                    showMusicStatus('success', '自动播放已开始 🎵', '正在播放根据节气生成的音乐');
                 } catch (autoplayError) {
                     console.log('自动播放被阻止:', autoplayError);
                     showMusicStatus('success', '音频已就绪', '由于浏览器策略，请手动点击播放按钮');
                 }
-                
+
             } catch (error) {
                 console.error('音频处理失败:', error);
                 showMusicStatus('error', '音频处理失败', error.message);
@@ -1312,31 +1221,35 @@
             const downloadSection = document.getElementById('downloadSection');
             const downloadMusic = document.getElementById('downloadMusic');
             const downloadSheet = document.getElementById('downloadSheet');
-            
+
             if (audioUrl) {
                 downloadMusic.onclick = () => {
                     const link = document.createElement('a');
                     link.href = audioUrl;
-                    link.download = `星宿音乐_${new Date().getTime()}.mp3`;
+                    const timestamp = new Date().getTime();
+                    const solarTerm = currentData?.solar_term || '节气';
+                    link.download = `${solarTerm}音乐_${timestamp}.mp3`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                 };
                 downloadMusic.style.display = 'block';
             }
-            
+
             if (pdfUrl) {
                 downloadSheet.onclick = () => {
                     const link = document.createElement('a');
                     link.href = pdfUrl;
-                    link.download = `星宿乐谱_${new Date().getTime()}.pdf`;
+                    const timestamp = new Date().getTime();
+                    const solarTerm = currentData?.solar_term || '节气';
+                    link.download = `${solarTerm}乐谱_${timestamp}.pdf`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                 };
                 downloadSheet.style.display = 'block';
             }
-            
+
             if (audioUrl || pdfUrl) {
                 downloadSection.style.display = 'block';
             }
@@ -1344,34 +1257,18 @@
 
         function showMusicStatus(type, title, description) {
             const card = document.getElementById('musicStatusCard');
-            const statusText = document.getElementById('musicStatusText');
-            
-            // 移除所有状态类
             card.className = 'music-status-card';
-            
-            // 添加对应状态类
             card.classList.add(`status-${type}`);
-            
-            // 设置图标
+
             let icon;
             switch (type) {
-                case 'success':
-                    icon = 'fas fa-check-circle';
-                    break;
-                case 'warning':
-                    icon = 'fas fa-exclamation-triangle';
-                    break;
-                case 'error':
-                    icon = 'fas fa-times-circle';
-                    break;
-                case 'loading':
-                    icon = 'fas fa-spinner fa-spin';
-                    break;
-                default:
-                    icon = 'fas fa-info-circle';
+                case 'success': icon = 'fas fa-check-circle'; break;
+                case 'warning': icon = 'fas fa-exclamation-triangle'; break;
+                case 'error': icon = 'fas fa-times-circle'; break;
+                case 'loading': icon = 'fas fa-spinner fa-spin'; break;
+                default: icon = 'fas fa-info-circle';
             }
-            
-            // 更新内容
+
             card.innerHTML = `
                 <div class="flex items-center gap-2 mb-2">
                     <i class="${icon}"></i>
@@ -1384,14 +1281,10 @@
         function showRetryOptions(show) {
             const retrySection = document.getElementById('retrySection');
             retrySection.style.display = show ? 'block' : 'none';
-            
             if (show) {
-                // 更新重试按钮状态
                 const retryBtn = document.getElementById('retryBtn');
                 const forceRetryBtn = document.getElementById('forceRetryBtn');
-                
                 retryBtn.innerHTML = `<i class="fas fa-redo"></i> 重试 (${retryCount + 1}/${maxRetries})`;
-                
                 if (retryCount >= maxRetries - 1) {
                     retryBtn.disabled = true;
                     forceRetryBtn.innerHTML = '<i class="fas fa-bolt"></i> 强制重试';
@@ -1404,18 +1297,17 @@
                 showMusicStatus('error', '重试次数已达上限', '请稍后再试或检查网络连接');
                 return;
             }
-            
+
             if (!force) {
                 retryCount++;
             } else {
-                retryCount = 0; // 强制重试时重置计数
+                retryCount = 0;
             }
-            
-            // 等待一段时间后重试
+
             const waitTime = force ? 1000 : (retryCount * 2000);
             const duration = parseInt(document.getElementById('durationInput').value);
-            showMusicStatus('loading', '准备重试...', `等待 ${waitTime/1000} 秒后重新生成${duration}秒音乐`);
-            
+            showMusicStatus('loading', '准备重试...', `等待 ${waitTime / 1000} 秒后重新生成${duration}秒节气音乐`);
+
             setTimeout(() => {
                 generateMusic();
             }, waitTime);
@@ -1424,7 +1316,6 @@
         function showLoadingIndicator(show, text = '加载中...') {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const loadingText = document.getElementById('loadingText');
-            
             if (show) {
                 loadingText.textContent = text;
                 loadingIndicator.style.display = 'block';
@@ -1434,4 +1325,5 @@
         }
     </script>
 </body>
+
 </html>

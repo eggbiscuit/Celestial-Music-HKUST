@@ -11,9 +11,19 @@ from datetime import datetime
 
 # 导入自定义模块
 try:
-    from modules.astronomy import calc_mansion, get_all_mansions_positions, get_moon_position
+    from modules.astronomy import (
+        get_sun_position,
+        convert_lunar_to_solar, 
+        match_zodiac_sign_interval,
+        determine_solar_term,
+        get_28_mansions_for_display,
+        generate_solar_term_music_prompt,
+        get_all_mansions_positions,
+        # 保留兼容性
+        calc_mansion, get_moon_position
+    )
     from modules.wuxing import get_element
-    from modules.mapping import map_to_params, get_full_music_config
+    from modules.mapping import map_to_params, get_full_music_config, get_solar_term_music_config
     from modules.generation import generate_music
 except ImportError as e:
     print(f"模块导入错误: {e}")
@@ -27,8 +37,8 @@ logger = logging.getLogger(__name__)
 # 创建FastAPI应用
 app = FastAPI(
     title="28星宿天体音乐生成器",
-    description="基于传统中国天文学和五行理论的音乐生成系统",
-    version="2.1.0"
+    description="基于传统中国天文学和十二星次的音乐生成系统",
+    version="3.0.0"
 )
 
 # CORS中间件
@@ -49,6 +59,7 @@ class TimeSelection(BaseModel):
     month: int
     day: int
     hour: int
+    is_lunar: bool = False
 
 class LocationSelection(BaseModel):
     latitude: float
@@ -59,8 +70,8 @@ class AstronomyRequest(BaseModel):
     time_data: TimeSelection
     location_data: LocationSelection
 
-# ==================== 页面路由 ====================
 
+# ==================== 页面路由 ====================
 @app.get("/")
 async def time_selector():
     """第一步：时间选择页面"""
@@ -71,132 +82,301 @@ async def location_selector():
     """第二步：位置选择页面"""
     return FileResponse('static/location-selector.html')
 
+@app.get("/sphere")
+async def sphere():
+    """第三步：太阳节气音乐页面"""
+    return FileResponse('static/sphere.html')  # 太阳/节气版本
+
+@app.get("/solar")
+async def solar():
+    """第三步：太阳节气音乐页面"""
+    return FileResponse('static/solar.html')  # 太阳/节气版本
+
 @app.get("/starmap")
 async def starmap():
     """第三步：星图音乐页面"""
     return FileResponse('static/starmap.html')
 
-# ==================== API接口 ====================
+# 🎯 添加这行
+@app.get("/stellarium_test.html")
+async def stellarium_test():
+    """Stellarium测试页面"""
+    return FileResponse('static/stellarium_test.html')
 
+@app.get("/stellarium_web_engine.html")
+async def stellarium_web_engine():
+    """Stellarium Web Engine页面"""
+    return FileResponse('static/stellarium_web_engine.html')
+
+@app.get("/api/solar-longitude")
+async def get_solar_longitude_api(
+    year: int = Query(..., description="年份"),
+    month: int = Query(..., description="月份"), 
+    day: int = Query(..., description="日期"),
+    hour: int = Query(12, description="小时")
+):
+    """获取精确的太阳黄经 - 直接使用astropy"""
+    try:
+        # 直接使用astropy计算
+        from astropy.time import Time
+        from astropy.coordinates import get_sun
+        import warnings
+        warnings.filterwarnings('ignore')
+        
+        time_str = f'{year}-{month:02d}-{day:02d} {hour:02d}:00:00'
+        time = Time(time_str, format='iso', scale='utc')
+        sun = get_sun(time)
+        longitude = sun.geocentrictrueecliptic.lon.degree % 360
+        
+        return {"longitude": round(longitude, 2)}
+        
+    except Exception as e:
+        logger.error(f"太阳黄经计算失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==================== API接口 ====================
 @app.get("/api/health")
 async def health_check():
     """健康检查接口"""
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "version": "2.1.0"
+        "version": "3.0.0"
     }
 
-@app.get("/api/mansion")
+@app.get("/api/mansion") 
 async def get_mansion_data(
-    date: Optional[str] = Query(None, description="日期时间 (ISO格式)")
+    date: Optional[str] = Query(None, description="日期时间"),
+    is_lunar: bool = Query(False, description="是否为农历"),
+    mode: str = Query("music", description="模式: music(音乐生成), mansions(获取星宿), visualization(可视化)")
 ):
-    """获取星宿数据 - 兼容原有前端调用"""
+    """获取星宿数据 - 支持三种模式"""
+    logger.info(f"🚀 ==================== API调用开始 ====================")
+    logger.info(f"📋 [API] 接收到请求参数:")
+    logger.info(f"    - 日期: {date}")
+    logger.info(f"    - 是否农历: {is_lunar}")
+    logger.info(f"    - 模式: {mode}")
+    
     try:
-        # 从SessionStorage读取时间和位置数据
-        time_data = None
-        location_data = None
+        # ==================== 步骤1: 时间解析和转换 ====================
+        logger.info(f"📅 [步骤1] 开始时间解析和转换...")
         
-        # 解析时间
         if date:
             try:
                 dt = datetime.fromisoformat(date.replace('Z', '+00:00'))
-                timestamp = dt.timestamp()
+                year, month, day, hour = dt.year, dt.month, dt.day, dt.hour
+                logger.info(f"✅ [步骤1] 日期解析成功: {year}-{month}-{day} {hour}:00")
             except ValueError:
                 dt = datetime.now()
-                timestamp = dt.timestamp()
+                year, month, day, hour = dt.year, dt.month, dt.day, dt.hour
+                logger.warning(f"⚠️ [步骤1] 日期解析失败，使用当前时间: {year}-{month}-{day} {hour}:00")
         else:
-            dt = datetime.now()
-            timestamp = dt.timestamp()
+            dt = datetime.now() 
+            year, month, day, hour = dt.year, dt.month, dt.day, dt.hour
+            logger.info(f"📅 [步骤1] 使用当前时间: {year}-{month}-{day} {hour}:00")
         
-        # 默认位置（香港）- 如果没有从SessionStorage获取到位置
-        latitude = 22.3193
-        longitude = 114.1694
+        # ==================== 步骤2: 农历转公历（如果需要） ====================
+        if is_lunar:
+            logger.info(f"🌙 [步骤2] 检测到农历标志，开始农历转公历...")
+            year, month, day = convert_lunar_to_solar(year, month, day)
+            dt = datetime(year, month, day, hour)
+            logger.info(f"✅ [步骤2] 农历转换完成，最终日期: {year}-{month}-{day} {hour}:00")
+        else:
+            logger.info(f"📅 [步骤2] 公历日期，无需转换")
         
-        logger.info(f"计算时间: {dt.isoformat()}, 位置: {latitude}, {longitude}")
+        timestamp = dt.timestamp()
+        latitude, longitude = 22.3193, 114.1694
+        logger.info(f"🌍 [步骤2] 最终时间戳: {timestamp}")
+        logger.info(f"📍 [步骤2] 观测位置: 纬度{latitude}°, 经度{longitude}°")
         
-        # 获取月亮位置
-        moon_pos = get_moon_position(timestamp, latitude, longitude)
-        logger.info(f"月亮位置数据: {moon_pos}")
+        # ==================== 步骤3: astropy计算太阳黄经 ====================
+        logger.info(f"☀️ [步骤3] 开始astropy计算太阳黄经...")
+        sun_pos = get_sun_position(timestamp, latitude, longitude)
+        if 'ecliptic_longitude' not in sun_pos:
+            raise ValueError("无法获取太阳黄经数据")
         
-        # 确保有ecliptic_longitude字段
-        if 'ecliptic_longitude' not in moon_pos:
-            if 'longitude' in moon_pos:
-                moon_pos['ecliptic_longitude'] = moon_pos['longitude']
-            else:
-                raise ValueError("无法获取月亮黄经数据")
+        logger.info(f"✅ [步骤3] 太阳黄经计算完成: {sun_pos['ecliptic_longitude']:.2f}°")
         
-        # 计算星宿
-        current_mansion = calc_mansion(moon_pos['ecliptic_longitude'])
-        element = get_element(current_mansion)
-        
-        # 获取音乐配置
-        music_config = get_full_music_config(current_mansion)
-        
-        # 构造响应数据 - 兼容原有前端
         response_data = {
             "success": True,
             "timestamp": dt.isoformat(),
-            "mansion": current_mansion,
-            "element": element,
-            "moon_ecliptic_lon": moon_pos['ecliptic_longitude'],
-            "instrument": music_config.get('instrument', 'Piano'),
-            "mode": music_config.get('mode', 'Major'),
-            "moon_position": moon_pos,
-            "music_config": music_config
+            "sun_position": sun_pos,
+            "mode": mode
         }
         
-        logger.info(f"返回数据: 月亮在{current_mansion}宿, 五行:{element}, 乐器:{music_config.get('instrument')}, 调式:{music_config.get('mode')}")
+        # ==================== 三分支处理 ====================
+        logger.info(f"🔀 [分支选择] 进入模式: {mode}")
+        
+        if mode == "music":
+            # ==================== 分支A: 音乐生成路径 ====================
+            logger.info(f"🎵 [分支A] 音乐生成路径: 匹配十二星次区间 → 确定节气 → 生成音乐提示词 → 调用API → 播放联动")
+            
+            # 步骤4A: 匹配十二星次区间
+            logger.info(f"🌟 [步骤4A] 开始匹配十二星次区间...")
+            zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+            logger.info(f"✅ [步骤4A] 十二星次匹配完成: {zodiac_sign}")
+            
+            # 步骤5A: 确定对应节气
+            logger.info(f"🌱 [步骤5A] 开始确定对应节气...")
+            solar_term = determine_solar_term(zodiac_data, sun_pos['ecliptic_longitude'])
+            logger.info(f"✅ [步骤5A] 节气确定完成: {solar_term}")
+            
+            # 步骤6A: 生成节气音乐提示词
+            logger.info(f"🎼 [步骤6A] 开始生成节气音乐提示词...")
+            music_prompt = generate_solar_term_music_prompt(solar_term, zodiac_sign)
+            logger.info(f"✅ [步骤6A] 音乐提示词生成完成")
+            
+            response_data.update({
+                "zodiac_sign": zodiac_sign,
+                "zodiac_longitude_range": {"start": zodiac_data["start"], "end": zodiac_data["end"]},
+                "solar_term": solar_term,
+                "music_prompt": music_prompt,
+                "process": "solar_term_music_generation",
+                # 兼容字段
+                "mansion": solar_term,
+                "element": "节气",
+                "sun_ecliptic_lon": sun_pos['ecliptic_longitude'],
+                "instrument": "传统民乐",
+                "mode": "五声音阶"
+            })
+            
+            logger.info(f"🎵 [分支A完成] 音乐生成路径完成，准备调用音乐API和播放联动")
+            
+        elif mode == "mansions":
+            # ==================== 分支B: 获取星宿路径 ====================
+            logger.info(f"🏛️ [分支B] 获取星宿路径: 匹配十二星次区间 → 获取28星宿")
+            
+            # 步骤4B: 匹配十二星次区间
+            logger.info(f"🌟 [步骤4B] 开始匹配十二星次区间...")
+            zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+            logger.info(f"✅ [步骤4B] 十二星次匹配完成: {zodiac_sign}")
+            
+            # 步骤5B: 获取对应二十八星宿
+            logger.info(f"🏛️ [步骤5B] 开始获取对应二十八星宿...")
+            mansions_in_zodiac = get_28_mansions_for_display(zodiac_data)
+            logger.info(f"✅ [步骤5B] 获取星宿完成: {mansions_in_zodiac}")
+            
+            response_data.update({
+                "zodiac_sign": zodiac_sign,
+                "zodiac_longitude_range": {"start": zodiac_data["start"], "end": zodiac_data["end"]},
+                "mansions_in_zodiac": mansions_in_zodiac,
+                "process": "get_mansions",
+                # 兼容字段
+                "mansion": f"{zodiac_sign}星次",
+                "element": "星宿",
+                "sun_ecliptic_lon": sun_pos['ecliptic_longitude'],
+                "instrument": "星宿显示",
+                "mode": "星宿数据"
+            })
+            
+            logger.info(f"🏛️ [分支B完成] 获取星宿路径完成")
+            
+        elif mode == "visualization":
+            # ==================== 分支C: Three.js可视化路径 ====================
+            logger.info(f"🎭 [分支C] Three.js可视化路径: astropy计算太阳黄经 → Three.js渲染星图 → 黄道/星次/星宿可视化")
+            
+            # 步骤4C: 准备Three.js渲染数据（直接基于太阳黄经）
+            logger.info(f"🎭 [步骤4C] 开始准备Three.js渲染数据...")
+            
+            # 为了可视化，我们仍需要星次和星宿数据
+            zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+            mansions_in_zodiac = get_28_mansions_for_display(zodiac_data)
+            all_mansions_positions = get_all_mansions_positions(timestamp)
+            
+            logger.info(f"✅ [步骤4C] Three.js渲染数据准备完成")
+            logger.info(f"🌟 [步骤4C] 黄道坐标: {sun_pos['ecliptic_longitude']:.2f}°")
+            logger.info(f"🌟 [步骤4C] 当前星次: {zodiac_sign}")
+            logger.info(f"🏛️ [步骤4C] 相关星宿: {mansions_in_zodiac}")
+            
+            response_data.update({
+                "zodiac_sign": zodiac_sign,
+                "zodiac_longitude_range": {"start": zodiac_data["start"], "end": zodiac_data["end"]},
+                "mansions_in_zodiac": mansions_in_zodiac,
+                "all_mansions_positions": all_mansions_positions,
+                "ecliptic_data": {
+                    "longitude": sun_pos['ecliptic_longitude'],
+                    "latitude": sun_pos['ecliptic_latitude']
+                },
+                "process": "threejs_visualization",
+                # 兼容字段
+                "mansion": f"{zodiac_sign}星次",
+                "element": "可视化",
+                "sun_ecliptic_lon": sun_pos['ecliptic_longitude'],
+                "instrument": "星图显示",
+                "mode": "天文可视化"
+            })
+            
+            logger.info(f"🎭 [分支C完成] Three.js可视化路径完成，准备黄道/星次/星宿可视化")
+        
+        else:
+            logger.warning(f"⚠️ [分支选择] 未知模式: {mode}，使用默认音乐模式")
+            # 默认走音乐路径
+            zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+            solar_term = determine_solar_term(zodiac_data, sun_pos['ecliptic_longitude'])
+            music_prompt = generate_solar_term_music_prompt(solar_term, zodiac_sign)
+            
+            response_data.update({
+                "zodiac_sign": zodiac_sign,
+                "solar_term": solar_term,
+                "music_prompt": music_prompt,
+                "process": "default_music"
+            })
+        
+        logger.info(f"✅ ==================== API调用成功完成 ====================")
+        logger.info(f"📊 [最终结果] 模式: {mode}, 太阳黄经: {sun_pos['ecliptic_longitude']:.2f}°")
         return response_data
         
     except Exception as e:
-        logger.error(f"天文计算失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"天文计算错误: {str(e)}")
+        logger.error(f"❌ ==================== API调用失败 ====================")
+        logger.error(f"💥 [错误] {str(e)}")
+        raise HTTPException(status_code=500, detail=f"处理错误: {str(e)}")
 
 @app.post("/api/astronomy/calculate")
 async def calculate_astronomy(request: AstronomyRequest):
     """根据指定时间和位置计算天文数据"""
     try:
-        # 转换时间
-        dt = datetime(
-            request.time_data.year,
-            request.time_data.month,
-            request.time_data.day,
-            request.time_data.hour
-        )
-        timestamp = dt.timestamp()
+        year, month, day, hour = request.time_data.year, request.time_data.month, request.time_data.day, request.time_data.hour
         
-        logger.info(f"计算历史时间: {dt.isoformat()}, 位置: {request.location_data.latitude}, {request.location_data.longitude}")
+        # 检查农历转换
+        if request.time_data.is_lunar:
+            year, month, day = convert_lunar_to_solar(year, month, day)
         
-        # 获取月亮位置
-        moon_pos = get_moon_position(
-            timestamp, 
-            request.location_data.latitude, 
-            request.location_data.longitude
-        )
+        # 🔧 修复：直接使用ISO时间格式，与 /api/solar-longitude 保持一致
+        from astropy.time import Time
+        from astropy.coordinates import get_sun
+        import warnings
+        warnings.filterwarnings('ignore')
         
-        # 检查是否有错误
-        if 'error' in moon_pos:
-            raise ValueError(f"月亮位置计算失败: {moon_pos['error']}")
+        time_str = f'{year}-{month:02d}-{day:02d} {hour:02d}:00:00'
+        time = Time(time_str, format='iso', scale='utc')
+        sun = get_sun(time)
+        solar_longitude = sun.geocentrictrueecliptic.lon.degree % 360
         
-        # 确保有ecliptic_longitude字段
-        if 'ecliptic_longitude' not in moon_pos:
-            if 'longitude' in moon_pos:
-                moon_pos['ecliptic_longitude'] = moon_pos['longitude']
-            else:
-                raise ValueError("无法获取月亮黄经数据")
+        logger.info(f"直接计算太阳黄经: {solar_longitude:.2f}°")
         
-        # 计算当前星宿
-        current_mansion = calc_mansion(moon_pos['ecliptic_longitude'])
-        element = get_element(current_mansion)
+        # 构造兼容的sun_pos格式
+        sun_pos = {
+            'ecliptic_longitude': solar_longitude,
+            'ecliptic_latitude': float(sun.geocentrictrueecliptic.lat.degree),
+            'ra': float(sun.ra.deg),
+            'dec': float(sun.dec.deg),
+            'distance': float(sun.distance.km),
+            'timestamp': time.iso
+        }
         
-        # 获取所有星宿位置
-        mansions_positions = get_all_mansions_positions(timestamp)
+        dt = datetime(year, month, day, hour)  # 用于其他地方
         
-        # 生成音乐配置
-        music_config = get_full_music_config(current_mansion)
+        # 匹配星次和确定节气
+        zodiac_sign, zodiac_data = match_zodiac_sign_interval(solar_longitude)
+        solar_term = determine_solar_term(zodiac_data, solar_longitude)
+        mansions_in_zodiac = get_28_mansions_for_display(zodiac_data)
         
-        logger.info(f"计算成功: 月亮在 {current_mansion} 宿，黄经 {moon_pos['ecliptic_longitude']:.2f}°")
+        # 对于 mansions_positions，如果需要可以传递 time 对象
+        try:
+            mansions_positions = get_all_mansions_positions(dt.timestamp())
+        except:
+            mansions_positions = {}
         
         return {
             "success": True,
@@ -206,61 +386,47 @@ async def calculate_astronomy(request: AstronomyRequest):
                 "longitude": request.location_data.longitude,
                 "address": request.location_data.address
             },
-            "moon_position": moon_pos,
-            "current_mansion": current_mansion,
-            "element": element,
-            "ecliptic_longitude": moon_pos['ecliptic_longitude'],
+            "sun_position": sun_pos,
+            "zodiac_sign": zodiac_sign,
+            "solar_term": solar_term,
+            "mansions_in_zodiac": mansions_in_zodiac,
+            "ecliptic_longitude": solar_longitude,  # ✅ 使用直接计算的结果
             "mansions_positions": mansions_positions,
-            "music_config": music_config,
-            # 兼容原有前端的字段
+            # 兼容字段
             "timestamp": dt.isoformat(),
-            "mansion": current_mansion,
-            "moon_ecliptic_lon": moon_pos['ecliptic_longitude'],
-            "instrument": music_config.get('instrument', 'Piano'),
-            "mode": music_config.get('mode', 'Major')
+            "mansion": f"{zodiac_sign}({solar_term})",
+            "element": "节气",
+            "sun_ecliptic_lon": solar_longitude,  # ✅ 使用直接计算的结果
+            "instrument": "传统民乐",
+            "mode": "五声音阶"
         }
         
     except Exception as e:
-        logger.error(f"时间格式错误: {str(e)}")
+        logger.error(f"天文计算错误: {str(e)}")
         raise HTTPException(status_code=400, detail=f"天文计算失败: {str(e)}")
-    
-@app.get("/api/astronomy")
-async def get_astronomy_data(
-    year: int = Query(..., ge=1950, le=2025, description="年份(1950-2025)"),
-    month: int = Query(..., ge=1, le=12, description="月份(1-12)"),
-    day: int = Query(..., ge=1, le=31, description="日期(1-31)"),
-    hour: int = Query(..., ge=0, le=23, description="小时(0-23)"),
-    latitude: float = Query(..., ge=-90, le=90, description="纬度(-90到90)"),
-    longitude: float = Query(..., ge=-180, le=180, description="经度(-180到180)")
-):
-    """通过GET参数获取天文数据"""
-    try:
-        request = AstronomyRequest(
-            time_data=TimeSelection(year=year, month=month, day=day, hour=hour),
-            location_data=LocationSelection(latitude=latitude, longitude=longitude)
-        )
-        return await calculate_astronomy(request)
-    except Exception as e:
-        logger.error(f"GET方式天文计算失败: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/api/generate_music")
 async def generate_music_api(request: dict):
-    """生成音乐接口 - 兼容原有前端调用"""
+    """音乐生成API - 使用节气提示词"""
     try:
         logger.info(f"收到音乐生成请求: {request}")
         
-        # 解析请求参数
+        # 获取参数
         date_str = request.get('date')
-        latitude = request.get('lat', 22.3193)
-        longitude = request.get('lon', 114.1095)
-        style = request.get('style', 'cinematic, ethereal')
+        is_lunar = request.get('is_lunar', False)
         duration = request.get('duration', 45)
+        latitude = request.get('lat', 22.3193)
+        longitude = request.get('lon', 114.1695)
         
-        # 首先计算天文数据
+        # 处理时间
         if date_str:
             try:
                 dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+                year, month, day, hour = dt.year, dt.month, dt.day, dt.hour
+                if is_lunar:
+                    year, month, day = convert_lunar_to_solar(year, month, day)
+                    dt = datetime(year, month, day, hour)
                 timestamp = dt.timestamp()
             except ValueError:
                 dt = datetime.now()
@@ -269,45 +435,52 @@ async def generate_music_api(request: dict):
             dt = datetime.now()
             timestamp = dt.timestamp()
         
-        # 获取天文数据
-        moon_pos = get_moon_position(timestamp, latitude, longitude)
-        if 'ecliptic_longitude' not in moon_pos:
-            if 'longitude' in moon_pos:
-                moon_pos['ecliptic_longitude'] = moon_pos['longitude']
-            else:
-                raise ValueError("无法获取月亮黄经数据")
+        # 计算太阳黄经
+        sun_pos = get_sun_position(timestamp, latitude, longitude)
+        if 'ecliptic_longitude' not in sun_pos:
+            raise ValueError("无法获取太阳黄经数据")
         
-        current_mansion = calc_mansion(moon_pos['ecliptic_longitude'])
-        element = get_element(current_mansion)
-        music_config = get_full_music_config(current_mansion)
+        # 匹配星次和确定节气
+        zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+        solar_term = determine_solar_term(zodiac_data, sun_pos['ecliptic_longitude'])
         
-        # 生成音乐
+        # 生成节气音乐提示词
+        music_prompt = generate_solar_term_music_prompt(solar_term, zodiac_sign, duration)
+        
+        # 调用音乐生成API
         music_result = generate_music(
-            instrument=music_config.get('instrument', 'Piano'),
-            mode=music_config.get('mode', 'Major'),
-            style=style,
+            instrument="Traditional Chinese Orchestra",
+            mode="Pentatonic",
+            style=music_prompt,
             duration=duration
         )
         
-        # 构造响应数据
         response_data = {
             "success": True,
             "astronomy": {
-                "mansion": current_mansion,
-                "element": element,
-                "moon_ecliptic_lon": moon_pos['ecliptic_longitude']
+                "zodiac_sign": zodiac_sign,
+                "solar_term": solar_term,
+                "sun_ecliptic_longitude": sun_pos['ecliptic_longitude'],
+                # 兼容字段
+                "mansion": f"{zodiac_sign}({solar_term})",
+                "element": "节气",
+                "sun_ecliptic_lon": sun_pos['ecliptic_longitude']
             },
             "parameters": {
-                "element": element,
-                "instrument": music_config.get('instrument', 'Piano'),
-                "mode": music_config.get('mode', 'Major'),
+                "solar_term": solar_term,
+                "zodiac_sign": zodiac_sign,
+                "prompt": music_prompt,
                 "duration": duration,
-                "enhanced_prompt": f"{music_config.get('instrument', 'Piano')}, {music_config.get('mode', 'Major')}, {style}, {duration} seconds, inspired by {current_mansion} constellation and {element} element"
+                "instrument": "Traditional Chinese Orchestra",
+                "mode": "Pentatonic",
+                "enhanced_prompt": music_prompt,
+                # 兼容字段
+                "element": "节气"
             },
             "music": music_result
         }
         
-        logger.info(f"音乐生成完成: {current_mansion}宿, {element}元素")
+        logger.info(f"节气音乐生成完成: {solar_term}({zodiac_sign})")
         return response_data
         
     except Exception as e:
@@ -317,11 +490,11 @@ async def generate_music_api(request: dict):
 @app.post("/api/music/generate")
 async def generate_music_query_api(
     instrument: str = Query(None, description="乐器类型"),
-    mode: str = Query(None, description="音乐调式"), 
+    mode: str = Query(None, description="音乐调式"),
     style: str = Query(default="cinematic, ethereal", description="音乐风格"),
     duration: int = Query(default=45, ge=15, le=180, description="音乐时长(秒)")
 ):
-    """通过查询参数生成音乐 - 兼容前端调用"""
+    """通过查询参数生成音乐"""
     try:
         logger.info(f"收到查询参数音乐生成请求: instrument={instrument}, mode={mode}, style={style}, duration={duration}")
         
@@ -329,48 +502,46 @@ async def generate_music_query_api(
         dt = datetime.now()
         timestamp = dt.timestamp()
         latitude = 22.3193
-        longitude = 114.1095
+        longitude = 114.1695
         
         # 获取天文数据
-        moon_pos = get_moon_position(timestamp, latitude, longitude)
-        if 'ecliptic_longitude' not in moon_pos:
-            if 'longitude' in moon_pos:
-                moon_pos['ecliptic_longitude'] = moon_pos['longitude']
-            else:
-                raise ValueError("无法获取月亮黄经数据")
+        sun_pos = get_sun_position(timestamp, latitude, longitude)
+        if 'ecliptic_longitude' not in sun_pos:
+            raise ValueError("无法获取太阳黄经数据")
         
-        current_mansion = calc_mansion(moon_pos['ecliptic_longitude'])
-        element = get_element(current_mansion)
-        music_config = get_full_music_config(current_mansion)
+        # 匹配星次和确定节气
+        zodiac_sign, zodiac_data = match_zodiac_sign_interval(sun_pos['ecliptic_longitude'])
+        solar_term = determine_solar_term(zodiac_data, sun_pos['ecliptic_longitude'])
         
-        # 使用参数优先级：前端传递 > 天文计算 > 默认值
-        final_instrument = instrument if instrument and instrument != 'undefined' else music_config.get('instrument', 'Piano')
-        final_mode = mode if mode and mode != 'undefined' else music_config.get('mode', 'Major')
+        # 使用节气音乐配置，忽略传入的参数
+        final_instrument = "Traditional Chinese Orchestra"
+        final_mode = "Pentatonic"
+        
+        # 生成节气音乐提示词
+        music_prompt = generate_solar_term_music_prompt(solar_term, zodiac_sign, duration)
         
         logger.info(f"最终音乐参数: instrument={final_instrument}, mode={final_mode}")
         
-        # 生成音乐（使用最终确定的参数）
+        # 生成音乐
         music_result = generate_music(
             instrument=final_instrument,
             mode=final_mode,
-            style=style,
+            style=music_prompt,
             duration=duration
         )
         
         logger.info(f"音乐生成原始结果: {music_result}")
         
-        # 处理音乐结果，确保返回正确的格式
+        # 处理音乐结果
         processed_music = music_result
         if isinstance(music_result, str) and music_result.isdigit():
-            # 如果返回的是ID字符串，构造完整的音频信息
             processed_music = {
                 "success": True,
                 "id": music_result,
-                "download_url": f"https://yue-inst.ngrok.app/download/{music_result}",  # 根据实际API调整
+                "download_url": f"https://yue-inst.ngrok.app/download/{music_result}",
                 "message": "音乐生成成功"
             }
         elif isinstance(music_result, dict):
-            # 确保字典格式包含必要字段
             if 'success' not in music_result:
                 processed_music['success'] = True
             if 'download_url' not in music_result and music_result.get('id'):
@@ -380,21 +551,28 @@ async def generate_music_query_api(
         response_data = {
             "success": True,
             "astronomy": {
-                "mansion": current_mansion,
-                "element": element,
-                "moon_ecliptic_lon": moon_pos['ecliptic_longitude']
+                "zodiac_sign": zodiac_sign,
+                "solar_term": solar_term,
+                "sun_ecliptic_longitude": sun_pos['ecliptic_longitude'],
+                # 兼容字段
+                "mansion": f"{zodiac_sign}({solar_term})",
+                "element": "节气",
+                "sun_ecliptic_lon": sun_pos['ecliptic_longitude']
             },
             "parameters": {
-                "element": element,
+                "solar_term": solar_term,
+                "zodiac_sign": zodiac_sign,
                 "instrument": final_instrument,
                 "mode": final_mode,
                 "duration": duration,
-                "enhanced_prompt": f"{final_instrument}, {final_mode}, {style}, {duration} seconds, inspired by {current_mansion} constellation and {element} element"
+                "enhanced_prompt": music_prompt,
+                # 兼容字段
+                "element": "节气"
             },
             "music": processed_music
         }
         
-        logger.info(f"音乐生成完成: {current_mansion}宿, {element}元素, {final_instrument}, {final_mode}")
+        logger.info(f"音乐生成完成: {zodiac_sign}星次, {solar_term}节气, {final_instrument}, {final_mode}")
         return response_data
         
     except Exception as e:
@@ -422,13 +600,11 @@ async def get_all_mansions():
             "mansions": mansions_info,
             "total": len(mansions_info)
         }
-        
     except Exception as e:
         logger.error(f"获取星宿信息失败: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # ==================== 错误处理 ====================
-
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
     """404错误处理"""
@@ -447,21 +623,32 @@ async def internal_error_handler(request, exc):
     )
 
 # ==================== 启动配置 ====================
-
 if __name__ == "__main__":
     import uvicorn
     
     # 检查静态文件目录
     if not os.path.exists("static"):
-        logger.warning("static目录不存在，创建中...")
+        logger.warning("⚠️ static目录不存在，创建中...")
         os.makedirs("static")
     
-    logger.info("28星宿天体音乐生成器后端服务启动中...")
-    logger.info("访问路径:")
-    logger.info("  时间选择: http://localhost:8000/")
-    logger.info("  位置选择: http://localhost:8000/location")
-    logger.info("  星图音乐: http://localhost:8000/starmap")
-    logger.info("  API文档:  http://localhost:8000/docs")
+    logger.info("🚀 ==================== 系统启动 ====================")
+    logger.info("🎼 28星宿天体音乐生成器后端服务启动中...")
+    logger.info("📊 版本: 3.0.0 (基于十二星次和节气)")
+    logger.info("🌐 访问路径:")
+    logger.info("   📅 时间选择: http://localhost:8000/")
+    logger.info("   📍 位置选择: http://localhost:8000/location")
+    logger.info("   🌟 星图音乐: http://localhost:8000/starmap")
+    logger.info("   📚 API文档: http://localhost:8000/docs")
+    logger.info("🔄 逻辑流程:")
+    logger.info("   1️⃣ 用户输入时间/经纬度")
+    logger.info("   2️⃣ 时间类型判断(农历/公历)")
+    logger.info("   3️⃣ 农历转公历 | 公历直接转datetime")
+    logger.info("   4️⃣ astropy计算太阳黄经")
+    logger.info("   5️⃣ 三分支处理:")
+    logger.info("       分支A: 匹配十二星次区间→确定节气→生成音乐提示词→调用API→播放联动")
+    logger.info("       分支B: 匹配十二星次区间→获取28星宿")
+    logger.info("       分支C: astropy计算太阳黄经→Three.js可视化→黄道/星次/星宿可视化")
+    logger.info("✅ ==================== 启动完成 ====================")
     
     uvicorn.run(
         "backend_app:app",

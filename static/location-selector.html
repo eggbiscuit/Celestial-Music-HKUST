@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,8 +37,15 @@
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .glass-panel {
@@ -94,6 +102,7 @@
         }
 
         #earthCanvas {
+
             border-radius: 50%;
             cursor: grab;
             transition: transform 0.3s ease;
@@ -177,13 +186,14 @@
                 flex-direction: column;
                 padding: 20px;
             }
-            
+
             .glass-panel {
                 margin-bottom: 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
@@ -196,12 +206,14 @@
             <div class="step active">2</div>
             <div class="step-line inactive"></div>
             <div class="step inactive">3</div>
+            <div class="step-line inactive"></div>
+            <div class="step inactive">4</div>
         </div>
 
         <!-- 标题 -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-white mb-2">选择观测位置</h1>
-            <p class="text-gray-300">在地球上选择您的观测位置</p>
+            <p class="text-gray-300">在地球上选择您的观测位置 | 滚轮缩放地球</p>
         </div>
 
         <!-- 主要内容区域 -->
@@ -256,14 +268,14 @@
                         <i class="fas fa-globe text-blue-400 mr-2"></i>
                         <span class="text-white font-semibold">地球选择器</span>
                     </div>
-                    
+
                     <div class="flex justify-center">
                         <canvas id="earthCanvas" width="400" height="400"></canvas>
                     </div>
-                    
+
                     <div class="text-center mt-4">
                         <p class="text-gray-300 text-sm">点击并拖拽地球来旋转视角</p>
-                        <p class="text-gray-400 text-xs">点击地球表面选择位置</p>
+                        <p class="text-gray-400 text-xs">点击地球表面选择位置 | 滚轮缩放</p>
                     </div>
                 </div>
 
@@ -294,6 +306,11 @@
                     </div>
 
                     <div class="coord-display">
+                        <div class="text-gray-300 text-sm">缩放级别</div>
+                        <div class="text-blue-400" id="zoomLevel">1.0x</div>
+                    </div>
+
+                    <div class="coord-display">
                         <div class="text-gray-300 text-sm">状态</div>
                         <div class="text-green-400" id="locationStatus">
                             <i class="fas fa-check-circle mr-1"></i>
@@ -305,7 +322,7 @@
                     <div class="mt-8">
                         <button class="btn-primary" id="confirmLocation">
                             <i class="fas fa-arrow-right mr-2"></i>
-                            进入星图生成
+                            进入天球坐标
                         </button>
                         <button class="btn-secondary" id="goBackToTime">
                             <i class="fas fa-arrow-left mr-2"></i>
@@ -322,9 +339,22 @@
         let canvas, ctx;
         let earthRadius = 180;
         let rotation = { x: 0, y: 0 };
+        let targetRotation = { x: 0, y: 0 };
+        let isAnimating = false;
+        let animationSpeed = 0.08;
         let isDragging = false;
         let lastMousePos = { x: 0, y: 0 };
         let selectedLocation = { lat: 22.5431, lng: 114.0579, name: "深圳", country: "中国" };
+
+        // 🎯 新增：缩放相关变量
+        let zoomLevel = 1;
+        const minZoom = 0.5;
+        const maxZoom = 4;
+
+        // 在全局变量部分添加
+        let earthTexture = null;
+        let isTextureLoaded = false;
+        let textureDataCache = null;
 
         // 城市数据
         const cities = {
@@ -342,46 +372,22 @@
             singapore: { lat: 1.3521, lng: 103.8198, name: "新加坡", country: "新加坡" }
         };
 
-        // 简化的大陆轮廓数据
-        const continents = [
-            // 亚洲主要轮廓
-            [
-                { lat: 70, lng: 100 }, { lat: 55, lng: 160 }, { lat: 35, lng: 140 },
-                { lat: 22, lng: 120 }, { lat: 10, lng: 105 }, { lat: 25, lng: 70 },
-                { lat: 40, lng: 50 }, { lat: 60, lng: 60 }, { lat: 70, lng: 100 }
-            ],
-            // 欧洲
-            [
-                { lat: 71, lng: 25 }, { lat: 60, lng: 5 }, { lat: 36, lng: 10 },
-                { lat: 40, lng: 40 }, { lat: 60, lng: 60 }, { lat: 71, lng: 25 }
-            ],
-            // 非洲
-            [
-                { lat: 37, lng: 10 }, { lat: 12, lng: 45 }, { lat: -35, lng: 20 },
-                { lat: -22, lng: 17 }, { lat: 5, lng: -17 }, { lat: 37, lng: 10 }
-            ],
-            // 北美洲
-            [
-                { lat: 70, lng: -140 }, { lat: 60, lng: -165 }, { lat: 25, lng: -110 },
-                { lat: 30, lng: -80 }, { lat: 45, lng: -60 }, { lat: 60, lng: -90 },
-                { lat: 70, lng: -140 }
-            ],
-            // 南美洲
-            [
-                { lat: 10, lng: -70 }, { lat: -20, lng: -40 }, { lat: -55, lng: -70 },
-                { lat: -30, lng: -80 }, { lat: 10, lng: -70 }
-            ],
-            // 澳大利亚
-            [
-                { lat: -10, lng: 130 }, { lat: -35, lng: 115 }, { lat: -40, lng: 145 },
-                { lat: -20, lng: 150 }, { lat: -10, lng: 130 }
-            ]
-        ];
+        // 初始化时加载地球纹理
+        function loadEarthTexture() {
+            earthTexture = new Image();
+            earthTexture.crossOrigin = 'anonymous';
+            earthTexture.onload = function () {
+                isTextureLoaded = true;
+                drawEarth(); // 重新绘制
+            };
+            earthTexture.src = 'https://raw.githubusercontent.com/mingo-wu1/forpic_test/main/earth_atmos_2048_3.png';
+        }
 
         // 初始化
         function init() {
             createStars();
             initCanvas();
+            loadEarthTexture();
             loadSelectedTime();
             updateLocationDisplay();
             bindEvents();
@@ -405,14 +411,14 @@
         function initCanvas() {
             canvas = document.getElementById('earthCanvas');
             ctx = canvas.getContext('2d');
-            
+
             // 设置高DPI支持
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = 400 * dpr;
-            canvas.height = 400 * dpr;
+            canvas.width = 400 //* dpr;
+            canvas.height = 400 //* dpr;
             canvas.style.width = '400px';
             canvas.style.height = '400px';
-            ctx.scale(dpr, dpr);
+            // ctx.scale(dpr, dpr);
         }
 
         // 加载已选择的时间
@@ -420,9 +426,9 @@
             try {
                 const timeData = JSON.parse(sessionStorage.getItem('selectedTime'));
                 if (timeData) {
-                    document.getElementById('selectedTime').textContent = 
+                    document.getElementById('selectedTime').textContent =
                         `${timeData.year}年${timeData.month}月${timeData.day}日 ${timeData.hour}:00`;
-                    document.getElementById('timeDetails').textContent = 
+                    document.getElementById('timeDetails').textContent =
                         `时间戳: ${timeData.year}-${String(timeData.month).padStart(2, '0')}-${String(timeData.day).padStart(2, '0')}T${String(timeData.hour).padStart(2, '0')}:00:00Z`;
                 } else {
                     document.getElementById('selectedTime').textContent = '未选择时间';
@@ -433,18 +439,19 @@
             }
         }
 
-        // 更新位置显示
+        // 🎯 更新位置显示 - 新增缩放级别显示
         function updateLocationDisplay() {
-            const lngText = selectedLocation.lng >= 0 ? 
-                `${selectedLocation.lng.toFixed(4)}°E` : 
+            const lngText = selectedLocation.lng >= 0 ?
+                `${selectedLocation.lng.toFixed(4)}°E` :
                 `${Math.abs(selectedLocation.lng).toFixed(4)}°W`;
-            const latText = selectedLocation.lat >= 0 ? 
-                `${selectedLocation.lat.toFixed(4)}°N` : 
+            const latText = selectedLocation.lat >= 0 ?
+                `${selectedLocation.lat.toFixed(4)}°N` :
                 `${Math.abs(selectedLocation.lat).toFixed(4)}°S`;
-            
+
             document.getElementById('longitude').textContent = lngText;
             document.getElementById('latitude').textContent = latText;
             document.getElementById('locationName').textContent = selectedLocation.name;
+            document.getElementById('zoomLevel').textContent = `${zoomLevel.toFixed(1)}x`;
         }
 
         // 绑定事件
@@ -452,9 +459,10 @@
             // 城市按钮事件
             document.querySelectorAll('.city-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
+                    console.log('🎯 按钮被点击:', btn.dataset.city);
                     const cityKey = btn.dataset.city;
                     selectCity(cityKey);
-                    
+
                     // 更新按钮状态
                     document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('selected'));
                     btn.classList.add('selected');
@@ -467,6 +475,9 @@
             canvas.addEventListener('mouseup', handleMouseUp);
             canvas.addEventListener('mouseleave', handleMouseUp);
             canvas.addEventListener('click', handleCanvasClick);
+
+            // 🎯 新增：滚轮缩放事件
+            canvas.addEventListener('wheel', handleWheel, { passive: false });
 
             // 触摸事件
             canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -485,18 +496,161 @@
             });
         }
 
+        // 🎯 新增：滚轮缩放处理
+        function handleWheel(e) {
+            e.preventDefault();
+
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            const newZoom = zoomLevel * zoomFactor;
+
+            // 限制缩放范围
+            zoomLevel = Math.max(minZoom, Math.min(maxZoom, newZoom));
+
+            updateLocationDisplay(); // 更新缩放级别显示
+            drawEarth(); // 重新绘制
+        }
+
         // 选择城市
         function selectCity(cityKey) {
             if (cities[cityKey]) {
+                console.log('🎯 城市数据:', cities[cityKey]);
                 selectedLocation = { ...cities[cityKey] };
+                console.log('🎯 selectedLocation设置为:', selectedLocation);
                 updateLocationDisplay();
-                drawEarth();
+                console.log('🎯 即将调用animateToCity');
+                animateToCity(selectedLocation.lat, selectedLocation.lng);
             }
+        }
+
+        // 优化版城市动画跳转
+        function animateToCity(targetLat, targetLng) {
+            console.log('🎯 动画函数被调用:', targetLat, targetLng);
+
+            // 🎯 目标：让红点投影到地球中心 (200, 200)
+            const earthCenterX = 200;
+            const earthCenterY = 200;
+
+            // 🎯 迭代计算，让红点精确居中
+            let bestRotationY = -(targetLng * Math.PI / 180);
+            let bestRotationX = 0;
+
+            // 多次迭代优化
+            for (let i = 0; i < 10; i++) {
+                // 临时设置旋转
+                let tempRotation = { x: bestRotationX, y: bestRotationY };
+
+                // 计算在这个旋转下，目标点会投影到哪里
+                const projected = calculateProjection(targetLat, targetLng, tempRotation);
+
+                if (projected && projected.visible) {
+                    // 计算偏差
+                    const deltaX = projected.x - earthCenterX;
+                    const deltaY = projected.y - earthCenterY;
+
+                    // 如果偏差很小，就停止迭代
+                    if (Math.abs(deltaX) < 2 && Math.abs(deltaY) < 2) {
+                        break;
+                    }
+
+                    // 🎯 根据偏差调整旋转角度
+                    bestRotationY -= deltaX * 0.005; // 调整经度旋转
+                } else {
+                    // 🎯 关键修复：如果红点不可见，调整为可见
+                    bestRotationY = -(targetLng * Math.PI / 180);
+                    bestRotationX = 0; // 重置纬度旋转，让红点回到可见面
+                    break; // 停止迭代，使用基本可见位置
+                }
+            }
+
+            // 设置最终的目标旋转角度
+            targetRotation.y = bestRotationY;
+            targetRotation.x = bestRotationX;
+
+            // 限制X轴旋转范围
+            targetRotation.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, targetRotation.x));
+
+            // 开始动画
+            isAnimating = true;
+            console.log('🎯 设置目标旋转角度:', targetRotation.y, targetRotation.x);
+
+            animateRotation();
+        }
+
+        // 🎯 新增：计算投影位置的辅助函数
+        function calculateProjection(lat, lng, rotation) {
+            const latRad = lat * Math.PI / 180;
+            const lngRad = lng * Math.PI / 180;
+
+            // 球面坐标
+            let x = Math.cos(latRad) * Math.sin(lngRad);
+            let y = Math.sin(latRad);
+            let z = Math.cos(latRad) * Math.cos(lngRad);
+
+            // 应用旋转
+            const cosX = Math.cos(rotation.x);
+            const sinX = Math.sin(rotation.x);
+            const y1 = y * cosX - z * sinX;
+            const z1 = y * sinX + z * cosX;
+
+            const cosY = Math.cos(rotation.y);
+            const sinY = Math.sin(rotation.y);
+            const x2 = x * cosY + z1 * sinY;
+            const z2 = -x * sinY + z1 * cosY;
+
+            // 检查是否在可见半球
+            if (z2 < 0) return { visible: false };
+
+            // 🎯 使用缩放后的半径投影到2D
+            const currentRadius = earthRadius * zoomLevel;
+            const screenX = 200 + x2 * currentRadius;
+            const screenY = 200 - y1 * currentRadius;
+
+            return {
+                x: screenX,
+                y: screenY,
+                visible: true
+            };
+        }
+
+        // 动画循环函数
+        function animateRotation() {
+            if (!isAnimating) return;
+
+            // 计算当前旋转与目标旋转的差值
+            const diffY = targetRotation.y - rotation.y;
+            const diffX = targetRotation.x - rotation.x;
+
+            // 处理角度跨越-π到π的情况
+            let adjustedDiffY = diffY;
+            if (Math.abs(diffY) > Math.PI) {
+                adjustedDiffY = diffY > 0 ? diffY - 2 * Math.PI : diffY + 2 * Math.PI;
+            }
+
+            // 检查是否足够接近目标
+            if (Math.abs(adjustedDiffY) < 0.01 && Math.abs(diffX) < 0.01) {
+                rotation.y = targetRotation.y;
+                rotation.x = targetRotation.x;
+                isAnimating = false;
+                console.log('🎯 动画完成');
+                drawEarth();
+                return;
+            }
+
+            // 平滑插值
+            rotation.y += adjustedDiffY * animationSpeed;
+            rotation.x += diffX * animationSpeed;
+
+            // 重绘地球
+            drawEarth();
+
+            // 继续动画
+            requestAnimationFrame(animateRotation);
         }
 
         // 鼠标事件处理
         function handleMouseDown(e) {
             isDragging = true;
+            isAnimating = false; // 停止动画
             const rect = canvas.getBoundingClientRect();
             lastMousePos = {
                 x: e.clientX - rect.left,
@@ -506,22 +660,24 @@
 
         function handleMouseMove(e) {
             if (!isDragging) return;
-            
+
+            isAnimating = false; // 确保拖拽时停止动画
+
             const rect = canvas.getBoundingClientRect();
             const currentPos = {
                 x: e.clientX - rect.left,
                 y: e.clientY - rect.top
             };
-            
+
             const deltaX = currentPos.x - lastMousePos.x;
             const deltaY = currentPos.y - lastMousePos.y;
-            
+
             rotation.y += deltaX * 0.01;
             rotation.x -= deltaY * 0.01;
-            
+
             // 限制X轴旋转
-            rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x));
-            
+            rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotation.x));
+
             lastMousePos = currentPos;
             drawEarth();
         }
@@ -533,6 +689,7 @@
         // 触摸事件处理
         function handleTouchStart(e) {
             e.preventDefault();
+            isAnimating = false; // 停止动画
             const touch = e.touches[0];
             const rect = canvas.getBoundingClientRect();
             isDragging = true;
@@ -545,22 +702,24 @@
         function handleTouchMove(e) {
             e.preventDefault();
             if (!isDragging) return;
-            
+
+            isAnimating = false; // 确保触摸时停止动画
+
             const touch = e.touches[0];
             const rect = canvas.getBoundingClientRect();
             const currentPos = {
                 x: touch.clientX - rect.left,
                 y: touch.clientY - rect.top
             };
-            
+
             const deltaX = currentPos.x - lastMousePos.x;
             const deltaY = currentPos.y - lastMousePos.y;
-            
+
             rotation.y += deltaX * 0.01;
             rotation.x -= deltaY * 0.01;
-            
-            rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x));
-            
+
+            rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotation.x));
+
             lastMousePos = currentPos;
             drawEarth();
         }
@@ -570,17 +729,32 @@
             isDragging = false;
         }
 
-        // Canvas点击事件
+        // 🎯 Canvas点击事件 - 修复缩放版本
         function handleCanvasClick(e) {
-            if (isDragging) return;
-            
+            if (isDragging) return; // 如果正在拖拽，不处理点击
+
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left - 200; // 中心点偏移
-            const y = e.clientY - rect.top - 200;
-            
-            // 检查是否点击在地球上
-            const distance = Math.sqrt(x*x + y*y);
-            if (distance <= earthRadius) {
+
+            // 修复DPI缩放问题 - 关键修复
+            const dpr = window.devicePixelRatio || 1;
+            const scaleX = 400 / rect.width;  // 使用逻辑宽度400，不是物理宽度
+            const scaleY = 400 / rect.height; // 使用逻辑高度400，不是物理高度
+
+            const x = (e.clientX - rect.left) * scaleX - 200; // 减去中心点偏移
+            const y = (e.clientY - rect.top) * scaleY - 200;
+
+            console.log('点击坐标:', {
+                clientX: e.clientX - rect.left,
+                clientY: e.clientY - rect.top,
+                transformedX: x,
+                transformedY: y
+            }); // 调试信息
+
+            // 🎯 使用缩放后的半径检测点击
+            const currentRadius = earthRadius * zoomLevel;
+            const distance = Math.sqrt(x * x + y * y);
+
+            if (distance <= currentRadius) {
                 const coords = getLatLngFromClick(x, y);
                 if (coords) {
                     selectedLocation = {
@@ -591,34 +765,48 @@
                     };
                     updateLocationDisplay();
                     drawEarth();
-                    
+
                     // 取消城市按钮选择
                     document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('selected'));
+
+                    console.log('计算出的经纬度:', coords); // 调试用
                 }
             }
         }
 
-        // 从点击位置计算经纬度
+        // 🎯 从点击位置计算经纬度 - 修复缩放版本
         function getLatLngFromClick(x, y) {
-            const distance = Math.sqrt(x*x + y*y);
-            if (distance > earthRadius) return null;
-            
-            // 简化的球面投影计算
-            const normalizedX = x / earthRadius;
-            const normalizedY = y / earthRadius;
-            
-            // 计算球面坐标
-            const z = Math.sqrt(1 - normalizedX*normalizedX - normalizedY*normalizedY);
-            
-            // 应用旋转
-            const rotatedX = normalizedX * Math.cos(rotation.y) - z * Math.sin(rotation.y);
-            const rotatedZ = normalizedX * Math.sin(rotation.y) + z * Math.cos(rotation.y);
-            const rotatedY = normalizedY * Math.cos(rotation.x) - rotatedZ * Math.sin(rotation.x);
-            
+            const currentRadius = earthRadius * zoomLevel; // 🎯 使用缩放后的半径
+            const distance = Math.sqrt(x * x + y * y);
+            if (distance > currentRadius) return null;
+
+            // 🎯 使用缩放后的半径进行归一化
+            const normalizedX = x / currentRadius;
+            const normalizedY = -y / currentRadius; // Y轴翻转
+            const normalizedZ = Math.sqrt(Math.max(0, 1 - normalizedX * normalizedX - normalizedY * normalizedY));
+
+            console.log('球面坐标:', { normalizedX, normalizedY, normalizedZ }); // 调试
+
+            // 应用逆旋转变换（与projectPoint中的旋转相反）
+            const cosX = Math.cos(rotation.x);
+            const sinX = Math.sin(rotation.x);
+            const cosY = Math.cos(rotation.y);
+            const sinY = Math.sin(rotation.y);
+
+            // 逆旋转：先逆Y轴旋转，再逆X轴旋转
+            const x1 = normalizedX * cosY - normalizedZ * sinY;
+            const z1 = normalizedX * sinY + normalizedZ * cosY;
+            const y1 = normalizedY * cosX + z1 * sinX;
+            const z2 = -normalizedY * sinX + z1 * cosX;
+
+            console.log('逆旋转后:', { x1, y1, z2 }); // 调试
+
             // 转换为经纬度
-            const lat = Math.asin(rotatedY) * 180 / Math.PI;
-            const lng = Math.atan2(rotatedX, Math.sqrt(rotatedY*rotatedY + rotatedZ*rotatedZ)) * 180 / Math.PI;
-            
+            const lat = Math.asin(Math.max(-1, Math.min(1, y1))) * 180 / Math.PI;
+            const lng = Math.atan2(x1, z2) * 180 / Math.PI;
+
+            console.log('计算的经纬度:', { lat, lng }); // 调试
+
             return { lat, lng };
         }
 
@@ -628,7 +816,7 @@
                 alert('您的浏览器不支持地理位置获取');
                 return;
             }
-            
+
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     selectedLocation = {
@@ -638,8 +826,8 @@
                         country: "未知"
                     };
                     updateLocationDisplay();
-                    drawEarth();
-                    
+                    animateToCity(selectedLocation.lat, selectedLocation.lng);
+
                     document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('selected'));
                 },
                 (error) => {
@@ -649,53 +837,130 @@
             );
         }
 
-        // 绘制地球
+        // 🎯 绘制地球 - 修复缩放版本
         function drawEarth() {
             ctx.clearRect(0, 0, 400, 400);
-            
+
             const centerX = 200;
             const centerY = 200;
-            
-            // 绘制地球背景
-            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, earthRadius);
-            gradient.addColorStop(0, '#4A90E2');
-            gradient.addColorStop(0.7, '#2E5BBA');
-            gradient.addColorStop(1, '#1E3A8A');
-            
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, earthRadius, 0, 2 * Math.PI);
-            ctx.fill();
-            
-            // 绘制大陆
-            ctx.fillStyle = '#10B981';
-            continents.forEach(continent => {
+            const currentRadius = earthRadius * zoomLevel; // 🎯 使用缩放后的半径
+
+            if (!isTextureLoaded) {
+                // 加载中显示
+                ctx.fillStyle = '#4682B4';
                 ctx.beginPath();
-                let first = true;
-                continent.forEach(point => {
-                    const projected = projectPoint(point.lat, point.lng);
-                    if (projected && projected.visible) {
-                        if (first) {
-                            ctx.moveTo(projected.x, projected.y);
-                            first = false;
-                        } else {
-                            ctx.lineTo(projected.x, projected.y);
+                ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
+                ctx.fill();
+
+                ctx.fillStyle = 'white';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('加载地球纹理中...', centerX, centerY);
+                return;
+            }
+
+            // 🎯 创建球体遮罩 - 使用缩放后的半径
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
+            ctx.clip();
+
+            // 优化1：缓存纹理数据，避免重复创建临时canvas
+            if (!textureDataCache) {
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = earthTexture.width;
+                tempCanvas.height = earthTexture.height;
+                tempCtx.drawImage(earthTexture, 0, 0);
+                textureDataCache = tempCtx.getImageData(0, 0, earthTexture.width, earthTexture.height);
+            }
+
+            const imageSize = Math.ceil(currentRadius * 2); // 使用缩放后的实际尺寸
+            const imageData = ctx.createImageData(imageSize, imageSize); // 🎯 关键修复：使用 imageSize 而不是 currentRadius * 2
+            const data = imageData.data;
+
+            // 优化2：预计算旋转矩阵
+            const cosX = Math.cos(rotation.x);
+            const sinX = Math.sin(rotation.x);
+            const cosY = Math.cos(rotation.y);
+            const sinY = Math.sin(rotation.y);
+
+            // 优化3：减少采样密度，每隔一个像素计算一次，然后填充周围像素
+            const step = currentRadius > 200 ? (currentRadius > 300 ? 4 : 2) : 1//2; // 采样步长，可以调整为1（最高质量）到3（最快速度）
+
+            for (let y = 0; y < imageSize; y += step) {
+                for (let x = 0; x < imageSize; x += step) {
+                    const dx = x - currentRadius;
+                    const dy = y - currentRadius;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance <= currentRadius) {
+                        // 🎯 计算球面坐标 - 使用缩放后的半径
+                        const nx = dx / currentRadius;
+                        const ny = dy / currentRadius;
+                        const nz = Math.sqrt(Math.max(0, 1 - nx * nx - ny * ny));
+
+                        // 优化4：使用预计算的旋转矩阵
+                        const x1 = nx * cosY - nz * sinY;
+                        const z1 = nx * sinY + nz * cosY;
+                        const y1 = ny * cosX - z1 * sinX;
+                        const z2 = ny * sinX + z1 * cosX;
+
+                        // 转换为经纬度
+                        const lat = Math.asin(Math.max(-1, Math.min(1, y1)));
+                        const lng = Math.atan2(x1, z2);
+
+                        // 映射到纹理坐标
+                        const textureX = Math.floor(((lng + Math.PI) / (2 * Math.PI)) * earthTexture.width) % earthTexture.width;
+                        const textureY = Math.floor(((Math.PI / 2 - lat) / Math.PI) * earthTexture.height);
+
+                        if (textureX >= 0 && textureX < earthTexture.width &&
+                            textureY >= 0 && textureY < earthTexture.height) {
+
+                            const textureIndex = (textureY * earthTexture.width + textureX) * 4;
+
+                            // 获取颜色值
+                            const r = textureDataCache.data[textureIndex];
+                            const g = textureDataCache.data[textureIndex + 1];
+                            const b = textureDataCache.data[textureIndex + 2];
+
+                            // 添加光照效果
+                            const lightIntensity = Math.max(0.3, (nz + 1) / 2);
+                            const finalR = r * lightIntensity;
+                            const finalG = g * lightIntensity;
+                            const finalB = b * lightIntensity;
+
+                            // 优化5：填充采样区域，减少重复计算
+                            // for (let sy = 0; sy < step && y + sy < currentRadius * 2; sy++) {
+                            //     for (let sx = 0; sx < step && x + sx < currentRadius * 2; sx++) {
+                            //         const imageIndex = ((y + sy) * currentRadius * 2 + (x + sx)) * 4;
+                            for (let sy = 0; sy < step && y + sy < imageSize; sy++) {
+                                for (let sx = 0; sx < step && x + sx < imageSize; sx++) {
+                                    const imageIndex = ((y + sy) * imageSize + (x + sx)) * 4; // 🎯 使用 imageSize
+                                    data[imageIndex] = finalR;
+                                    data[imageIndex + 1] = finalG;
+                                    data[imageIndex + 2] = finalB;
+                                    data[imageIndex + 3] = 255;
+                                }
+                            }
                         }
                     }
-                });
-                ctx.closePath();
-                ctx.fill();
-            });
-            
-            // 绘制经纬网格
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 1;
-            
-            // 经线
+                }
+            }
+
+            ctx.putImageData(imageData, centerX - imageSize / 2, centerY - imageSize / 2);
+
+            ctx.restore();
+
+            // 优化6：简化经纬网格绘制
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 0.5;
+
+            // 经线 - 减少采样点
             for (let lng = -180; lng <= 180; lng += 30) {
                 ctx.beginPath();
                 let first = true;
-                for (let lat = -90; lat <= 90; lat += 5) {
+                for (let lat = -90; lat <= 90; lat += 10) { // 从5度改为10度
                     const projected = projectPoint(lat, lng);
                     if (projected && projected.visible) {
                         if (first) {
@@ -708,12 +973,12 @@
                 }
                 ctx.stroke();
             }
-            
-            // 纬线
-            for (let lat = -90; lat <= 90; lat += 30) {
+
+            // 纬线 - 减少采样点
+            for (let lat = -60; lat <= 60; lat += 30) {
                 ctx.beginPath();
                 let first = true;
-                for (let lng = -180; lng <= 180; lng += 5) {
+                for (let lng = -180; lng <= 180; lng += 10) { // 从5度改为10度
                     const projected = projectPoint(lat, lng);
                     if (projected && projected.visible) {
                         if (first) {
@@ -726,51 +991,67 @@
                 }
                 ctx.stroke();
             }
-            
-            // 绘制选择的位置标记
+
+            // 绘制选中位置
             const selectedProjected = projectPoint(selectedLocation.lat, selectedLocation.lng);
             if (selectedProjected && selectedProjected.visible) {
-                ctx.fillStyle = '#EF4444';
+                ctx.shadowColor = '#FF4444';
+                ctx.shadowBlur = 15;
+
+                ctx.fillStyle = '#FF4444';
                 ctx.beginPath();
-                ctx.arc(selectedProjected.x, selectedProjected.y, 6, 0, 2 * Math.PI);
+                ctx.arc(selectedProjected.x, selectedProjected.y, 8, 0, 2 * Math.PI);
                 ctx.fill();
-                
+
+                ctx.shadowBlur = 0;
                 ctx.strokeStyle = '#FFFFFF';
                 ctx.lineWidth = 2;
                 ctx.stroke();
+
+                // 位置标签
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(selectedLocation.name, selectedProjected.x, selectedProjected.y - 15);
             }
-            
-            // 绘制地球边缘高光
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+
+            // 🎯 地球边缘高光 - 使用缩放后的半径
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, earthRadius, 0, 2 * Math.PI);
+            ctx.arc(centerX, centerY, currentRadius, 0, 2 * Math.PI);
             ctx.stroke();
         }
 
-        // 投影点到2D平面
+        // 🎯 投影点到2D平面 - 修复缩放版本
         function projectPoint(lat, lng) {
             const latRad = lat * Math.PI / 180;
             const lngRad = lng * Math.PI / 180;
-            
+
             // 球面坐标
             let x = Math.cos(latRad) * Math.sin(lngRad);
             let y = Math.sin(latRad);
             let z = Math.cos(latRad) * Math.cos(lngRad);
-            
+
             // 应用旋转
-            const rotatedX = x * Math.cos(rotation.y) - z * Math.sin(rotation.y);
-            const rotatedZ = x * Math.sin(rotation.y) + z * Math.cos(rotation.y);
-            const rotatedY = y * Math.cos(rotation.x) - rotatedZ * Math.sin(rotation.x);
-            const finalZ = y * Math.sin(rotation.x) + rotatedZ * Math.cos(rotation.x);
-            
+            const cosX = Math.cos(rotation.x);
+            const sinX = Math.sin(rotation.x);
+            const y1 = y * cosX - z * sinX;
+            const z1 = y * sinX + z * cosX;
+
+            const cosY = Math.cos(rotation.y);
+            const sinY = Math.sin(rotation.y);
+            const x2 = x * cosY + z1 * sinY;
+            const z2 = -x * sinY + z1 * cosY;
+
             // 检查是否在可见半球
-            if (finalZ < 0) return { visible: false };
-            
-            // 投影到2D
-            const screenX = 200 + rotatedX * earthRadius;
-            const screenY = 200 - rotatedY * earthRadius;
-            
+            if (z2 < 0) return { visible: false };
+
+            // 🎯 投影到2D - 使用缩放后的半径
+            const currentRadius = earthRadius * zoomLevel;
+            const screenX = 200 + x2 * currentRadius;
+            const screenY = 200 - y1 * currentRadius;
+
             return {
                 x: screenX,
                 y: screenY,
@@ -787,20 +1068,19 @@
                     window.location.href = '/';
                     return;
                 }
-                
+
                 const locationData = {
                     latitude: selectedLocation.lat,
                     longitude: selectedLocation.lng,
                     address: selectedLocation.name,
                     country: selectedLocation.country
                 };
-                
+
                 // 保存位置数据
                 sessionStorage.setItem('selectedLocation', JSON.stringify(locationData));
-                
+
                 // 跳转到星图页面
-                window.location.href = '/starmap';
-                
+                window.location.href = '/sphere';
             } catch (e) {
                 console.error('保存位置数据失败:', e);
                 alert('保存位置数据失败，请重试');
@@ -811,4 +1091,5 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
+
 </html>
