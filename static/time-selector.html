@@ -5,235 +5,429 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日晷时间选择器 - 28星宿天体音乐生成器</title>
-    <!-- 🚀 预加载中文字体 - 用户选择时间时就开始下载 -->
     <link rel="preload" href="/static/fonts/wqy-microhei.ttc" as="font" type="font/ttc" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
+        :root {
+            color-scheme: dark;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #0c0c1e 0%, #1a1a3e 50%, #2d1b69 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", "PingFang SC", "Microsoft Yahei", sans-serif;
+            background: radial-gradient(circle at top left, rgba(102, 126, 234, 0.3), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(118, 75, 162, 0.35), transparent 45%),
+                linear-gradient(135deg, #070815 0%, #12122b 45%, #1c1a3f 100%);
             overflow-x: hidden;
+            color: #fff;
         }
 
         .stars {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
+            z-index: 0;
         }
 
         .star {
             position: absolute;
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            animation: twinkle 2s infinite;
+            opacity: 0.6;
+            animation: twinkle 2.4s ease-in-out infinite;
         }
 
         @keyframes twinkle {
-
             0%,
             100% {
-                opacity: 0.3;
+                opacity: 0.15;
             }
 
             50% {
-                opacity: 1;
+                opacity: 0.9;
             }
         }
 
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .sundial-container {
+        .page-container {
             position: relative;
-            width: 600px;
-            height: 600px;
-            margin: 0 auto;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
         }
 
-        #sundialCanvas {
-            border-radius: 50%;
-            cursor: grab;
-            transition: transform 0.3s ease;
+        .page-header {
+            text-align: center;
+            margin-bottom: clamp(2rem, 6vw, 3.5rem);
+            max-width: 680px;
         }
 
-        #sundialCanvas:active {
-            cursor: grabbing;
+        .page-title {
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 700;
+            letter-spacing: 0.08em;
         }
 
-        .info-display {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
+        .page-subtitle {
+            margin-top: 1rem;
+            font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+            color: rgba(222, 230, 255, 0.78);
+            line-height: 1.7;
         }
 
-        .confirm-btn {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .confirm-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        .glass-card {
+            width: min(100%, 1080px);
+            border-radius: 28px;
+            padding: clamp(1.8rem, 4vw, 3rem);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(22px);
+            box-shadow: 0 30px 80px rgba(14, 18, 43, 0.55);
         }
 
         .step-indicator {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 40px;
+            gap: clamp(0.75rem, 4vw, 1.75rem);
+            flex-wrap: wrap;
+            margin-bottom: clamp(1.5rem, 4vw, 2.8rem);
         }
 
         .step {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            width: clamp(2.5rem, 6vw, 3.1rem);
+            height: clamp(2.5rem, 6vw, 3.1rem);
+            border-radius: 999px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.16);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
 
         .step.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .step.inactive {
-            background: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.45);
+            transform: translateY(-2px);
         }
 
         .step-line {
-            width: 60px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
+            flex: 1 1 60px;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.4));
+            max-width: 160px;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(1.6rem, 4vw, 2.8rem);
+            align-items: center;
+        }
+
+        .sundial-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sundial-frame {
+            width: min(80vw, 480px);
+            aspect-ratio: 1 / 1;
+            position: relative;
+        }
+
+        #sundialCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            box-shadow: 0 24px 60px rgba(15, 20, 45, 0.55);
+        }
+
+        #sundialCanvas:active {
+            cursor: grabbing;
+        }
+
+        .info-panel {
+            background: rgba(15, 19, 45, 0.55);
+            border-radius: 24px;
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            padding: clamp(1.5rem, 3.5vw, 2.4rem);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+        }
+
+        .info-heading {
+            font-size: clamp(1.45rem, 3vw, 1.85rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .info-lead {
+            color: rgba(216, 224, 255, 0.75);
+            line-height: 1.7;
+            margin-bottom: clamp(1.4rem, 3vw, 2rem);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: clamp(1.1rem, 2.5vw, 1.6rem);
+            margin-bottom: clamp(1.5rem, 3vw, 2.2rem);
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.35rem;
+        }
+
+        .info-card i {
+            font-size: 1.4rem;
+            color: #a6b7ff;
+        }
+
+        .info-card p {
+            margin: 0;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(215, 221, 255, 0.7);
+        }
+
+        .info-value {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            padding: 0.95rem 1.2rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 16px 38px rgba(102, 126, 234, 0.35);
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .confirm-btn i {
+            font-size: 0.95rem;
+        }
+
+        .mobile-helper {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: rgba(222, 229, 255, 0.65);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .mobile-helper i {
+            color: rgba(102, 126, 234, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-panel {
+                order: 2;
+            }
+
+            .sundial-panel {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                border-radius: 22px;
+            }
+
+            .info-panel {
+                padding: 1.4rem;
+            }
+
+            .info-card {
+                border-radius: 16px;
+            }
+
+            .step-line {
+                flex-basis: 40px;
+            }
+
+            .info-card {
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .page-container {
+                padding: 2.4rem 1.1rem 3rem;
+            }
+
+            .glass-card {
+                padding: 1.4rem;
+            }
+
+            .step-indicator {
+                gap: 0.65rem;
+            }
+
+            .step-line {
+                display: none;
+            }
+
+            .mobile-helper {
+                font-size: 0.9rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
 
-    <div class="min-h-screen flex flex-col items-center justify-center p-6">
-        <!-- 标题 -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-4">28星宿天体音乐生成器</h1>
-            <p class="text-xl text-gray-300">选择观测时间</p>
-        </div>
+    <main class="page-container">
+        <header class="page-header">
+            <h1 class="page-title">28星宿天体音乐生成器</h1>
+            <p class="page-subtitle">旋转日晷盘，选择你的观测日期与时间，捕捉来自宇宙的律动，解锁下一步的星图旅程。</p>
+        </header>
 
-        <!-- 步骤指示器 -->
-        <div class="step-indicator mt-8">
-            <div class="step active">1</div>
-            <div class="step-line inactive"></div>
-            <div class="step inactive">2</div>
-            <div class="step-line inactive"></div>
-            <div class="step inactive">3</div>
-            <div class="step-line inactive"></div>
-            <div class="step inactive">4</div>
-        </div>
-
-        <!-- 主容器 -->
-        <div class="glass-container p-8 max-w-2xl w-full">
-            <!-- 日晷容器 -->
-            <div class="sundial-container">
-                <canvas id="sundialCanvas" width="600" height="600"></canvas>
+        <section class="glass-card">
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step-line"></div>
+                <div class="step">2</div>
+                <div class="step-line"></div>
+                <div class="step">3</div>
+                <div class="step-line"></div>
+                <div class="step">4</div>
             </div>
 
-            <!-- 信息显示 -->
-            <div class="info-display text-center text-white">
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <i class="fas fa-calendar-alt text-blue-400 mb-2"></i>
-                        <p class="text-sm text-gray-300">选择的日期</p>
-                        <p class="text-lg font-semibold" id="selectedDate">1950年1月1日</p>
-                    </div>
-                    <div>
-                        <i class="fas fa-clock text-purple-400 mb-2"></i>
-                        <p class="text-sm text-gray-300">选择的时间</p>
-                        <p class="text-lg font-semibold" id="selectedTime">00:00</p>
+            <div class="layout-grid">
+                <div class="sundial-panel">
+                    <div class="sundial-frame">
+                        <canvas id="sundialCanvas" width="600" height="600"></canvas>
                     </div>
                 </div>
 
-                <div class="text-center">
+                <aside class="info-panel">
+                    <h2 class="info-heading">时间坐标</h2>
+                    <p class="info-lead">通过拖动同心圆环来调整年份、月份、日期与小时。每一次改变都将影响你将听见的星辰和声。</p>
+
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <p class="info-label">日期</p>
+                            <p class="info-value" id="selectedDate">1950年1月1日</p>
+                        </div>
+                        <div class="info-card">
+                            <i class="fas fa-clock"></i>
+                            <p class="info-label">小时</p>
+                            <p class="info-value" id="selectedTime">00:00</p>
+                        </div>
+                    </div>
+
                     <button class="confirm-btn" onclick="confirmSelection()">
-                        <i class="fas fa-arrow-right mr-2"></i>
-                        确认时间，进入下一步
+                        <span>确认时间，进入下一步</span>
+                        <i class="fas fa-arrow-right"></i>
                     </button>
-                </div>
+                </aside>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
-        // 全局变量
         const canvas = document.getElementById('sundialCanvas');
         const ctx = canvas.getContext('2d');
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
 
-        // 圆环配置
-        const rings = {
-            year: { radius: 220, width: 30, min: 1950, max: 2025, current: 1950, angle: 0 },
-            month: { radius: 170, width: 25, min: 1, max: 12, current: 1, angle: 0 },
-            day: { radius: 120, width: 20, min: 1, max: 31, current: 1, angle: 0 },
-            hour: { radius: 70, width: 15, min: 0, max: 23, current: 0, angle: 0 }
+        const baseRingDimensions = {
+            year: { radius: 220, width: 30 },
+            month: { radius: 170, width: 26 },
+            day: { radius: 120, width: 22 },
+            hour: { radius: 75, width: 16 }
         };
 
-        // 拖拽状态
+        const rings = {
+            year: { ...baseRingDimensions.year, min: 1950, max: 2025, current: 1950, angle: 0 },
+            month: { ...baseRingDimensions.month, min: 1, max: 12, current: 1, angle: 0 },
+            day: { ...baseRingDimensions.day, min: 1, max: 31, current: 1, angle: 0 },
+            hour: { ...baseRingDimensions.hour, min: 0, max: 23, current: 0, angle: 0 }
+        };
+
+        let centerX = canvas.width / 2;
+        let centerY = canvas.height / 2;
+        let renderScale = 1;
+
         let isDragging = false;
         let dragRing = null;
         let lastAngle = 0;
 
-        // 初始化
         function init() {
             createStars();
             setCurrentTime();
-            drawSundial();
             setupEventListeners();
+            resizeCanvas();
             updateDisplay();
         }
 
-        // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 200; i++) {
+            const totalStars = window.innerWidth < 640 ? 120 : 180;
+
+            for (let i = 0; i < totalStars; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
-                star.style.width = star.style.height = (Math.random() * 3 + 1) + 'px';
+                const size = Math.random() * 2.4 + 0.6;
+                star.style.width = star.style.height = size + 'px';
                 star.style.animationDelay = Math.random() * 2 + 's';
                 starsContainer.appendChild(star);
             }
         }
 
-        // 设置当前时间为默认值
         function setCurrentTime() {
             const now = new Date();
             rings.year.current = Math.min(Math.max(now.getFullYear(), 1950), 2025);
@@ -241,86 +435,105 @@
             rings.day.current = now.getDate();
             rings.hour.current = now.getHours();
 
-            // 计算对应的角度
             rings.year.angle = ((rings.year.current - rings.year.min) / (rings.year.max - rings.year.min)) * 360;
             rings.month.angle = ((rings.month.current - 1) / 11) * 360;
-            rings.day.angle = ((rings.day.current - 1) / (getDaysInMonth() - 1)) * 360;
+            rings.day.angle = ((rings.day.current - 1) / (getDaysInMonth() - 1 || 1)) * 360;
             rings.hour.angle = (rings.hour.current / 23) * 360;
         }
 
-        // 获取当前月份的天数
         function getDaysInMonth() {
             return new Date(rings.year.current, rings.month.current, 0).getDate();
         }
 
-        // 绘制日晷
+        function resizeCanvas() {
+            const wrapper = document.querySelector('.sundial-frame');
+            if (!wrapper) return;
+
+            const availableWidth = wrapper.clientWidth || Math.min(window.innerWidth * 0.8, 480);
+            const availableHeight = window.innerHeight * 0.62;
+            const finalSize = Math.max(Math.min(availableWidth, availableHeight, 540), 260);
+            const dpr = window.devicePixelRatio || 1;
+
+            canvas.style.width = finalSize + 'px';
+            canvas.style.height = finalSize + 'px';
+            canvas.width = finalSize * dpr;
+            canvas.height = finalSize * dpr;
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+
+            centerX = finalSize / 2;
+            centerY = finalSize / 2;
+            renderScale = finalSize / 600;
+
+            for (const [type, ring] of Object.entries(rings)) {
+                const base = baseRingDimensions[type];
+                ring.radius = base.radius * renderScale;
+                ring.width = Math.max(base.width * renderScale, 6);
+            }
+
+            drawSundial();
+        }
+
         function drawSundial() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 绘制背景圆
-            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 250);
-            gradient.addColorStop(0, 'rgba(139, 69, 19, 0.3)');
-            gradient.addColorStop(1, 'rgba(160, 82, 45, 0.1)');
+            const backgroundRadius = Math.min(centerX, centerY) - 20 * renderScale;
+            const gradient = ctx.createRadialGradient(centerX, centerY, backgroundRadius * 0.15, centerX, centerY, backgroundRadius);
+            gradient.addColorStop(0, 'rgba(139, 92, 246, 0.35)');
+            gradient.addColorStop(1, 'rgba(30, 24, 54, 0.25)');
+
             ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 240, 0, Math.PI * 2);
+            ctx.arc(centerX, centerY, backgroundRadius, 0, Math.PI * 2);
             ctx.fill();
 
-            // 绘制各个圆环
-            drawRing('year', '年份', '#CD853F');
-            drawRing('month', '月份', '#DEB887');
-            drawRing('day', '日期', '#F4A460');
-            drawRing('hour', '小时', '#DAA520');
+            drawRing('year', '年份', '#f6ad55');
+            drawRing('month', '月份', '#fbd38d');
+            drawRing('day', '日期', '#f6e05e');
+            drawRing('hour', '小时', '#faf089');
 
-            // 绘制中心指针
             drawPointer();
         }
 
-        // 绘制单个圆环
         function drawRing(type, label, color) {
             const ring = rings[type];
-            const { radius, width, min, max, current, angle } = ring;
+            const { radius, width } = ring;
 
-            // 外圆环
             ctx.strokeStyle = color;
             ctx.lineWidth = width;
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.stroke();
 
-            // 内圆环（更深色）
-            ctx.strokeStyle = darkenColor(color, 0.3);
-            ctx.lineWidth = width - 4;
+            ctx.strokeStyle = darkenColor(color, 0.35);
+            ctx.lineWidth = Math.max(width - 4 * renderScale, 2 * renderScale);
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.stroke();
 
-            // 绘制刻度
             drawTicks(type, radius, color);
-
-            // 绘制当前选中的标记
-            drawCurrentMarker(radius, angle, color);
-
-            // 绘制数值
-            drawValues(type, radius);
+            drawCurrentMarker(radius, ring.angle, color);
+            drawValues(type, radius, label);
         }
 
-        // 绘制刻度
         function drawTicks(type, radius, color) {
             const ring = rings[type];
-            const tickCount = ring.max - ring.min + 1;
+            const total = ring.max - ring.min + 1;
+            const tickCount = Math.min(total, 60);
+            const innerOffset = 15 * renderScale;
+            const outerOffset = 5 * renderScale;
 
             ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = Math.max(1.6 * renderScale, 1);
 
             for (let i = 0; i < tickCount; i++) {
-                const angle = (i / (tickCount - 1)) * 360 - 90;
+                const angle = (i / tickCount) * 360 - 90;
                 const radian = (angle * Math.PI) / 180;
-
-                const x1 = centerX + Math.cos(radian) * (radius - 15);
-                const y1 = centerY + Math.sin(radian) * (radius - 15);
-                const x2 = centerX + Math.cos(radian) * (radius + 5);
-                const y2 = centerY + Math.sin(radian) * (radius + 5);
+                const x1 = centerX + Math.cos(radian) * (radius - innerOffset);
+                const y1 = centerY + Math.sin(radian) * (radius - innerOffset);
+                const x2 = centerX + Math.cos(radian) * (radius + outerOffset);
+                const y2 = centerY + Math.sin(radian) * (radius + outerOffset);
 
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
@@ -329,87 +542,93 @@
             }
         }
 
-        // 绘制当前选中标记
         function drawCurrentMarker(radius, angle, color) {
             const radian = ((angle - 90) * Math.PI) / 180;
             const x = centerX + Math.cos(radian) * radius;
             const y = centerY + Math.sin(radian) * radius;
 
-            // 发光效果
+            const outerSize = Math.max(7 * renderScale, 5.5);
+            const innerSize = Math.max(3.5 * renderScale, 2.5);
+
             ctx.shadowColor = color;
-            ctx.shadowBlur = 20;
+            ctx.shadowBlur = 18 * renderScale;
             ctx.fillStyle = color;
             ctx.beginPath();
-            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.arc(x, y, outerSize, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // 内部高亮
-            ctx.fillStyle = 'white';
+            ctx.fillStyle = '#ffffff';
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.arc(x, y, innerSize, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // 绘制数值
         function drawValues(type, radius) {
             const ring = rings[type];
-            const tickCount = Math.min(ring.max - ring.min + 1, 12); // 限制显示数量
+            const totalRange = ring.max - ring.min;
+            const tickCount = Math.min(totalRange + 1, 12);
+            const textOffset = 26 * renderScale;
 
-            ctx.fillStyle = 'white';
-            ctx.font = '12px Arial';
+            ctx.fillStyle = '#f9fafb';
+            ctx.font = `${Math.max(11 * renderScale, 9)}px "Inter", "Segoe UI", sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            for (let i = 0; i < tickCount; i++) {
-                const value = ring.min + Math.floor((i / (tickCount - 1)) * (ring.max - ring.min));
-                // const angle = (i / (tickCount - 1)) * 360 - 90;
-                const angle = ((i + 1) * 30) - 90;  // 🎯 修改2：每30度一个，像时钟
-                const radian = (angle * Math.PI) / 180;
+            if (tickCount <= 1) {
+                ctx.fillText(ring.current.toString(), centerX, centerY - (radius + textOffset));
+                return;
+            }
 
-                const textRadius = radius + 25;
-                const x = centerX + Math.cos(radian) * textRadius;
-                const y = centerY + Math.sin(radian) * textRadius;
+            for (let i = 0; i < tickCount; i++) {
+                const ratio = i / (tickCount - 1);
+                const value = Math.round(ring.min + ratio * totalRange);
+                const angle = ratio * 360 - 90;
+                const radian = (angle * Math.PI) / 180;
+                const x = centerX + Math.cos(radian) * (radius + textOffset);
+                const y = centerY + Math.sin(radian) * (radius + textOffset);
 
                 ctx.fillText(value.toString(), x, y);
             }
         }
 
-        // 绘制中心指针
         function drawPointer() {
-            const gradient = ctx.createLinearGradient(centerX, centerY - 40, centerX, centerY + 40);
-            gradient.addColorStop(0, '#FFD700');
-            gradient.addColorStop(1, '#FFA500');
+            const pointerHeight = 52 * renderScale;
+            const pointerWidth = 6 * renderScale;
+
+            const gradient = ctx.createLinearGradient(centerX, centerY - pointerHeight, centerX, centerY + pointerHeight / 2);
+            gradient.addColorStop(0, '#fbd38d');
+            gradient.addColorStop(1, '#f6ad55');
 
             ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.moveTo(centerX, centerY - 40);
-            ctx.lineTo(centerX - 3, centerY + 35);
-            ctx.lineTo(centerX + 3, centerY + 35);
+            ctx.moveTo(centerX, centerY - pointerHeight);
+            ctx.lineTo(centerX - pointerWidth, centerY + pointerHeight * 0.7);
+            ctx.lineTo(centerX + pointerWidth, centerY + pointerHeight * 0.7);
             ctx.closePath();
             ctx.fill();
 
-            // 中心圆
-            ctx.fillStyle = '#FFD700';
+            ctx.fillStyle = '#f6ad55';
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+            ctx.arc(centerX, centerY, Math.max(6 * renderScale, 4), 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // 设置事件监听器
         function setupEventListeners() {
             canvas.addEventListener('mousedown', handleMouseDown);
             canvas.addEventListener('mousemove', handleMouseMove);
             canvas.addEventListener('mouseup', handleMouseUp);
             canvas.addEventListener('mouseleave', handleMouseUp);
 
-            // 触摸事件
-            canvas.addEventListener('touchstart', handleTouchStart);
-            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
             canvas.addEventListener('touchend', handleTouchEnd);
+
+            window.addEventListener('resize', () => {
+                window.requestAnimationFrame(resizeCanvas);
+            });
         }
 
-        // 鼠标事件处理
         function handleMouseDown(e) {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -429,7 +648,6 @@
             endDrag();
         }
 
-        // 触摸事件处理
         function handleTouchStart(e) {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
@@ -454,13 +672,11 @@
             endDrag();
         }
 
-        // 开始拖拽
         function startDrag(x, y) {
             const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
 
-            // 确定拖拽的是哪个圆环
             for (const [type, ring] of Object.entries(rings)) {
-                if (Math.abs(distance - ring.radius) < ring.width / 2 + 10) {
+                if (Math.abs(distance - ring.radius) < ring.width / 2 + 10 * renderScale) {
                     isDragging = true;
                     dragRing = type;
                     lastAngle = Math.atan2(y - centerY, x - centerX) * 180 / Math.PI;
@@ -470,21 +686,16 @@
             }
         }
 
-        // 更新拖拽
         function updateDrag(x, y) {
             if (!isDragging || !dragRing) return;
 
             const currentAngle = Math.atan2(y - centerY, x - centerX) * 180 / Math.PI;
             let deltaAngle = currentAngle - lastAngle;
 
-            // 处理角度跨越
             if (deltaAngle > 180) deltaAngle -= 360;
             if (deltaAngle < -180) deltaAngle += 360;
 
-            // 更新圆环角度
             rings[dragRing].angle = (rings[dragRing].angle + deltaAngle + 360) % 360;
-
-            // 根据角度计算数值
             updateValueFromAngle(dragRing);
 
             lastAngle = currentAngle;
@@ -492,14 +703,12 @@
             updateDisplay();
         }
 
-        // 结束拖拽
         function endDrag() {
             isDragging = false;
             dragRing = null;
             canvas.style.cursor = 'grab';
         }
 
-        // 根据角度更新数值
         function updateValueFromAngle(ringType) {
             const ring = rings[ringType];
             const normalizedAngle = ring.angle / 360;
@@ -512,21 +721,18 @@
                 ring.current = Math.round(normalizedAngle * (ring.max - ring.min)) + ring.min;
             }
 
-            // 确保数值在有效范围内
             ring.current = Math.max(ring.min, Math.min(ring.max, ring.current));
 
-            // 如果年份或月份改变，需要重新计算日期的最大值
             if (ringType === 'year' || ringType === 'month') {
                 const maxDays = getDaysInMonth();
+                rings.day.max = maxDays;
                 if (rings.day.current > maxDays) {
                     rings.day.current = maxDays;
-                    rings.day.angle = ((rings.day.current - 1) / (maxDays - 1)) * 360;
+                    rings.day.angle = ((rings.day.current - 1) / (maxDays - 1 || 1)) * 360;
                 }
-                rings.day.max = maxDays;
             }
         }
 
-        // 更新显示
         function updateDisplay() {
             const dateStr = `${rings.year.current}年${rings.month.current}月${rings.day.current}日`;
             const timeStr = `${rings.hour.current.toString().padStart(2, '0')}:00`;
@@ -535,7 +741,6 @@
             document.getElementById('selectedTime').textContent = timeStr;
         }
 
-        // 确认选择
         function confirmSelection() {
             const selectedTime = {
                 year: rings.year.current,
@@ -546,14 +751,10 @@
                 formatted: `${rings.year.current}年${rings.month.current}月${rings.day.current}日 ${rings.hour.current.toString().padStart(2, '0')}:00`
             };
 
-            // 保存到sessionStorage
             sessionStorage.setItem('selectedTime', JSON.stringify(selectedTime));
-
-            // 跳转到位置选择页面
             window.location.href = '/location';
         }
 
-        // 颜色处理函数
         function darkenColor(color, factor) {
             const hex = color.replace('#', '');
             const r = parseInt(hex.substr(0, 2), 16);
@@ -567,7 +768,6 @@
             return `rgb(${newR}, ${newG}, ${newB})`;
         }
 
-        // 初始化应用
         init();
     </script>
 </body>
