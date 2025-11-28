@@ -1,2089 +1,1043 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>28星宿音乐生成器 - 节气音乐星图</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>二十八星宿星图 - 28 Mansions Celestial Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* ==================== CSS Variables ==================== */
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #1a1d2e;
+            --color-gold: #d4af37;
+            --color-cyan: #00ffff;
+            --color-blue: #4facfe;
+            --color-red: #ff6b6b;
+            --color-white: #ffffff;
+            --color-gray: #a8a8a8;
+
+            /* Safe area for notch screens */
+            --safe-area-top: env(safe-area-inset-top, 0px);
+            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-area-left: env(safe-area-inset-left, 0px);
+            --safe-area-right: env(safe-area-inset-right, 0px);
+        }
+
+        /* ==================== Base Styles ==================== */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #0a0a23 0%, #1a1a3a 50%, #2a1a4a 100%);
-            color: #ffffff;
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
-            overflow: hidden;
+            font-family: 'Inter', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1d2e 50%, #0d1117 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            min-height: 100dvh;
         }
 
-        /* 步骤导航样式 */
-        .step-navigation {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        /* ==================== Layout Grid ==================== */
+        .main-container {
+            display: grid;
+            grid-template-areas:
+                "header"
+                "starmap"
+                "controls"
+                "info"
+                "player";
+            grid-template-rows: auto 65vh auto auto auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-top: var(--safe-area-top);
+            padding-bottom: var(--safe-area-bottom);
+        }
+
+        /* Desktop layout */
+        @media (min-width: 768px) {
+            .main-container {
+                grid-template-areas:
+                    "header header header"
+                    "controls starmap info"
+                    "player player player";
+                grid-template-columns: 280px 1fr 320px;
+                grid-template-rows: auto 1fr auto;
+                gap: 1rem;
+                padding: 1rem;
+                max-width: 1920px;
+                margin: 0 auto;
+            }
+        }
+
+        /* ==================== Header (Step Navigation) ==================== */
+        .step-nav {
+            grid-area: header;
             display: flex;
-            gap: 40px;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
+            justify-content: space-around;
+            padding: 0.5rem;
+            background: rgba(26, 29, 46, 0.9);
             backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            gap: 0.25rem;
+            position: sticky;
+            top: var(--safe-area-top);
+            z-index: 100;
         }
 
-        .step {
+        .step-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 15px;
-        }
-
-        .step:hover {
-            background: rgba(255, 255, 255, 0.1);
+            gap: 0.25rem;
+            padding: 0.5rem 0.25rem;
+            flex: 1;
+            min-width: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         .step-number {
-            width: 35px;
-            height: 35px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            margin-bottom: 5px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid var(--color-gold);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-gold);
             transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-number {
+            background: var(--color-gold);
+            color: #0a0e1a;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
         }
 
         .step-label {
-            font-size: 12px;
-            color: #cccccc;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
 
-        .step.completed .step-number {
-            background: #4ade80;
-            color: #000000;
+        .step-item.active .step-label {
+            color: var(--color-gold);
+            font-weight: 600;
         }
 
-        .step.active .step-number {
-            background: #3b82f6;
-            color: #ffffff;
+        /* Hide step labels on very small screens */
+        @media (max-width: 380px) {
+            .step-label {
+                display: none;
+            }
+            .step-number {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
         }
 
-        .step.inactive .step-number {
-            background: rgba(255, 255, 255, 0.2);
-            color: #888888;
+        @media (min-width: 768px) {
+            .step-nav {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .step-item {
+                padding: 0.75rem;
+            }
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .step-label {
+                font-size: 13px;
+            }
         }
 
-        .step.active .step-label {
-            color: #3b82f6;
-        }
-
-        .step-connector {
-            width: 30px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            align-self: center;
-            margin-top: 17px;
-        }
-
-        .main-container {
-            display: flex;
-            height: 100vh;
-            padding-top: 0px;
-        }
-
-        .control-panel {
-            width: 280px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            overflow-y: auto;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .star-canvas-container {
-            flex: 1;
+        /* ==================== Starmap Section ==================== */
+        .starmap-container {
+            grid-area: starmap;
             position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            min-height: 300px;
         }
 
-        /* 【新增】iframe 样式 */
-        #stellariumFrame {
+        .starmap-container iframe {
             width: 100%;
             height: 100%;
             border: none;
-            background: #000;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        #starCanvas {
-            width: 100%;
-            height: 100%;
             display: block;
-            cursor: grab;
         }
 
-        #starCanvas:active {
-            cursor: grabbing;
+        .starmap-hint {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--color-cyan);
+            pointer-events: none;
+            opacity: 0.8;
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 10;
         }
 
-        .info-panel {
-            width: 320px;
-            background: rgba(0, 0, 0, 0.8);
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @media (min-width: 768px) {
+            .starmap-container {
+                min-height: 600px;
+            }
+            .starmap-hint {
+                font-size: 14px;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+
+        /* ==================== Collapsible Panels ==================== */
+        .panel {
+            background: rgba(26, 29, 46, 0.8);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            overflow-y: auto;
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            margin: 0.5rem;
         }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            color: #4facfe;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-item {
+        .panel-header {
+            padding: 1rem;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
+            align-items: center;
+            background: rgba(212, 175, 55, 0.05);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background 0.2s ease;
+            min-height: 56px; /* Ensure 44px+ touch target */
         }
 
-        .info-label {
-            color: #cccccc;
+        .panel-header:active {
+            background: rgba(212, 175, 55, 0.15);
         }
 
-        .info-value {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        /* 已选择信息卡片 */
-        .selected-info-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .selected-info-title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #4facfe;
-            margin-bottom: 10px;
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-gold);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
-        .selected-info-content {
-            font-size: 12px;
-            color: #cccccc;
-            line-height: 1.4;
+        .panel-toggle {
+            font-size: 20px;
+            color: var(--color-gold);
+            transition: transform 0.3s ease;
         }
 
-        /* 【新增】预览信息卡片 */
-        .preview-info-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 10px 0;
+        details[open] .panel-toggle {
+            transform: rotate(180deg);
         }
 
-        .preview-info-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #ffc107;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .panel-content {
+            padding: 1rem;
         }
 
-        .preview-info-content {
-            font-size: 11px;
-            color: #ffd54f;
-            line-height: 1.3;
+        @media (min-width: 768px) {
+            .panel {
+                margin: 0;
+            }
+            /* Desktop: always show panels */
+            details {
+                display: block !important;
+            }
+            details summary {
+                pointer-events: none;
+            }
+            details .panel-toggle {
+                display: none;
+            }
         }
 
-        .btn {
+        /* ==================== Controls Section ==================== */
+        .controls-section {
+            grid-area: controls;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
             width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: #e0e0e0;
             font-size: 14px;
             transition: all 0.3s ease;
+            min-height: 44px;
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
+        /* Duration preset buttons */
+        .duration-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .preset-btn {
+            padding: 0.625rem 0.5rem;
+            background: rgba(74, 172, 254, 0.1);
+            border: 1px solid var(--color-blue);
+            border-radius: 6px;
+            color: var(--color-blue);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preset-btn:hover, .preset-btn:active {
+            background: rgba(74, 172, 254, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Action buttons */
         .btn-primary {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: linear-gradient(135deg, var(--color-gold) 0%, #b8932d 100%);
+            border: none;
+            border-radius: 8px;
+            color: #0a0e1a;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+            min-height: 48px;
         }
 
-        .btn-primary:hover:not(:disabled) {
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
-            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-success {
-            background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(45deg, #ff9a56 0%, #ff6b35 100%);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #cccccc;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .duration-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .duration-input {
-            flex: 1;
-            padding: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 12px;
-        }
-
-        .duration-preset {
-            padding: 4px 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.3s ease;
-        }
-
-        .duration-preset:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .duration-preset.active {
-            background: #4facfe;
-            border-color: #4facfe;
-        }
-
-        .rotation-controls {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        .rotation-btn {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .rotation-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .rotation-btn.active {
-            background: #4facfe;
-            border-color: #4facfe;
-        }
-
-        .music-status-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--color-cyan);
             border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .status-success {
-            border-left: 4px solid #4ade80;
-            background: rgba(74, 222, 128, 0.1);
-        }
-
-        .status-warning {
-            border-left: 4px solid #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-        }
-
-        .status-error {
-            border-left: 4px solid #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .status-loading {
-            border-left: 4px solid #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .music-params {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 6px;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .param-item {
-            display: flex;
-            justify-content: space-between;
-            margin: 5px 0;
-            font-size: 13px;
-        }
-
-        .param-label {
-            color: #a0a0a0;
-        }
-
-        .param-value {
-            color: #4facfe;
-            font-weight: bold;
-        }
-
-        .enhanced-prompt {
-            background: rgba(75, 85, 99, 0.3);
-            border: 1px solid rgba(75, 85, 99, 0.5);
-            border-radius: 6px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 11px;
-            color: #d1d5db;
-            line-height: 1.4;
-        }
-
-        .enhanced-prompt .prompt-label {
-            color: #fbbf24;
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .duration-display {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            border-radius: 4px;
-            padding: 4px 8px;
-            display: inline-block;
-            font-size: 11px;
-            color: #60a5fa;
-            margin-left: 8px;
-        }
-
-        .retry-options {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .retry-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 4px;
-            font-size: 12px;
+            color: var(--color-cyan);
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-height: 44px;
         }
 
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .btn-secondary:hover, .btn-secondary:active {
+            background: rgba(0, 255, 255, 0.2);
+        }
+
+        /* ==================== Info Section ==================== */
+        .info-section {
+            grid-area: info;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--color-gold);
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+
+        /* Mansions grid */
+        .mansions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .mansion-tag {
+            padding: 0.5rem;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid var(--color-red);
+            border-radius: 6px;
             text-align: center;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
+            font-size: 13px;
+            color: var(--color-red);
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #4facfe;
+        .mansion-tag.active {
+            background: var(--color-red);
+            color: white;
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .mansions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ==================== Music Player Section ==================== */
+        .player-section {
+            grid-area: player;
+            position: sticky;
+            bottom: var(--safe-area-bottom);
+            background: rgba(26, 29, 46, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 1rem;
+            padding-bottom: calc(1rem + var(--safe-area-bottom));
+            z-index: 50;
+        }
+
+        .player-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .player-title {
+            font-size: 14px;
+            color: var(--color-gold);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        audio {
+            width: 100%;
+            height: 48px;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .player-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .player-section {
+                position: static;
+                padding-bottom: 1rem;
+            }
+            .player-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* ==================== Loading & Status ==================== */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-top-color: var(--color-gold);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
 
-        .constellation-legend {
-            font-size: 12px;
-            margin-bottom: 15px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .status-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 255, 0, 0.5);
-            color: #00ff00;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            backdrop-filter: blur(5px);
-            z-index: 1001;
-            /* 确保在iframe之上 */
-        }
-
-        /* .status-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 255, 0, 0.2);
-            border: 1px solid rgba(0, 255, 0, 0.5);
-            color: #00ff00;
-            padding: 8px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            backdrop-filter: blur(5px);
-        } */
-
-        .status-indicator.error {
-            background: rgba(255, 0, 0, 0.2);
-            border-color: rgba(255, 0, 0, 0.5);
-            color: #ff6b6b;
-        }
-
-        .timeout-help {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid rgba(255, 193, 7, 0.3);
+        .status-message {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid var(--color-cyan);
             border-radius: 6px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 12px;
-            color: #ffc107;
-        }
-
-        .help-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* 数据缺失警告 */
-        .data-missing-warning {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #fca5a5;
-        }
-
-        .data-missing-warning .warning-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .data-missing-warning .warning-text {
             font-size: 13px;
-            line-height: 1.4;
-            margin-bottom: 10px;
+            color: var(--color-cyan);
+        }
+
+        .status-message.error {
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: var(--color-red);
+            color: var(--color-red);
+        }
+
+        .status-message.success {
+            background: rgba(80, 250, 123, 0.1);
+            border-left-color: #50fa7b;
+            color: #50fa7b;
+        }
+
+        /* ==================== Checkbox Custom Style ==================== */
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--color-gold);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            min-height: 44px;
+        }
+
+        /* ==================== Scrollbar ==================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.5);
         }
     </style>
 </head>
-
 <body>
-    <!-- 步骤导航 -->
-    <div class="step-navigation">
-        <div class="step completed" onclick="goBackToStep(1)">
-            <div class="step-number">1</div>
-            <div class="step-label">时间选择</div>
-        </div>
-
-        <div class="step-connector"></div>
-        <div class="step completed" onclick="goBackToStep(2)">
-            <div class="step-number">2</div>
-            <div class="step-label">位置选择</div>
-        </div>
-
-        <div class="step-connector"></div>
-        <div class="step completed" onclick="goBackToStep(3)">
-            <div class="step-number">3</div>
-            <div class="step-label">天球坐标</div>
-        </div>
-
-        <div class="step-connector"></div>
-        <div class="step active">
-            <div class="step-number">4</div>
-            <div class="step-label">节气星图</div>
-        </div>
-    </div>
-
     <div class="main-container">
-        <!-- 控制面板 -->
-        <div class="control-panel">
-            <div class="section-title">
-                <i class="fas fa-star"></i> 28星宿天体星图
+        <!-- Step Navigation -->
+        <nav class="step-nav">
+            <div class="step-item active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">选择时间</div>
             </div>
-
-            <!-- 已选择信息显示 -->
-            <div id="selectedInfoContainer">
-                <!-- 时间信息卡片 -->
-                <div class="selected-info-card">
-                    <div class="selected-info-title">
-                        <i class="fas fa-clock"></i> 已选择时间
-                    </div>
-                    <div class="selected-info-content" id="selectedTimeInfo">
-                        正在读取选择的时间...
-                    </div>
-                </div>
-
-                <!-- 位置信息卡片 -->
-                <div class="selected-info-card">
-                    <div class="selected-info-title">
-                        <i class="fas fa-map-marker-alt"></i> 观测位置
-                    </div>
-                    <div class="selected-info-content" id="selectedLocationInfo">
-                        正在读取选择的位置...
-                    </div>
-                </div>
-
-                <!-- 数据缺失警告 -->
-                <div id="dataMissingWarning" class="data-missing-warning" style="display: none;">
-                    <div class="warning-title">
-                        <i class="fas fa-exclamation-triangle"></i> 数据缺失警告
-                    </div>
-                    <div class="warning-text" id="warningText">
-                        未检测到前面步骤的选择数据，将使用默认时间和位置进行计算。
-                    </div>
-                    <button class="btn btn-outline" onclick="goBackToStep(1)">
-                        <i class="fas fa-arrow-left"></i> 返回时间选择
-                    </button>
-                </div>
+            <div class="step-item" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">选择位置</div>
             </div>
-
-            <div class="control-group">
-                <label class="info-label">观测时间（星图预览）</label>
-                <input type="datetime-local" id="timeInput"
-                    class="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded mt-2">
-                <button id="updateBtn" class="btn btn-primary mt-2">更新星图预览</button>
-
-                <!-- 【新增】预览信息显示 -->
-                <div id="previewInfoCard" class="preview-info-card" style="display: none;">
-                    <div class="preview-info-title">
-                        <i class="fas fa-eye"></i> 预览时间天文信息
-                    </div>
-                    <div class="preview-info-content" id="previewInfo">
-                        点击"更新星图预览"查看
-                    </div>
-                </div>
+            <div class="step-item" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">查看星图</div>
             </div>
-
-            <div class="control-group">
-                <label class="info-label">节气音乐时长设置</label>
-                <div class="duration-control">
-                    <input type="number" id="durationInput" class="duration-input" value="45" min="15" max="180"
-                        step="5">
-                    <span class="text-xs text-gray-400">秒</span>
-                </div>
-                <div class="flex gap-1 mt-2">
-                    <button class="duration-preset" data-duration="30">30s</button>
-                    <button class="duration-preset active" data-duration="45">45s</button>
-                    <button class="duration-preset" data-duration="60">60s</button>
-                    <button class="duration-preset" data-duration="90">90s</button>
-                </div>
-                <div class="text-xs text-gray-400 mt-1">推荐45秒，生成更完整的节气音乐作品</div>
+            <div class="step-item" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">生成音乐</div>
             </div>
+        </nav>
 
-            <div class="control-group">
-                <label class="info-label">旋转控制</label>
-                <div class="rotation-controls mt-2">
-                    <button id="pauseBtn" class="rotation-btn active">暂停</button>
-                    <button id="slowBtn" class="rotation-btn">慢速</button>
-                    <button id="normalBtn" class="rotation-btn">正常</button>
-                    <button id="fastBtn" class="rotation-btn">快速</button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="info-label">显示选项</label>
-                <div class="mt-2 space-y-2">
-                    <label class="flex items-center">
-                        <input type="checkbox" id="showLabels" checked class="mr-2">
-                        <span>显示星宿标注</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" id="showLines" checked class="mr-2">
-                        <span>显示连线</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="checkbox" id="showBackground" checked class="mr-2">
-                        <span>显示背景星空</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="constellation-legend">
-                <div class="section-title">四象图例</div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #4facfe;"></div>
-                    <span>东方青龙 (7宿)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #ff6b6b;"></div>
-                    <span>南方朱雀 (7宿)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #ffffff;"></div>
-                    <span>西方白虎 (7宿)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #a8a8a8;"></div>
-                    <span>北方玄武 (7宿)</span>
-                </div>
-            </div>
-
-            <button id="generateMusicBtn" class="btn btn-secondary">
-                <i class="fas fa-music"></i> 生成节气音乐
-            </button>
-
-
-
-            <button id="testStellariumBtn" class="btn btn-primary mt-2">
-                <i class="fas fa-telescope"></i> 测试星图导航
-            </button>
-
-
-
-
+        <!-- Starmap Display -->
+        <div class="starmap-container">
+            <iframe id="stellarium-iframe" src="stellarium_web_engine.html"></iframe>
+            <div class="starmap-hint">触摸拖动以旋转星图 / 双指缩放</div>
         </div>
 
+        <!-- Controls Panel -->
+        <div class="controls-section">
+            <details class="panel" open>
+                <summary class="panel-header">
+                    <div class="panel-title">
+                        <span>⚙️</span>
+                        <span>时间与位置设置</span>
+                    </div>
+                    <span class="panel-toggle">▼</span>
+                </summary>
+                <div class="panel-content">
+                    <!-- Time Selection -->
+                    <div class="form-group">
+                        <label class="form-label">选择观测时间</label>
+                        <input
+                            type="datetime-local"
+                            id="observation-time"
+                            class="form-input"
+                            value=""
+                        >
+                    </div>
 
-        <!-- 星图区域 - 替换为 Stellarium Web Engine -->
-        <div class="star-canvas-container">
-            <!-- 原来的 Three.js canvas 替换为 Stellarium iframe -->
-            <!-- style="width: 100%; height: 100%; border: none; background: #000;"> -->
-            <iframe id="stellariumFrame" src="/stellarium_web_engine.html" frameborder="0"
-                allow="accelerometer; gyroscope" onload="onStellariumLoad()">
-            </iframe>
+                    <!-- Location -->
+                    <div class="form-group">
+                        <label class="form-label">观测位置</label>
+                        <input
+                            type="text"
+                            id="location-display"
+                            class="form-input"
+                            readonly
+                            placeholder="点击下方设置位置"
+                        >
+                        <button type="button" class="btn-secondary" style="margin-top: 0.5rem;" onclick="openLocationSelector()">
+                            选择位置
+                        </button>
+                    </div>
 
-            <!-- 保留状态指示器 -->
-            <div class="status-indicator" id="statusIndicator">正在加载真实星图...</div>
+                    <!-- Update Starmap Button -->
+                    <button type="button" class="btn-primary" onclick="updateStarmap()">
+                        更新星图
+                    </button>
 
-            <!-- 简化的加载指示器 -->
-            <div class="loading" id="loadingIndicator" style="display: none;">
-                <div class="spinner"></div>
-                <div id="loadingText">加载中...</div>
-            </div>
+                    <div id="status-message"></div>
+                </div>
+            </details>
+
+            <!-- Music Generation Panel -->
+            <details class="panel">
+                <summary class="panel-header">
+                    <div class="panel-title">
+                        <span>🎵</span>
+                        <span>音乐生成设置</span>
+                    </div>
+                    <span class="panel-toggle">▼</span>
+                </summary>
+                <div class="panel-content">
+                    <div class="form-group">
+                        <label class="form-label">音乐时长 (秒)</label>
+                        <input
+                            type="number"
+                            id="music-duration"
+                            class="form-input"
+                            value="45"
+                            min="15"
+                            max="180"
+                        >
+                        <div class="duration-presets">
+                            <button type="button" class="preset-btn" onclick="setDuration(15)">15s</button>
+                            <button type="button" class="preset-btn" onclick="setDuration(30)">30s</button>
+                            <button type="button" class="preset-btn" onclick="setDuration(45)">45s</button>
+                            <button type="button" class="preset-btn" onclick="setDuration(60)">60s</button>
+                            <button type="button" class="preset-btn" onclick="setDuration(90)">90s</button>
+                            <button type="button" class="preset-btn" onclick="setDuration(120)">120s</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="use-lunar" checked>
+                            <span class="form-label" style="margin: 0;">使用农历计算</span>
+                        </label>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-primary"
+                        id="generate-music-btn"
+                        onclick="generateMusic()"
+                    >
+                        生成天体音乐
+                    </button>
+
+                    <div id="music-status"></div>
+                </div>
+            </details>
         </div>
 
-        <!-- 信息面板 -->
-        <div class="info-panel">
-            <div class="section-title">
-                <i class="fas fa-sun"></i> 天文信息（已选择时间）
-            </div>
-            <div class="info-item">
-                <span class="info-label">选择时间:</span>
-                <span class="info-value" id="selectedTime">--</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">太阳星次:</span>
-                <span class="info-value" id="zodiacSign">--</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">对应节气:</span>
-                <span class="info-value" id="solarTerm">--</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">太阳黄经:</span>
-                <span class="info-value" id="eclipticLon">--°</span>
-            </div>
-
-            <div class="info-item">
-                <span class="info-label">对应星宿:</span>
-                <span class="info-value" id="mansionsInfo">--</span>
-            </div>
-
-            <!-- 🔑 新增：现代星座 -->
-            <div class="info-item">
-                <span class="info-label">现代星座:</span>
-                <span class="info-value" id="modernConstellation">--</span>
-            </div>
-
-            <div class="section-title mt-6">
-                <i class="fas fa-music"></i> 节气音乐参数
-                <span class="duration-display" id="durationDisplay">45秒</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">乐器:</span>
-                <span class="info-value" id="instrument">传统民乐</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">调式:</span>
-                <span class="info-value" id="mode">五声音阶</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">风格:</span>
-                <span class="info-value">节气主题</span>
-            </div>
-
-            <div class="section-title mt-6">
-                <i class="fas fa-play"></i> 音乐播放器
-            </div>
-            <div id="musicStatusContainer">
-                <div class="music-status-card status-loading" id="musicStatusCard">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i class="fas fa-info-circle"></i>
-                        <span class="font-bold">准备生成节气音乐</span>
+        <!-- Info Panel -->
+        <div class="info-section">
+            <details class="panel" open>
+                <summary class="panel-header">
+                    <div class="panel-title">
+                        <span>📊</span>
+                        <span>天文信息</span>
                     </div>
-                    <div id="musicStatusText">点击"生成节气音乐"按钮开始</div>
-                </div>
-            </div>
+                    <span class="panel-toggle">▼</span>
+                </summary>
+                <div class="panel-content">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">太阳黄经</div>
+                            <div class="info-value" id="info-longitude">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">十二星次</div>
+                            <div class="info-value" id="info-zodiac">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">节气</div>
+                            <div class="info-value" id="info-solar-term">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">五行</div>
+                            <div class="info-value" id="info-element">--</div>
+                        </div>
+                    </div>
 
-            <div id="musicParamsDisplay" style="display: none;">
-                <div class="music-params">
-                    <div class="param-item">
-                        <span class="param-label">星次:</span>
-                        <span class="param-value" id="paramZodiac">--</span>
-                    </div>
-                    <div class="param-item">
-                        <span class="param-label">节气:</span>
-                        <span class="param-value" id="paramSolarTerm">--</span>
-                    </div>
-                    <div class="param-item">
-                        <span class="param-label">乐器:</span>
-                        <span class="param-value" id="paramInstrument">--</span>
-                    </div>
-                    <div class="param-item">
-                        <span class="param-label">调式:</span>
-                        <span class="param-value" id="paramMode">--</span>
-                    </div>
-                    <div class="param-item">
-                        <span class="param-label">时长:</span>
-                        <span class="param-value" id="paramDuration">--</span>
+                    <div style="margin-top: 1rem;">
+                        <div class="form-label">相关星宿</div>
+                        <div class="mansions-grid" id="mansions-list">
+                            <div class="mansion-tag">角</div>
+                            <div class="mansion-tag">亢</div>
+                            <div class="mansion-tag">氐</div>
+                            <div class="mansion-tag">房</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div id="enhancedPromptDisplay" style="display: none;">
-                <div class="enhanced-prompt">
-                    <span class="prompt-label">
-                        <i class="fas fa-magic"></i> 节气音乐提示词：
-                    </span>
-                    <div id="enhancedPromptText">--</div>
-                </div>
-            </div>
-
-            <audio id="musicPlayer" controls class="w-full mt-3" style="display: none;"></audio>
-
-            <div id="retrySection" style="display: none;">
-                <div class="retry-options">
-                    <button id="retryBtn" class="retry-btn btn-warning">
-                        <i class="fas fa-redo"></i> 重试
+        <!-- Music Player -->
+        <div class="player-section" id="music-player-section" style="display: none;">
+            <div class="player-container">
+                <div class="player-title">生成的天体音乐</div>
+                <audio id="music-player" controls>
+                    <source id="music-source" src="" type="audio/mpeg">
+                    您的浏览器不支持音频播放
+                </audio>
+                <div class="player-actions">
+                    <button type="button" class="btn-secondary" onclick="downloadMusic()">
+                        下载音乐
                     </button>
-                    <button id="forceRetryBtn" class="retry-btn btn-primary">
-                        <i class="fas fa-bolt"></i> 强制重试
+                    <button type="button" class="btn-secondary" onclick="shareMusic()">
+                        分享音乐
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="regenerateMusic()">
+                        重新生成
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="backToSettings()">
+                        返回设置
                     </button>
                 </div>
-                <div class="timeout-help mt-3">
-                    <div class="help-title">
-                        <i class="fas fa-lightbulb"></i> 遇到超时问题？
-                    </div>
-                    <div>• 外部音乐服务可能繁忙</div>
-                    <div>• 较长时长的音乐需要更多生成时间</div>
-                    <div>• 天文计算已完成，只需重新生成音频</div>
-                </div>
-            </div>
-
-            <div id="downloadSection" style="display: none;" class="mt-4">
-                <button id="downloadMusic" class="btn btn-success mb-2">
-                    <i class="fas fa-download"></i> 下载音乐
-                </button>
-                <button id="downloadSheet" class="btn btn-success">
-                    <i class="fas fa-file-pdf"></i> 下载乐谱
-
-                </button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript代码 -->
     <script>
-        // 全局变量
-        let scene, camera, renderer, starField, rotationSpeed = 0;
-        let constellationGroups = [];
-        let isRotating = false;
-        let selectedAstronomyData = null;  // 【新增】已选择时间的天文数据
-        let previewAstronomyData = null;   // 【新增】预览时间的天文数据
-        let retryCount = 0;
-        let maxRetries = 3;
-        let selectedTimeData = null;
-        let selectedLocationData = null;
-        let stellariumReady = false; // 【新增】
-        let stellariumCommunication = {
-            ready: false,
-            messageQueue: [],
-            maxRetries: 5,
-            retryDelay: 1000
+        // Global state
+        let currentAstronomyData = null;
+        let currentMusicUrl = null;
+        let selectedLocation = {
+            latitude: 22.3193,
+            longitude: 114.1694,
+            address: "香港科技大学"
         };
 
-
-
-        // Three.js CDN加载
-        (function () {
-            const cdnSources = [
-                'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
-                'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
-                'https://unpkg.com/three@0.128.0/build/three.min.js'
-            ];
-            let currentCDN = 0;
-
-            function loadThreeJS() {
-                if (currentCDN >= cdnSources.length) {
-                    console.error('所有Three.js CDN都加载失败');
-                    document.getElementById('statusIndicator').textContent = 'Three.js加载失败';
-                    document.getElementById('statusIndicator').className = 'status-indicator error';
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.src = cdnSources[currentCDN];
-                script.onload = function () {
-                    console.log('Three.js加载成功:', cdnSources[currentCDN]);
-                    initStarMap();
-                };
-                script.onerror = function () {
-                    console.warn('CDN失败:', cdnSources[currentCDN]);
-                    currentCDN++;
-                    loadThreeJS();
-                };
-                document.head.appendChild(script);
-            }
-            loadThreeJS();
-        })();
-
-        // 页面加载时读取前面步骤的数据
-        // let stellariumReady = false;
-        window.addEventListener('load', function () {
-            console.log('🚀 页面加载完成，开始初始化...');
-            loadPreviousStepData();
-            setupStellariumCommunication(); // 新增
-
-            setupTestButton();// 🔑 新增：直接绑定测试按钮事件
-            setupEventListeners();
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeDateTime();
+            loadStoredLocation();
+            updateLocationDisplay();
         });
 
-        // 🔑 新增：独立的测试按钮设置函数
-        function setupTestButton() {
-            const testBtn = document.getElementById('testStellariumBtn');
-            if (!testBtn) {
-                console.error('❌ 测试按钮不存在!');
-                return;
-            }
-
-            console.log('✅ 测试按钮找到，开始绑定事件...');
-
-            testBtn.addEventListener('click', () => {
-                console.log('🧪 ============ 测试按钮被点击! ============');
-                console.log('🧪 开始测试星图导航...');
-                console.log('🕐 使用已选择时间:', selectedTimeData);
-                console.log('🌍 使用已选择位置:', selectedLocationData);
-
-                // 检查必要数据
-                if (!selectedTimeData || !selectedTimeData.year) {
-                    console.error('❌ 时间数据缺失!');
-                    alert('请先在第一步选择时间');
-                    return;
-                }
-
-                if (!selectedLocationData || !selectedLocationData.latitude) {
-                    console.error('❌ 位置数据缺失!');
-                    alert('请先在第二步选择位置');
-                    return;
-                }
-
-                // 检查天文数据
-                if (!selectedAstronomyData) {
-                    console.warn('⚠️ 没有天文数据，尝试重新计算...');
-                    if (typeof loadSelectedTimeAstronomyData === 'function') {
-                        loadSelectedTimeAstronomyData().then(() => {
-                            if (selectedAstronomyData) {
-                                console.log('✅ 天文数据获取成功，开始导航');
-                                performNavigation();
-                            } else {
-                                console.error('❌ 天文数据计算失败');
-                                alert('无法获取天文计算数据');
-                            }
-                        });
-                    } else {
-                        console.error('❌ loadSelectedTimeAstronomyData函数不存在');
-                        alert('天文计算函数不可用');
-                    }
-                    return;
-                }
-
-                console.log('✅ 所有数据检查通过，开始导航');
-                performNavigation();
-            });
-
-            console.log('✅ 测试按钮事件绑定完成');
+        function initializeDateTime() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset() * 60000;
+            const localISOTime = new Date(now - offset).toISOString().slice(0, 16);
+            document.getElementById('observation-time').value = localISOTime;
         }
 
-
-        // 【新增】iframe 加载完成回调
-        function onStellariumLoad() {
-            console.log('📡 Stellarium iframe 加载完成');
-            document.getElementById('statusIndicator').textContent = '📡 等待 Stellarium 初始化...';
-        }
-
-        // 【新增】设置 Stellarium 通信
-        function setupStellariumCommunication() {
-            console.log('🔗 设置 Stellarium 通信...');
-
-            // 监听来自 Stellarium iframe 的消息
-            window.addEventListener('message', function (event) {
-                const stellariumFrame = document.getElementById('stellariumFrame');
-                if (!stellariumFrame || event.source !== stellariumFrame.contentWindow) {
-                    return;
-                }
-
-                console.log('📨 收到 Stellarium 消息:', event.data);
-
-
-                // 添加这个新的响应处理
-                if (event.data.type === 'stellariumResponse') {
-                    console.log('📨 收到Stellarium响应:', event.data);
-
-                    if (event.data.success) {
-                        document.getElementById('statusIndicator').textContent = '✅ ' + event.data.message;
-                        document.getElementById('statusIndicator').style.color = '#00ff00';
-                    } else {
-                        document.getElementById('statusIndicator').textContent = '❌ ' + (event.data.error || '操作失败');
-                        document.getElementById('statusIndicator').style.color = '#ff6b6b';
-                    }
-                    return;
-                }
-
-
-                if (event.data.type === 'stellariumReady') {
-                    stellariumCommunication.ready = true;
-                    stellariumReady = true; // 保持原有变量
-                    console.log('✅ Stellarium Web Engine 已准备就绪');
-
-                    // 🔑 关键：等待确保完全初始化
-                    setTimeout(() => {
-                        sendDataToStellarium();
-                    }, 2000);
-
-                } else if (event.data.type === 'stellariumResponse') {
-                    console.log('📝 Stellarium 响应:', event.data.message);
-                    document.getElementById('statusIndicator').textContent = event.data.message;
-                }
-            });
-            // 【修复】等待 iframe 完全加载后再尝试通信
-            const stellariumFrame = document.getElementById('stellariumFrame');
-            if (stellariumFrame) {
-                // 监听 iframe 的 load 事件
-                stellariumFrame.addEventListener('load', function () {
-                    console.log('🔄 iframe 加载完成，等待 Stellarium 初始化...');
-                    // 给 Stellarium 一些时间来初始化
-                    setTimeout(function () {
-                        if (!stellariumReady) {
-                            console.log('⏰ Stellarium 仍在初始化中...');
-                            document.getElementById('statusIndicator').textContent = '⏰ Stellarium 初始化中...';
-                        }
-                    }, 3000);
-                });
+        function loadStoredLocation() {
+            const stored = localStorage.getItem('selectedLocation');
+            if (stored) {
+                selectedLocation = JSON.parse(stored);
             }
         }
 
-        // 【新增】安全发送消息函数
-        function sendMessageToStellarium(message, retryCount = 0) {
-            if (!stellariumCommunication.ready) {
-                console.log('⏳ Stellarium 未就绪，稍后重试');
-                setTimeout(() => {
-                    sendMessageToStellarium(message, retryCount);
-                }, 1000);
-                return;
-            }
-
-            const stellariumFrame = document.getElementById('stellariumFrame');
-            if (!stellariumFrame || !stellariumFrame.contentWindow) {
-                console.error('❌ 无法找到 Stellarium iframe');
-                return;
-            }
-
-            try {
-                stellariumFrame.contentWindow.postMessage(message, '*');
-                console.log('📨 发送消息成功:', message);
-            } catch (error) {
-                console.error('❌ 发送消息失败:', error);
-
-                // 重试机制
-                if (retryCount < stellariumCommunication.maxRetries) {
-                    setTimeout(() => {
-                        sendMessageToStellarium(message, retryCount + 1);
-                    }, stellariumCommunication.retryDelay);
-                }
-            }
-        }
-
-
-        // 【修改】发送数据到 Stellarium 函数
-        function sendDataToStellarium() {
-            console.log('📤 准备发送数据到 Stellarium...');
-
-            // 构造消息
-            let timeToSend = null;
-            let locationToSend = null;
-
-            if (selectedTimeData && selectedTimeData.year) {
-                // 🔑 修复：这里也要使用UTC构造
-                const utcTime = new Date(Date.UTC(
-                    selectedTimeData.year,
-                    selectedTimeData.month - 1,
-                    selectedTimeData.day,
-                    selectedTimeData.hour,  // 使用用户选择的小时
-                    0, 0, 0
-                ));
-                timeToSend = utcTime.toISOString();
-
-                console.log('🕐 用户选择时间:', `${selectedTimeData.year}-${selectedTimeData.month}-${selectedTimeData.day} ${selectedTimeData.hour}:00`);
-                console.log('🕐 修复后发送:', timeToSend);
-            }
-
-            if (selectedLocationData && selectedLocationData.latitude) {
-                locationToSend = {
-                    latitude: selectedLocationData.latitude,
-                    longitude: selectedLocationData.longitude,
-                    name: selectedLocationData.address || '观测位置'
-                };
-                console.log('🌍 使用已选择位置:', locationToSend);
-            }
-
-            // 🔑 优先发送组合消息
-            if (timeToSend && locationToSend) {
-                sendMessageToStellarium({
-                    type: 'setLocationAndTime',
-                    latitude: locationToSend.latitude,
-                    longitude: locationToSend.longitude,
-                    name: locationToSend.name,
-                    time: timeToSend
-                });
+        function updateLocationDisplay() {
+            const display = document.getElementById('location-display');
+            if (selectedLocation.address) {
+                display.value = `${selectedLocation.address} (${selectedLocation.latitude.toFixed(4)}, ${selectedLocation.longitude.toFixed(4)})`;
             } else {
-                // 分别发送
-                if (locationToSend) {
-                    sendMessageToStellarium({
-                        type: 'setLocation',
-                        ...locationToSend
-                    });
-                }
-
-                if (timeToSend) {
-                    setTimeout(() => {
-                        sendMessageToStellarium({
-                            type: 'setTime',
-                            time: timeToSend
-                        });
-                    }, 500);
-                }
-            }
-
-            document.getElementById('statusIndicator').textContent = '📡 数据已发送到 Stellarium';
-        }
-
-        // 【修改】预览功能 - 同时更新 Stellarium 和天文数据
-        async function updatePreviewAstronomyData() {
-            try {
-                console.log('👁️ [星图预览] 开始更新预览数据...');
-
-                const timeInput = document.getElementById('timeInput').value;
-                // 🔑 使用安全发送机制
-                if (selectedLocationData && selectedLocationData.latitude) {
-                    sendMessageToStellarium({
-                        type: 'setLocationAndTime',
-                        latitude: selectedLocationData.latitude,
-                        longitude: selectedLocationData.longitude,
-                        name: selectedLocationData.address || '观测位置',
-                        time: new Date(timeInput).toISOString()
-                    });
-                } else {
-                    sendMessageToStellarium({
-                        type: 'setTime',
-                        time: new Date(timeInput).toISOString()
-                    });
-                }
-
-                // 【保持】原有的API调用获取天文数据
-                const params = new URLSearchParams();
-                if (timeInput) params.append('date', timeInput);
-                params.append('mode', 'visualization');
-
-                const response = await fetch(`/api/mansion?${params}`);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error || '获取数据失败');
-
-                previewAstronomyData = data;
-                updatePreviewUI(data);
-
-                console.log('✅ [星图预览] 预览数据更新完成');
-
-            } catch (error) {
-                console.error('❌ [星图预览] 更新失败:', error);
-                showPreviewError(error.message);
+                display.value = `纬度 ${selectedLocation.latitude.toFixed(4)}, 经度 ${selectedLocation.longitude.toFixed(4)}`;
             }
         }
 
-
-        // 导航功能
-        function goBackToStep(step) {
-            if (step === 1) {
-                window.location.href = '/';
-            } else if (step === 2) {
-                window.location.href = '/location';
-            } else if (step === 3) {
-                window.location.href = '/sphere';
-            }
-        }
-
-        // 读取前面步骤的数据
-        function loadPreviousStepData() {
-            try {
-                selectedTimeData = JSON.parse(sessionStorage.getItem('selectedTime') || '{}');
-                selectedLocationData = JSON.parse(sessionStorage.getItem('selectedLocation') || '{}');
-                console.log('读取到的时间数据:', selectedTimeData);
-                console.log('读取到的位置数据:', selectedLocationData);
-                displaySelectedInfo(selectedTimeData, selectedLocationData);
-
-                // 如果有选择的时间，设置到时间输入框
-                if (selectedTimeData.year && selectedTimeData.month) {
-                    const selectedDate = new Date(
-                        selectedTimeData.year,
-                        selectedTimeData.month - 1,
-                        selectedTimeData.day,
-                        selectedTimeData.hour
-                    );
-                    document.getElementById('timeInput').value = selectedDate.toISOString().slice(0, 16);
-
-                    // 【新增】自动加载已选择时间的天文数据
-                    loadSelectedTimeAstronomyData();
-                } else {
-                    setCurrentTime();
+        function openLocationSelector() {
+            window.open('location-selector.html', '_blank');
+            // Listen for location updates
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'selectedLocation') {
+                    loadStoredLocation();
+                    updateLocationDisplay();
                 }
-            } catch (error) {
-                console.error('读取步骤数据失败:', error);
-                setCurrentTime();
-                showDataMissingWarning();
-            }
+            });
         }
 
-        // 【新增】加载已选择时间的天文数据
-        async function loadSelectedTimeAstronomyData() {
-            if (!selectedTimeData || !selectedTimeData.year || !selectedLocationData || !selectedLocationData.latitude) {
+        function setDuration(seconds) {
+            document.getElementById('music-duration').value = seconds;
+        }
+
+        async function updateStarmap() {
+            const timeInput = document.getElementById('observation-time').value;
+            if (!timeInput) {
+                showStatus('请选择观测时间', 'error');
                 return;
             }
 
+            showStatus('正在更新星图...', 'info');
+            updateStepProgress(3);
+
             try {
-                console.log('🔍 [DEBUG] === 详细调试信息 ===');
-                console.log('🔍 [DEBUG] selectedTimeData 原始数据:', selectedTimeData);
-                console.log('🔍 [DEBUG] selectedLocationData 原始数据:', selectedLocationData);
+                const datetime = new Date(timeInput);
+                const stellariumIframe = document.getElementById('stellarium-iframe');
 
-                // 🔑 检查 sessionStorage 中的原始数据
-                const rawTimeData = sessionStorage.getItem('selectedTime');
-                const rawLocationData = sessionStorage.getItem('selectedLocation');
-                console.log('🔍 [DEBUG] sessionStorage 原始时间:', rawTimeData);
-                console.log('🔍 [DEBUG] sessionStorage 原始位置:', rawLocationData);
+                // Update Stellarium with new time and location
+                const stellariumUrl = new URL(stellariumIframe.src, window.location.href);
+                stellariumUrl.searchParams.set('time', datetime.toISOString());
+                stellariumUrl.searchParams.set('lat', selectedLocation.latitude);
+                stellariumUrl.searchParams.set('lon', selectedLocation.longitude);
 
-                const requestData = {
-                    time_data: selectedTimeData,
-                    location_data: selectedLocationData
-                };
+                stellariumIframe.src = stellariumUrl.toString();
 
-                console.log('🔍 [DEBUG] 发送给API的完整请求:', JSON.stringify(requestData, null, 2));
-
+                // Fetch astronomy data
                 const response = await fetch('/api/astronomy/calculate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
+                    body: JSON.stringify({
+                        time: {
+                            year: datetime.getFullYear(),
+                            month: datetime.getMonth() + 1,
+                            day: datetime.getDate(),
+                            hour: datetime.getHours(),
+                            is_lunar: document.getElementById('use-lunar').checked
+                        },
+                        location: selectedLocation
+                    })
                 });
-
-                if (!response.ok) {
-                    console.log('🔍 [DEBUG] API响应失败:', response.status, response.statusText);
-                    throw new Error(`HTTP ${response.status}`);
-                }
 
                 const data = await response.json();
-                console.log('🔍 [DEBUG] API返回的完整数据:', JSON.stringify(data, null, 2));
-                console.log('🔍 [DEBUG] API返回的星次:', data.zodiac_sign);
-
-                if (!data.success) throw new Error(data.error || '获取数据失败');
-
-                selectedAstronomyData = data;
-                updateSelectedTimeUI(data);
-                console.log('✅ [已选择时间] 天文数据加载完成');
-
-            } catch (error) {
-                console.error('❌ [已选择时间] 天文数据加载失败:', error);
-            }
-        }
-
-        // 【新增】更新已选择时间的UI显示
-        function updateSelectedTimeUI(data) {
-            const timeStr = data.request_time || data.timestamp || new Date().toISOString();
-            document.getElementById('selectedTime').textContent = new Date(timeStr).toLocaleString('zh-CN');
-
-            // 显示十二星次和节气信息
-            if (data.zodiac_sign) {
-                document.getElementById('zodiacSign').textContent = data.zodiac_sign + '星次';
-
-                // 🔑 修正：节气只显示节气，不显示星宿
-                if (data.solar_term) {
-                    document.getElementById('solarTerm').textContent = data.solar_term;
+                if (data.success) {
+                    currentAstronomyData = data;
+                    updateAstronomyInfo(data);
+                    showStatus('星图更新成功！', 'success');
                 } else {
-                    document.getElementById('solarTerm').textContent = '--';  // ✅ 没有节气数据就显示 --
+                    showStatus('获取天文数据失败', 'error');
                 }
-
-                // 🔑 新增：专门显示对应星宿
-                if (data.mansions_in_zodiac && data.mansions_in_zodiac.length > 0) {
-                    document.getElementById('mansionsInfo').textContent = data.mansions_in_zodiac.join('、') + '宿';
-                } else {
-                    document.getElementById('mansionsInfo').textContent = '--';
-                }
-
-                // 🔑 新增：显示现代星座
-                const modernConst = getModernConstellation(data.zodiac_sign);
-                document.getElementById('modernConstellation').textContent = modernConst;
-            }
-
-            // 显示太阳黄经
-            const longitude = data.sun_position?.ecliptic_longitude || data.sun_ecliptic_longitude || data.ecliptic_longitude || 0;
-            document.getElementById('eclipticLon').textContent = longitude.toFixed(2) + '°';
-        }
-
-        // 🔑 新增：星次到现代星座的映射函数
-        function getModernConstellation(zodiacSign) {
-            const mapping = {
-                "星纪": "Capricorn (魔羯宫)",
-                "玄枵": "Aquarius (宝瓶宫)",
-                "娵訾": "Pisces (双鱼宫)",
-                "降娄": "Aries (白羊宫)",
-                "大梁": "Taurus (金牛宫)",
-                "实沈": "Gemini (双子宫)",
-                "鹑首": "Cancer (巨蟹宫)",
-                "鹑火": "Leo (狮子宫)",
-                "鹑尾": "Virgo (处女宫)",
-                "寿星": "Libra (天秤宫)",
-                "大火": "Scorpio (天蝎宫)",
-                "析木": "Sagittarius (射手宫)"
-            };
-            return mapping[zodiacSign] || "未知星座";
-        }
-
-
-        // 显示已选择的信息
-        function displaySelectedInfo(timeData, locationData) {
-            const timeInfoEl = document.getElementById('selectedTimeInfo');
-            const locationInfoEl = document.getElementById('selectedLocationInfo');
-
-            if (timeData && timeData.year) {
-                const timeStr = `${timeData.year}年${timeData.month}月${timeData.day}日 ${String(timeData.hour).padStart(2, '0')}:00`;
-                const formatted = timeData.formatted || timeStr;
-                timeInfoEl.innerHTML = `
-                    <div style="font-weight: bold; color: #4facfe;">${formatted}</div>
-                    <div style="font-size: 11px; color: #888; margin-top: 4px;">
-                        💡 音乐生成将使用此时间
-                    </div>
-                `;
-                document.getElementById('dataMissingWarning').style.display = 'none';
-            } else {
-                timeInfoEl.innerHTML = `
-                    <div style="color: #fbbf24;">未选择时间，将使用当前时间</div>
-                `;
-                showDataMissingWarning('时间');
-            }
-
-            if (locationData && locationData.latitude) {
-                const address = locationData.address || '未知地点';
-                locationInfoEl.innerHTML = `
-                    <div style="font-weight: bold; color: #4facfe;">${address}</div>
-                    <div style="font-size: 11px; color: #888; margin-top: 4px;">
-                        经度: ${locationData.longitude.toFixed(4)}°, 纬度: ${locationData.latitude.toFixed(4)}°<br>
-                        💡 音乐生成将使用此位置
-                    </div>
-                `;
-            } else {
-                locationInfoEl.innerHTML = `
-                    <div style="color: #fbbf24;">未选择位置，将使用默认位置(香港)</div>
-                `;
-                showDataMissingWarning('位置');
-            }
-        }
-
-        // 显示数据缺失警告
-        function showDataMissingWarning(missingType = '') {
-            const warningEl = document.getElementById('dataMissingWarning');
-            const warningTextEl = document.getElementById('warningText');
-            let warningText = '未检测到前面步骤的选择数据，将使用默认时间和位置进行计算。';
-
-            if (missingType === '时间') {
-                warningText = '未检测到时间选择数据，将使用当前时间进行计算。建议返回第一步重新选择时间。';
-            } else if (missingType === '位置') {
-                warningText = '未检测到位置选择数据，将使用默认位置(香港)进行计算。建议返回第二步重新选择位置。';
-            }
-
-            warningTextEl.textContent = warningText;
-            warningEl.style.display = 'block';
-        }
-
-        // 星宿数据
-        const CONSTELLATION_DATA = {
-            // 东方青龙七宿
-            "角": {
-                color: "#4facfe", stars: [
-                    { name: "角宿一", ra: 201.298, dec: -11.161, mag: 0.97 },
-                    { name: "角宿二", ra: 213.915, dec: -0.596, mag: 3.38 }
-                ], connections: [[0, 1]]
-            },
-            "亢": {
-                color: "#4facfe", stars: [
-                    { name: "亢宿一", ra: 215.676, dec: -9.383, mag: 4.16 },
-                    { name: "亢宿二", ra: 218.877, dec: -12.848, mag: 4.07 }
-                ], connections: [[0, 1]]
-            },
-            "心": {
-                color: "#4facfe", stars: [
-                    { name: "心宿一", ra: 243.587, dec: -28.216, mag: 2.89 },
-                    { name: "心宿二", ra: 247.352, dec: -26.432, mag: 0.96 }
-                ], connections: [[0, 1]]
-            },
-            // 南方朱雀七宿
-            "井": {
-                color: "#ff6b6b", stars: [
-                    { name: "井宿一", ra: 93.719, dec: 22.514, mag: 3.53 },
-                    { name: "井宿二", ra: 95.241, dec: 22.964, mag: 4.45 }
-                ], connections: [[0, 1]]
-            },
-            "鬼": {
-                color: "#ff6b6b", stars: [
-                    { name: "鬼宿一", ra: 130.821, dec: 19.841, mag: 3.94 },
-                    { name: "鬼宿二", ra: 131.171, dec: 21.469, mag: 4.67 }
-                ], connections: [[0, 1]]
-            },
-            // 西方白虎七宿
-            "昴": {
-                color: "#ffffff", stars: [
-                    { name: "昴宿一", ra: 56.871, dec: 24.105, mag: 5.65 },
-                    { name: "昴宿二", ra: 57.290, dec: 24.367, mag: 4.30 }
-                ], connections: [[0, 1]]
-            },
-            "参": {
-                color: "#ffffff", stars: [
-                    { name: "参宿一", ra: 85.190, dec: -1.202, mag: 1.70 },
-                    { name: "参宿二", ra: 84.053, dec: -1.944, mag: 2.23 }
-                ], connections: [[0, 1]]
-            },
-            // 北方玄武七宿
-            "斗": {
-                color: "#a8a8a8", stars: [
-                    { name: "斗宿一", ra: 278.110, dec: -25.421, mag: 3.17 },
-                    { name: "斗宿二", ra: 279.234, dec: -26.297, mag: 2.81 }
-                ], connections: [[0, 1]]
-            },
-            "牛": {
-                color: "#a8a8a8", stars: [
-                    { name: "牛宿一", ra: 304.413, dec: -12.759, mag: 3.08 },
-                    { name: "牛宿二", ra: 308.300, dec: -17.847, mag: 4.28 }
-                ], connections: [[0, 1]]
-            }
-        };
-
-        function initStarMap() {
-            try {
-                if (typeof THREE === 'undefined') {
-                    throw new Error('THREE.js未定义');
-                }
-                const canvas = document.getElementById('starCanvas');
             } catch (error) {
-                console.error('星图初始化失败:', error);
+                console.error('Update starmap error:', error);
+                showStatus('更新失败: ' + error.message, 'error');
             }
         }
 
-        function createBackgroundStars() {
-            const starGeometry = new THREE.BufferGeometry();
-            const starCount = 2000;
-            const positions = new Float32Array(starCount * 3);
-            const colors = new Float32Array(starCount * 3);
+        function updateAstronomyInfo(data) {
+            document.getElementById('info-longitude').textContent =
+                data.sun_ecliptic_lon ? data.sun_ecliptic_lon.toFixed(2) + '°' : '--';
+            document.getElementById('info-zodiac').textContent =
+                data.zodiac_sign || '--';
+            document.getElementById('info-solar-term').textContent =
+                data.solar_term || '--';
+            document.getElementById('info-element').textContent =
+                data.element || '--';
 
-            for (let i = 0; i < starCount; i++) {
-                const radius = 80;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-
-                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = radius * Math.cos(phi);
-
-                const brightness = Math.random() * 0.8 + 0.2;
-                colors[i * 3] = brightness;
-                colors[i * 3 + 1] = brightness;
-                colors[i * 3 + 2] = brightness;
+            // Update mansions
+            const mansionsContainer = document.getElementById('mansions-list');
+            if (data.mansions && data.mansions.length > 0) {
+                mansionsContainer.innerHTML = data.mansions
+                    .map(m => `<div class="mansion-tag">${m}</div>`)
+                    .join('');
             }
-
-            starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            starGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const starMaterial = new THREE.PointsMaterial({
-                size: 0.5,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.6
-            });
-
-            starField = new THREE.Points(starGeometry, starMaterial);
-            scene.add(starField);
         }
 
-        function createConstellationGroups() {
-            Object.entries(CONSTELLATION_DATA).forEach(([name, data]) => {
-                const group = new THREE.Group();
-                group.name = name;
-
-                // 创建星宿中的星星
-                const starMeshes = [];
-                data.stars.forEach((star, index) => {
-                    const position = sphericalToCartesian(star.ra, star.dec, 90);
-                    const size = Math.max(0.3, (6 - star.mag) * 0.3);
-                    const starGeometry = new THREE.SphereGeometry(size, 8, 8);
-                    const starMaterial = new THREE.MeshBasicMaterial({
-                        color: new THREE.Color(data.color),
-                        transparent: true,
-                        opacity: 0.9
-                    });
-
-                    const starMesh = new THREE.Mesh(starGeometry, starMaterial);
-                    starMesh.position.copy(position);
-                    starMesh.userData = { name: star.name, magnitude: star.mag };
-                    group.add(starMesh);
-                    starMeshes.push(starMesh);
-                });
-
-                // 创建连线
-                if (data.connections && data.connections.length > 0) {
-                    const lineGeometry = new THREE.BufferGeometry();
-                    const positions = [];
-                    data.connections.forEach(connection => {
-                        const start = starMeshes[connection[0]].position;
-                        const end = starMeshes[connection[1]].position;
-                        positions.push(start.x, start.y, start.z);
-                        positions.push(end.x, end.y, end.z);
-                    });
-
-                    lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-                    const lineMaterial = new THREE.LineBasicMaterial({
-                        color: new THREE.Color(data.color),
-                        transparent: true,
-                        opacity: 0.6,
-                        linewidth: 2
-                    });
-
-                    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-                    group.add(lines);
-                }
-
-                // 创建标签
-                const labelCanvas = document.createElement('canvas');
-                labelCanvas.width = 128;
-                labelCanvas.height = 64;
-                const ctx = labelCanvas.getContext('2d');
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(0, 0, 128, 64);
-                ctx.fillStyle = data.color;
-                ctx.font = 'bold 20px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(name + '宿', 64, 35);
-
-                const labelTexture = new THREE.CanvasTexture(labelCanvas);
-                const labelMaterial = new THREE.MeshBasicMaterial({ map: labelTexture, transparent: true });
-                const labelGeometry = new THREE.PlaneGeometry(8, 4);
-                const labelMesh = new THREE.Mesh(labelGeometry, labelMaterial);
-
-                // 计算星宿中心位置
-                const centerPosition = new THREE.Vector3();
-                starMeshes.forEach(star => centerPosition.add(star.position));
-                centerPosition.divideScalar(starMeshes.length);
-                centerPosition.normalize().multiplyScalar(95);
-
-                labelMesh.position.copy(centerPosition);
-                group.add(labelMesh);
-
-                scene.add(group);
-                constellationGroups.push(group);
-            });
-        }
-
-        function sphericalToCartesian(ra, dec, radius) {
-            const phi = (90 - dec) * Math.PI / 180;
-            const theta = ra * Math.PI / 180;
-            return new THREE.Vector3(
-                radius * Math.sin(phi) * Math.cos(theta),
-                radius * Math.cos(phi),
-                radius * Math.sin(phi) * Math.sin(theta)
-            );
-        }
-
-        function setupEventListeners() {
-            // 时长控制
-            const durationInput = document.getElementById('durationInput');
-            const durationDisplay = document.getElementById('durationDisplay');
-            durationInput.addEventListener('input', (e) => {
-                const duration = parseInt(e.target.value);
-                durationDisplay.textContent = `${duration}秒`;
-                updateDurationPresets(duration);
-            });
-
-            // 时长预设按钮
-            document.querySelectorAll('.duration-preset').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const duration = parseInt(e.target.dataset.duration);
-                    durationInput.value = duration;
-                    durationDisplay.textContent = `${duration}秒`;
-                    updateDurationPresets(duration);
-                });
-            });
-
-            // 【修改】事件监听 - 分离更新按钮和音乐生成按钮
-            document.getElementById('updateBtn').addEventListener('click', updatePreviewAstronomyData);  // 【修改】预览数据
-            document.getElementById('generateMusicBtn').addEventListener('click', generateMusic);
-
-            // 重试按钮
-            document.getElementById('retryBtn').addEventListener('click', () => retryMusic(false));
-            document.getElementById('forceRetryBtn').addEventListener('click', () => retryMusic(true));
-        }
-
-
-
-        // 执行导航的函数
-        function performNavigation() {
-            // 构造测试数据
-            const testData = {
-                type: 'testNavigation',
-                starCi: selectedAstronomyData.zodiac_sign,
-                mansions: selectedAstronomyData.mansions_in_zodiac,
-                solarLongitude: selectedAstronomyData.ecliptic_longitude,
-                // 🎯 完全使用用户选择的时间
-                time: new Date(Date.UTC(
-                    selectedTimeData.year,
-                    selectedTimeData.month - 1,
-                    selectedTimeData.day,
-                    selectedTimeData.hour,  // 就用用户的1点！
-                    0, 0, 0
-                )).toISOString(),
-                location: {
-                    latitude: selectedLocationData.latitude,
-                    longitude: selectedLocationData.longitude,
-                    name: selectedLocationData.address
-                }
-            };
-
-            console.log('📤 发送测试数据:');
-            console.log('  - 星次:', testData.starCi);
-            console.log('  - 星宿:', testData.mansions);
-            console.log('  - 黄经:', testData.solarLongitude);
-            console.log('  - 时间:', testData.time);
-            console.log('  - 位置:', testData.location.name);
-
-            // 发送到Stellarium
-            sendMessageToStellarium(testData);
-
-            document.getElementById('statusIndicator').textContent =
-                `🧪 已发送测试数据: ${testData.starCi}星次 → ${testData.location.name}`;
-        }
-
-        function updateDurationPresets(activeDuration) {
-            document.querySelectorAll('.duration-preset').forEach(btn => {
-                const btnDuration = parseInt(btn.dataset.duration);
-                btn.classList.toggle('active', btnDuration === activeDuration);
-            });
-        }
-
-        function setRotationSpeed(speed) {
-            rotationSpeed = speed;
-            isRotating = speed > 0;
-            document.querySelectorAll('.rotation-btn').forEach(btn => btn.classList.remove('active'));
-            if (speed === 0) document.getElementById('pauseBtn').classList.add('active');
-            else if (speed === 0.001) document.getElementById('slowBtn').classList.add('active');
-            else if (speed === 0.005) document.getElementById('normalBtn').classList.add('active');
-            else if (speed === 0.02) document.getElementById('fastBtn').classList.add('active');
-        }
-
-        function toggleLabels(e) {
-            constellationGroups.forEach(group => {
-                const labels = group.children.filter(child => child.type === 'Mesh' && child.material.map);
-                labels.forEach(label => label.visible = e.target.checked);
-            });
-        }
-
-        function toggleLines(e) {
-            constellationGroups.forEach(group => {
-                const lines = group.children.filter(child => child.type === 'LineSegments');
-                lines.forEach(line => line.visible = e.target.checked);
-            });
-        }
-
-        function toggleBackground(e) {
-            if (starField) starField.visible = e.target.checked;
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            if (isRotating) {
-                scene.rotation.y += rotationSpeed;
-            }
-
-            // 标签始终面向相机
-            constellationGroups.forEach(group => {
-                const labels = group.children.filter(child => child.type === 'Mesh' && child.material.map);
-                labels.forEach(label => label.lookAt(camera.position));
-            });
-
-            renderer.render(scene, camera);
-        }
-
-        function setCurrentTime() {
-            const now = new Date();
-            const timeString = now.toISOString().slice(0, 16);
-            document.getElementById('timeInput').value = timeString;
-        }
-
-        // 【新增】更新预览信息UI
-        function updatePreviewUI(data) {
-            const previewCard = document.getElementById('previewInfoCard');
-            const previewInfo = document.getElementById('previewInfo');
-
-            const timeStr = data.request_time || data.timestamp || new Date().toISOString();
-            const zodiacText = data.zodiac_sign ? `${data.zodiac_sign}星次` : '--';
-
-            // 🔑 修正：分开处理节气和星宿
-            const termText = data.solar_term || '--';  // ✅ 节气就是节气
-            const mansionsText = data.mansions_in_zodiac ? data.mansions_in_zodiac.join('、') + '宿' : '--';  // ✅ 星宿就是星宿
-
-            const longitude = data.sun_position?.ecliptic_longitude || data.sun_ecliptic_longitude || data.ecliptic_longitude || 0;
-            const modernConstText = data.zodiac_sign ? getModernConstellation(data.zodiac_sign) : '--';
-
-            previewInfo.innerHTML = `
-        <div>预览时间: ${new Date(timeStr).toLocaleString('zh-CN')}</div>
-        <div>太阳星次: ${zodiacText}</div>
-        <div>对应节气: ${termText}</div>
-        <div>太阳黄经: ${longitude.toFixed(2)}°</div>
-        <div>对应星宿: ${mansionsText}</div>
-        <div>现代星座: ${modernConstText}</div>
-    `;
-
-            previewCard.style.display = 'block';
-        }
-
-        // 【新增】显示预览错误
-        function showPreviewError(message) {
-            const previewCard = document.getElementById('previewInfoCard');
-            const previewInfo = document.getElementById('previewInfo');
-
-            previewInfo.innerHTML = `<div style="color: #ff6b6b;">预览失败: ${message}</div>`;
-            previewCard.style.display = 'block';
-        }
-
-        function highlightZodiacMansions(mansions) {
-            constellationGroups.forEach(group => {
-                const isInZodiac = mansions.includes(group.name);
-                group.children.forEach(child => {
-                    if (child.material) {
-                        if (isInZodiac) {
-                            child.material.opacity = 1.0;
-                            if (child.material.emissive) {
-                                child.material.emissive.setHex(0x003311);  // 绿色高亮表示当前星次
-                            }
-                        } else {
-                            child.material.opacity = 0.4;
-                            if (child.material.emissive) {
-                                child.material.emissive.setHex(0x000000);
-                            }
-                        }
-                    }
-                });
-            });
-        }
-
-        // 【修改】generateMusic - 使用已选择时间的数据
         async function generateMusic() {
-            const generateBtn = document.getElementById('generateMusicBtn');
-            const originalText = generateBtn.innerHTML;
-            const duration = parseInt(document.getElementById('durationInput').value);
-
-            try {
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成节气音乐...';
-                generateBtn.disabled = true;
-                showMusicStatus('loading', `正在生成${duration}秒节气音乐...`, '正在根据已选择时间的节气特色生成音乐');
-                showLoadingIndicator(true, `生成${duration}秒节气音乐中...`);
-
-                let requestData;
-
-                // 【关键修改】优先使用原始选择的数据
-                if (selectedTimeData && selectedTimeData.year && selectedLocationData && selectedLocationData.latitude) {
-                    // 使用原始选择的数据
-                    const originalDate = new Date(
-                        selectedTimeData.year,
-                        selectedTimeData.month - 1,
-                        selectedTimeData.day,
-                        selectedTimeData.hour
-                    );
-
-                    requestData = {
-                        date: originalDate.toISOString(),
-                        duration: duration,
-                        lat: selectedLocationData.latitude,
-                        lon: selectedLocationData.longitude,
-                        is_lunar: selectedTimeData.is_lunar || false
-                    };
-
-                    console.log('🔑 [音乐生成] 使用已选择时间数据:', requestData);
-                } else {
-                    // 备用：使用观测时间输入框（兼容模式）
-                    // 备用：使用观测时间输入框（兼容模式）
-                    requestData = {
-                        date: document.getElementById('timeInput').value,
-                        duration: duration,
-                        lat: 22.3964,
-                        lon: 114.1095,
-                        is_lunar: false
-                    };
-
-                    console.log('⚠️ [音乐生成] 使用备用数据:', requestData);
-                }
-
-                const response = await fetch('/api/generate_music', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`服务器错误: ${response.status} ${response.statusText}`);
-                }
-
-                const result = await response.json();
-                console.log('收到节气音乐生成响应:', result);
-
-                if (!result.success) {
-                    throw new Error(result.error || '节气音乐生成失败');
-                }
-
-                handleMusicResult(result);
-
-            } catch (error) {
-                console.error('节气音乐生成失败:', error);
-                showMusicStatus('error', '节气音乐生成失败', error.message);
-                retryCount = 0;
-                showRetryOptions(true);
-            } finally {
-                generateBtn.innerHTML = originalText;
-                generateBtn.disabled = false;
-                showLoadingIndicator(false);
-            }
-        }
-
-        function handleMusicResult(result) {
-            console.log('处理音乐结果:', result);
-
-            // 显示音乐参数
-            if (result.astronomy && result.parameters) {
-                showMusicParams(result.astronomy, result.parameters);
-
-                // 显示节气音乐提示词
-                if (result.parameters.prompt || result.parameters.enhanced_prompt) {
-                    showEnhancedPrompt(result.parameters.prompt || result.parameters.enhanced_prompt);
-                }
-            }
-
-            // 检查音乐生成是否成功
-            if (result.music && result.music.success !== false) {
-                const duration = result.parameters?.duration || 45;
-
-                if (result.music.download_url) {
-                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
-                    loadAndPlayAudio(result.music.download_url, result.music.pdf_download_url);
-                    showRetryOptions(false);
-                } else if (result.music.id || (typeof result.music === 'string' && result.music.length > 0)) {
-                    const musicId = result.music.id || result.music;
-                    console.log('尝试构造音频URL，ID:', musicId);
-                    const downloadUrl = `https://yue-inst.ngrok.app/download/${musicId}`;
-                    showMusicStatus('success', `${duration}秒节气音乐生成成功！`, '正在加载音频文件...');
-                    loadAndPlayAudio(downloadUrl);
-                    showRetryOptions(false);
-                } else {
-                    showMusicStatus('warning', '音乐生成完成但无法获取音频文件', '服务器返回了结果但没有可用的下载链接');
-                    showRetryOptions(true);
-                }
-            } else if (result.music && result.music.success === false) {
-                const errorMsg = result.music.error || '外部音乐服务超时';
-                const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, `天文计算已完成，但音频生成失败：${errorMsg}`);
-                showRetryOptions(true);
-            } else {
-                const duration = result.parameters?.duration || 45;
-                showMusicStatus('warning', `${duration}秒节气音乐参数生成成功`, '天文数据计算完成，但音频文件生成失败，请重试');
-                showRetryOptions(true);
-            }
-        }
-
-        function showMusicParams(astronomy, parameters) {
-            document.getElementById('paramZodiac').textContent = astronomy.zodiac_sign || parameters.zodiac_sign || '--';
-            document.getElementById('paramSolarTerm').textContent = astronomy.solar_term || parameters.solar_term || '--';
-            document.getElementById('paramInstrument').textContent = parameters.instrument || '--';
-            document.getElementById('paramMode').textContent = parameters.mode || '--';
-            document.getElementById('paramDuration').textContent = (parameters.duration || 45) + '秒';
-            document.getElementById('musicParamsDisplay').style.display = 'block';
-        }
-
-        function showEnhancedPrompt(prompt) {
-            document.getElementById('enhancedPromptText').textContent = prompt;
-            document.getElementById('enhancedPromptDisplay').style.display = 'block';
-        }
-
-        async function loadAndPlayAudio(audioUrl, pdfUrl = null) {
-            const player = document.getElementById('musicPlayer');
-            try {
-                showMusicStatus('loading', '加载音频文件...', '正在从服务器加载音乐文件');
-
-                player.style.display = 'block';
-                player.src = audioUrl;
-
-                player.onloadstart = () => {
-                    showMusicStatus('loading', '正在加载音频...', '音频文件开始下载');
-                };
-
-                player.oncanplay = () => {
-                    showMusicStatus('success', '音频加载完成', '可以开始播放音乐');
-                };
-
-                player.onplaying = () => {
-                    showMusicStatus('success', '正在播放节气音乐 🎵', '享受由星次和节气生成的美妙音乐');
-                };
-
-                player.onpause = () => {
-                    showMusicStatus('success', '音乐已暂停', '点击播放按钮继续');
-                };
-
-                player.onended = () => {
-                    showMusicStatus('success', '播放完成', '音乐播放结束');
-                };
-
-                player.onerror = (e) => {
-                    console.error('音频播放错误:', e);
-                    const errorCode = player.error ? player.error.code : '未知';
-                    showMusicStatus('error', '音频播放失败', `错误代码: ${errorCode}`);
-                    showRetryOptions(true);
-                };
-
-                setupDownloadButtons(audioUrl, pdfUrl);
-
-                try {
-                    await player.play();
-                    showMusicStatus('success', '自动播放已开始 🎵', '正在播放根据节气生成的音乐');
-                } catch (autoplayError) {
-                    console.log('自动播放被阻止:', autoplayError);
-                    showMusicStatus('success', '音频已就绪', '由于浏览器策略，请手动点击播放按钮');
-                }
-
-            } catch (error) {
-                console.error('音频处理失败:', error);
-                showMusicStatus('error', '音频处理失败', error.message);
-                showRetryOptions(true);
-            }
-        }
-
-        function setupDownloadButtons(audioUrl, pdfUrl) {
-            const downloadSection = document.getElementById('downloadSection');
-            const downloadMusic = document.getElementById('downloadMusic');
-            const downloadSheet = document.getElementById('downloadSheet');
-
-            if (audioUrl) {
-                downloadMusic.onclick = () => {
-                    const link = document.createElement('a');
-                    link.href = audioUrl;
-                    const timestamp = new Date().getTime();
-                    const solarTerm = selectedAstronomyData?.solar_term || '节气';
-                    link.download = `${solarTerm}音乐_${timestamp}.mp3`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                };
-                downloadMusic.style.display = 'block';
-            }
-
-            if (pdfUrl) {
-                downloadSheet.onclick = () => {
-                    const link = document.createElement('a');
-                    link.href = pdfUrl;
-                    const timestamp = new Date().getTime();
-                    const solarTerm = selectedAstronomyData?.solar_term || '节气';
-                    link.download = `${solarTerm}乐谱_${timestamp}.pdf`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                };
-                downloadSheet.style.display = 'block';
-            }
-
-            if (audioUrl || pdfUrl) {
-                downloadSection.style.display = 'block';
-            }
-        }
-
-        function showMusicStatus(type, title, description) {
-            const card = document.getElementById('musicStatusCard');
-            card.className = 'music-status-card';
-            card.classList.add(`status-${type}`);
-
-            let icon;
-            switch (type) {
-                case 'success': icon = 'fas fa-check-circle'; break;
-                case 'warning': icon = 'fas fa-exclamation-triangle'; break;
-                case 'error': icon = 'fas fa-times-circle'; break;
-                case 'loading': icon = 'fas fa-spinner fa-spin'; break;
-                default: icon = 'fas fa-info-circle';
-            }
-
-            card.innerHTML = `
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="${icon}"></i>
-                    <span class="font-bold">${title}</span>
-                </div>
-                <div id="musicStatusText">${description}</div>
-            `;
-        }
-
-        function showRetryOptions(show) {
-            const retrySection = document.getElementById('retrySection');
-            retrySection.style.display = show ? 'block' : 'none';
-            if (show) {
-                const retryBtn = document.getElementById('retryBtn');
-                const forceRetryBtn = document.getElementById('forceRetryBtn');
-                retryBtn.innerHTML = `<i class="fas fa-redo"></i> 重试 (${retryCount + 1}/${maxRetries})`;
-                if (retryCount >= maxRetries - 1) {
-                    retryBtn.disabled = true;
-                    forceRetryBtn.innerHTML = '<i class="fas fa-bolt"></i> 强制重试';
-                }
-            }
-        }
-
-        async function retryMusic(force = false) {
-            if (!force && retryCount >= maxRetries) {
-                showMusicStatus('error', '重试次数已达上限', '请稍后再试或检查网络连接');
+            if (!currentAstronomyData) {
+                showMusicStatus('请先更新星图以获取天文数据', 'error');
                 return;
             }
 
-            if (!force) {
-                retryCount++;
-            } else {
-                retryCount = 0;
+            const duration = parseInt(document.getElementById('music-duration').value);
+            const btn = document.getElementById('generate-music-btn');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> 生成中...';
+            showMusicStatus('正在生成音乐，这可能需要1-2分钟...', 'info');
+            updateStepProgress(4);
+
+            try {
+                const timeInput = document.getElementById('observation-time').value;
+                const datetime = new Date(timeInput);
+
+                const response = await fetch('/api/generate_music', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        time_selection: {
+                            year: datetime.getFullYear(),
+                            month: datetime.getMonth() + 1,
+                            day: datetime.getDate(),
+                            hour: datetime.getHours(),
+                            is_lunar: document.getElementById('use-lunar').checked
+                        },
+                        location_selection: selectedLocation,
+                        duration: duration
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.music_url) {
+                    currentMusicUrl = data.music_url;
+                    loadMusic(data.music_url);
+                    showMusicStatus('音乐生成成功！', 'success');
+                } else {
+                    showMusicStatus('音乐生成失败: ' + (data.error || '未知错误'), 'error');
+                }
+            } catch (error) {
+                console.error('Generate music error:', error);
+                showMusicStatus('生成失败: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '生成天体音乐';
             }
-
-            const waitTime = force ? 1000 : (retryCount * 2000);
-            const duration = parseInt(document.getElementById('durationInput').value);
-            showMusicStatus('loading', '准备重试...', `等待 ${waitTime / 1000} 秒后重新生成${duration}秒节气音乐`);
-
-            setTimeout(() => {
-                generateMusic();
-            }, waitTime);
         }
 
-        function showLoadingIndicator(show, text = '加载中...') {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const loadingText = document.getElementById('loadingText');
-            if (show) {
-                loadingText.textContent = text;
-                loadingIndicator.style.display = 'block';
-            } else {
-                loadingIndicator.style.display = 'none';
+        function loadMusic(url) {
+            const player = document.getElementById('music-player');
+            const source = document.getElementById('music-source');
+            const playerSection = document.getElementById('music-player-section');
+
+            source.src = url;
+            player.load();
+            playerSection.style.display = 'block';
+
+            // Auto play
+            player.play().catch(e => {
+                console.log('Auto-play prevented:', e);
+            });
+        }
+
+        function downloadMusic() {
+            if (currentMusicUrl) {
+                const a = document.createElement('a');
+                a.href = currentMusicUrl;
+                a.download = `celestial-music-${Date.now()}.mp3`;
+                a.click();
             }
         }
+
+        function shareMusic() {
+            if (navigator.share && currentMusicUrl) {
+                navigator.share({
+                    title: '28星宿天体音乐',
+                    text: '我刚刚生成了一首基于中国传统天文学的音乐！',
+                    url: currentMusicUrl
+                }).catch(err => console.log('Share failed:', err));
+            } else {
+                alert('您的浏览器不支持分享功能');
+            }
+        }
+
+        function regenerateMusic() {
+            generateMusic();
+        }
+
+        function backToSettings() {
+            document.getElementById('music-player-section').style.display = 'none';
+            updateStepProgress(3);
+        }
+
+        function updateStepProgress(step) {
+            document.querySelectorAll('.step-item').forEach(item => {
+                const stepNum = parseInt(item.dataset.step);
+                if (stepNum === step) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status-message');
+            statusDiv.className = `status-message ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function showMusicStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('music-status');
+            statusDiv.className = `status-message ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Handle location updates from storage events
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'selectedLocation') {
+                loadStoredLocation();
+                updateLocationDisplay();
+            }
+        });
     </script>
 </body>
-
 </html>
